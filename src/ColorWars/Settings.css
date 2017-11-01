@@ -1,0 +1,73 @@
+.Settings {
+  background-color: #CCCCCC;
+  vertical-align: top;
+  margin:0 auto;
+  display: inline-block;
+  padding: 10px;
+}
+
+.SettingsGroup {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: left;
+}
+
+.playerSettings {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.verticalBar {
+  height: 400px;
+  display: block;
+}
+
+.horizontalBar {
+  width: 400px;
+  margin-left: 15px;
+  display: block;
+}
+
+.inline {
+  padding-right : 20px;
+  vertical-align: middle;
+  max-width: 200px;
+}
+
+.grid {
+  border-collapse: separate;
+  empty-cells: show;
+}
+
+.grid tbody{
+  display: block;
+  border-collapse: separate;
+  empty-cells: show;
+  overflow-y: auto;
+  overflow-x: auto;
+  max-width: 400px;
+  max-height: 400px;
+}
+
+.grid td {
+  border: 1px solid black;  
+  min-width: 10px;
+  height: 10px;
+}
+
+.playerSettings {
+  border: 1px solid black;
+  display: inline-block;
+  justify-content: left;
+  width: 200px;
+}
+
+.playersSettings {
+  border: 1px solid black;
+  display: inline-block;
+  justify-content: left;
+  width: 400px;
+}

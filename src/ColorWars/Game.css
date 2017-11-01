@@ -1,0 +1,22 @@
+body {
+  background-color: #aaaaaa;
+}
+
+.Board {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.GameBoard {
+  background-color: #FFFFFF;
+  margin: 0 auto;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.ScoreBoard {
+  background-color: #444444;
+  margin: 0 auto;
+  display: inline-block;
+  vertical-align: top;
+}
