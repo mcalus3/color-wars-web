@@ -1,6 +1,6 @@
 {
-  "short_name": "Color Wars",
-  "name": "Competitive multiplayer game",
+  "short_name": "ColorWars",
+  "name": "Color Wars multiplayer game",
   "icons": [
     {
       "src": "favicon.ico",
