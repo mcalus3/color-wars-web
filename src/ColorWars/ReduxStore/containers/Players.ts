@@ -3,10 +3,9 @@ import { GameState } from '../../utils/objectTypes';
 import { connect } from 'react-redux';
 
 export function mapStateToProps(state: GameState) {
-    return {
-        playerNames: state.playerNames,
-        activePlayers: state.activePlayers,
-    }
+  return {
+    activePlayers: state.activePlayers
+  };
 }
 
 export default connect(mapStateToProps)(Players);

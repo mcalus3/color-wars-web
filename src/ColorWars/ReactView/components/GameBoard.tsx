@@ -9,23 +9,18 @@ import Fields from '../../ReduxStore/containers/Fields';
 import { getCanvasDimension } from '../../utils/functions';
 
 export interface Props {
-  dim: Point,
-  gameState: string
+  dim: Point;
+  gameState: string;
 }
 
-class GameBoard extends React.Component<Props, object>{
-  
-  canvDim: Point = {X: 0, Y: 0};
-  
-    componentWillMount(){
-    }
+class GameBoard extends React.Component<Props, object> {
+  canvDim: Point = { X: 0, Y: 0 };
 
-    render(){
-      this.canvDim = getCanvasDimension(this.props.dim);
-      return (
+  render() {
+    this.canvDim = getCanvasDimension(this.props.dim);
+    return (
       <div className="App">
-        <Stage width={this.canvDim.X} height={this.canvDim.Y} ref='stage'>
-
+        <Stage width={this.canvDim.X} height={this.canvDim.Y} >
           <Fields />
 
           <Tails />
@@ -33,15 +28,14 @@ class GameBoard extends React.Component<Props, object>{
           <Players />
 
           {this.renderEndGame()}
-          
-      </Stage>
+        </Stage>
       </div>
     );
   }
 
-  renderEndGame(){
-    if(this.props.gameState === 'endGame'){
-      return <EndGame />; 
+  renderEndGame() {
+    if (this.props.gameState === 'endGame') {
+      return <EndGame />;
     }
     return null;
   }

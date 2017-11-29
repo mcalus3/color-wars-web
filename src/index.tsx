@@ -5,33 +5,41 @@ import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 import { gameReducer } from './ColorWars/ReduxStore/reducers/GameReducer';
 import { GameState } from './ColorWars/utils/objectTypes';
-import { initialState } from './ColorWars/utils/initialState'
+import { initialState } from './ColorWars/utils/initialState';
 
 import * as actions from './ColorWars/ReduxStore/actionTypes';
 
 import { createStore, Reducer, Store } from 'redux';
 import { Provider } from 'react-redux';
 
-const store = initializeGame();
+const gStore = initializeGame();
 
-renderReactDom(store);
+renderReactDom(gStore);
 
 registerServiceWorker();
 
-function initializeGame(){
+function initializeGame() {
   // create a store
-  const store: Store<GameState> = createStore<GameState>(gameReducer as Reducer<GameState>, initialState);
-  
+  const store: Store<GameState> = createStore<GameState>(
+    gameReducer as Reducer<GameState>,
+    initialState
+  );
+
   // initialize game
   requestAnimationFrame(() => store.dispatch(actions.createGame()));
-  
+
   // add listener for key input
   document.addEventListener('keydown', (e: any) => {
-    if(e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40){
+    if (
+      e.keyCode === 37 ||
+      e.keyCode === 38 ||
+      e.keyCode === 39 ||
+      e.keyCode === 40
+    ) {
       e.preventDefault();
-    }  
+    }
     store.dispatch(actions.actorAction(e.keyCode));
-    });
+  });
 
   // start game loop
   setInterval(() => store.dispatch(actions.tick()), 25);
@@ -39,7 +47,7 @@ function initializeGame(){
   return store;
 }
 
-function renderReactDom(store: Store<GameState>){
+function renderReactDom(store: Store<GameState>) {
   ReactDOM.render(
     <div className="App">
       <div className="App-header">
@@ -50,5 +58,5 @@ function renderReactDom(store: Store<GameState>){
       </Provider>
     </div>,
     document.getElementById('root') as HTMLElement
-  )
+  );
 }

@@ -4,20 +4,24 @@ import { connect, Dispatch } from 'react-redux';
 
 import { GameState } from '../../utils/objectTypes';
 
-export function mapStateToProps(state: GameState, ownProps: {name: string, key: string} = {name: 'Marek', key: 'Marek'}) {
+export function mapStateToProps(
+  state: GameState,
+  ownProps: { id: number; key: string } = { id: 0, key: '0' }
+) {
   return {
-      name: ownProps.name,
-      color: state.playersByName[ownProps.name].color,
-      speed: state.playersByName[ownProps.name].speed,
-      deathPenalty: state.playersByName[ownProps.name].deathPenalty,
-      keys: state.playersByName[ownProps.name].keyMapping
-    }
+    name: state.playersById[ownProps.id].name,
+    color: state.playersById[ownProps.id].color,
+    speed: state.playersById[ownProps.id].speed,
+    deathPenalty: state.playersById[ownProps.id].deathPenalty,
+    keys: state.keyMappingsById[ownProps.id]
+  };
 }
 
-export function mapDispatchToProps(dispatch: Dispatch<actions.action>) {
-    return {
-      onPlayerModify: (name: string, prop: string, value: any) => dispatch(actions.modifyPlayer(name, prop, value)),
-    }
-  }
+export function mapDispatchToProps(dispatch: Dispatch<actions.Action>) {
+  return {
+    onPlayerModify: (id: number, prop: string, value: {}) =>
+      dispatch(actions.modifyPlayer(id, prop, value))
+  };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayerSettings);

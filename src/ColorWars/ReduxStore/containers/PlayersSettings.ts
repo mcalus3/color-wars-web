@@ -6,15 +6,15 @@ import { GameState } from '../../utils/objectTypes';
 
 export function mapStateToProps(state: GameState) {
   return {
-      playerNames: state.playerNames,
-      playersAmount: state.activePlayers
-    }
+    playersAmount: state.activePlayers
+  };
 }
 
-export function mapDispatchToProps(dispatch: Dispatch<actions.action>) {
-    return {
-      onPlayersChange: (amount: number) => dispatch(actions.setPlayersAmount(amount))
-    }
-  }
+export function mapDispatchToProps(dispatch: Dispatch<actions.Action>) {
+  return {
+    onPlayersChange: (amount: number) =>
+      dispatch(actions.setPlayersAmount(amount))
+  };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayersSettings);

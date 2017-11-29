@@ -1,181 +1,190 @@
-import { TypeKeys } from './constants'
-import { Point, Player } from '../utils/objectTypes'
+import { TypeKeys } from './constants';
+import { Point, Player } from '../utils/objectTypes';
 
 // Board
 
-export interface createBoard {
+export interface CreateBoard {
+  type: TypeKeys.CREATE_BOARD;
+}
+
+export function createGame(): CreateBoard {
+  return {
     type: TypeKeys.CREATE_BOARD
+  };
 }
 
-export function createGame(): createBoard {
-    return {
-        type: TypeKeys.CREATE_BOARD
-    }
+export interface ResizeBoard {
+  type: TypeKeys.RESIZE_BOARD;
+  size: Point;
 }
 
-export interface resizeBoard {
+export function resizeBoard(size: Point): ResizeBoard {
+  return {
     type: TypeKeys.RESIZE_BOARD,
-    size: Point
-}
-
-export function resizeBoard(size: Point): resizeBoard {
-    return {
-        type: TypeKeys.RESIZE_BOARD,
-        size
-    }
+    size
+  };
 }
 
 // Players
 
-export interface setPlayersAmount {
+export interface SetPlayersAmount {
+  type: TypeKeys.SET_PLAYERS_AMOUNT;
+  amount: number;
+}
+
+export function setPlayersAmount(amount: number): SetPlayersAmount {
+  return {
     type: TypeKeys.SET_PLAYERS_AMOUNT,
-    amount: number
+    amount
+  };
 }
 
-export function setPlayersAmount(amount: number): setPlayersAmount {
-    return {
-        type: TypeKeys.SET_PLAYERS_AMOUNT,
-        amount
-    }
+export interface AddPlayer {
+  type: TypeKeys.ADD_PLAYER;
+  player: Player;
 }
 
-export interface addPlayer {
+export function addPlayer(player: Player): AddPlayer {
+  return {
     type: TypeKeys.ADD_PLAYER,
-    player: Player,
+    player
+  };
 }
 
-export function addPlayer(player: Player): addPlayer {
-    return {
-        type: TypeKeys.ADD_PLAYER,
-        player
-    }
+export interface ModifyPlayer {
+  type: TypeKeys.MODIFY_PLAYER;
+  id: number;
+  property: string;
+  value: any;
 }
 
-export interface modifyPlayer {
+export function modifyPlayer(
+  id: number,
+  property: string,
+  value: any
+): ModifyPlayer {
+  return {
     type: TypeKeys.MODIFY_PLAYER,
-    name: string,
-    property: string,
-    value: any
+    id,
+    property,
+    value
+  };
 }
 
-export function modifyPlayer(name: string, property: string, value: any): modifyPlayer {
-    return {
-        type: TypeKeys.MODIFY_PLAYER,
-        name,
-        property,
-        value
-        }
+export interface RemovePlayer {
+  type: TypeKeys.REMOVE_PLAYER;
+  id: number;
 }
 
-export interface removePlayer {
+export function removePlayer(id: number): RemovePlayer {
+  return {
     type: TypeKeys.REMOVE_PLAYER,
-    name: string
-}
-
-export function removePlayer(name: string): removePlayer {
-    return {
-        type: TypeKeys.REMOVE_PLAYER,
-        name: name
-    }
+    id
+  };
 }
 
 // settings
 
+export interface SetOptimization {
+  type: TypeKeys.SET_OPTIMIZATION;
+  value: boolean;
+}
 
-export interface setOptimization {
+export function setOptimization(value: boolean): SetOptimization {
+  return {
     type: TypeKeys.SET_OPTIMIZATION,
-    value: boolean
+    value
+  };
 }
 
-export function setOptimization(value: boolean): setOptimization {
-    return {
-        type: TypeKeys.SET_OPTIMIZATION,
-        value
-    }
+export interface SetGameTime {
+  type: TypeKeys.SET_GAME_TIME;
+  frames: number;
 }
 
-export interface setGameTime {
+export function setGameTime(frames: number): SetGameTime {
+  return {
     type: TypeKeys.SET_GAME_TIME,
-    frames: number
+    frames
+  };
 }
 
-export function setGameTime(frames: number): setGameTime {
-    return {
-        type: TypeKeys.SET_GAME_TIME,
-        frames
-    }
+export interface SetStartingTerritory {
+  type: TypeKeys.SET_STARTING_TERRITORY;
+  size: number;
 }
 
-export interface setStartingTerritory {
+export function setStartingTerritory(size: number): SetStartingTerritory {
+  return {
     type: TypeKeys.SET_STARTING_TERRITORY,
-    size: number
-}
-
-export function setStartingTerritory(size: number): setStartingTerritory {
-    return {
-        type: TypeKeys.SET_STARTING_TERRITORY,
-        size
-    }
+    size
+  };
 }
 
 // GAME ACTIONS
 
-export interface tick {
+export interface Tick {
+  type: TypeKeys.TICK;
+}
+
+export function tick(): Tick {
+  return {
     type: TypeKeys.TICK
+  };
 }
 
-export function tick(): tick {
-    return {
-        type: TypeKeys.TICK
-    }
+export interface Pause {
+  type: TypeKeys.PAUSE;
 }
 
-export interface pause {
+export function pause(): Pause {
+  return {
     type: TypeKeys.PAUSE
+  };
 }
 
-export function pause(): pause {
-    return {
-        type: TypeKeys.PAUSE
-    }
+export interface Resume {
+  type: TypeKeys.RESUME;
 }
 
-export interface resume {
+export function resume(): Resume {
+  return {
     type: TypeKeys.RESUME
+  };
 }
 
-export function resume(): resume {
-    return {
-        type: TypeKeys.RESUME
-    }
+export interface Restart {
+  type: TypeKeys.RESTART;
 }
 
-export interface restart {
+export function restart(): Restart {
+  return {
     type: TypeKeys.RESTART
+  };
 }
 
-export function restart(): restart {
-    return {
-        type: TypeKeys.RESTART
-    }
+export interface ActorAction {
+  type: TypeKeys.ACTOR_ACTION;
+  key: number;
 }
 
-export interface actorAction {
+export function actorAction(key: number): ActorAction {
+  return {
     type: TypeKeys.ACTOR_ACTION,
-    key: number
+    key
+  };
 }
 
-export function actorAction(key: number): actorAction {
-    return {
-        type: TypeKeys.ACTOR_ACTION,
-        key
-    }
-}
+export type GameAction = Tick | ActorAction | Pause | Resume;
+export type SettingsAction =
+  | SetOptimization
+  | SetStartingTerritory
+  | SetGameTime;
+export type FieldsAction = ResizeBoard | CreateBoard;
+export type PlayersAction =
+  | AddPlayer
+  | RemovePlayer
+  | ModifyPlayer
+  | SetPlayersAmount;
 
-export type gameAction = tick | actorAction | pause | resume;
-export type settingsAction = setOptimization | setStartingTerritory | setGameTime;
-export type fieldsAction = resizeBoard | createBoard;
-export type playersAction = addPlayer | removePlayer | modifyPlayer | setPlayersAmount;
-
-export type action = playersAction | fieldsAction | settingsAction | gameAction;
-
+export type Action = PlayersAction | FieldsAction | SettingsAction | GameAction;

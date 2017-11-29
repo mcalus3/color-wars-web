@@ -3,29 +3,18 @@ import { FastLayer } from 'react-konva';
 import * as React from 'react';
 
 export interface Props {
-  playerNames: string[],
-  activePlayers: number,
+  activePlayers: number;
 }
 
-class Players extends React.Component<Props, object>{
-
-  render(){
+class Players extends React.Component<Props, object> {
+  render() {
     let playerComponents: JSX.Element[] = [];
 
-    this.props.playerNames.slice(0, this.props.activePlayers).forEach((name: string) => {
-      playerComponents.push(
-        <PlayerVisual
-          name={name}
-          key={name}
-        />
-      );
-    });
+    for (let i = 0; i < this.props.activePlayers; i++) {
+        playerComponents.push(<PlayerVisual id={i} key={i.toString()} />);
+      };
 
-    return (
-      <FastLayer ref='players'>
-      {playerComponents}
-      </FastLayer>
-    );
+    return <FastLayer>{playerComponents}</FastLayer>;
   }
 }
 

@@ -3,12 +3,15 @@ import { connect } from 'react-redux';
 
 import { GameState } from '../../utils/objectTypes';
 
-export function mapStateToProps(state: GameState, ownProps: {name: string, key: string} = {name: '', key: ''}) {
+export function mapStateToProps(
+  state: GameState,
+  ownProps: { id: number; key: string } = { id: 0, key: '' }
+) {
   return {
-      player: state.playersByName[ownProps.name],
-      dim: state.dimension,
-      optimized: state.optimized
-    }
+    player: state.playersById[ownProps.id],
+    dim: state.dimension,
+    optimized: state.optimized
+  };
 }
 
 export default connect(mapStateToProps)(PlayerVisual);

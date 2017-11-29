@@ -8,21 +8,19 @@ import * as actions from '../../../ReduxStore/actionTypes';
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 export interface Props {
-  playerNames: string[],
-  playersAmount: number,
-  onPlayersChange: (amount: number) => actions.setPlayersAmount
-} 
+  playersAmount: number;
+  onPlayersChange: (amount: number) => actions.SetPlayersAmount;
+}
 
-class PlayersSettings extends React.Component<Props, {players: number}>{ 
-
-  render(){
+class PlayersSettings extends React.Component<Props, { players: number }> {
+  render() {
     var players = [];
-    for(var i: number=0; i<this.props.playersAmount; i++){
-        players.push(
-          <PlayerSettings name={this.props.playerNames[i]} key={i.toString()}/>
-          );
+    for (var i: number = 0; i < this.props.playersAmount; i++) {
+      players.push(
+        <PlayerSettings id={i} key={i.toString()} />
+      );
     }
-    return(
+    return (
       <div className="Settings">
         <h2>Players</h2>
         <SliderWithTooltip
@@ -34,21 +32,19 @@ class PlayersSettings extends React.Component<Props, {players: number}>{
           tipFormatter={myFormatter}
           onAfterChange={this.playersChanged}
         />
-        <div className="PlayersSettings">
-          {players}
-        </div>
+        <div className="PlayersSettings">{players}</div>
       </div>
     );
   }
 
   playersChanged = (v: number) => {
-    this.setState({players: v});
+    this.setState({ players: v });
     this.props.onPlayersChange(v);
   }
 }
 
 export default PlayersSettings;
 
-function myFormatter(v: any) {
+function myFormatter(v: {}) {
   return `${v}`;
 }

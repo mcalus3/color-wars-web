@@ -1,7 +1,7 @@
 .Settings {
-  background-color: #CCCCCC;
+  background-color: #cccccc;
   vertical-align: top;
-  margin:0 auto;
+  margin: 0 auto;
   display: inline-block;
   padding: 10px;
 }
@@ -32,7 +32,7 @@
 }
 
 .inline {
-  padding-right : 20px;
+  padding-right: 20px;
   vertical-align: middle;
   max-width: 200px;
 }
@@ -42,7 +42,7 @@
   empty-cells: show;
 }
 
-.grid tbody{
+.grid tbody {
   display: block;
   border-collapse: separate;
   empty-cells: show;
@@ -53,7 +53,7 @@
 }
 
 .grid td {
-  border: 1px solid black;  
+  border: 1px solid black;
   min-width: 10px;
   height: 10px;
 }

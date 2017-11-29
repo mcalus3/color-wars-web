@@ -5,44 +5,48 @@ import * as Konva from 'konva';
 export interface Props {
   color: string;
   rect: {
-    X: number,
-    Y: number,
-    Width: number,
-    Height: number
+    X: number;
+    Y: number;
+    Width: number;
+    Height: number;
   };
   key: string;
 }
 
-class ScoreBar extends React.Component<Props, {oldProps: Props}>{
-  
+class ScoreBar extends React.Component<Props, { oldProps: Props }> {
   private previousBar: {
-    X: number,
-    Y: number,
-    Width: number,
-    Height: number
+    X: number;
+    Y: number;
+    Width: number;
+    Height: number;
   };
-  
-  constructor(props: Props){
+
+  constructor(props: Props) {
     super(props);
     this.previousBar = this.props.rect;
   }
 
-  componentDidMount(){
-    this.animateBar();    
+  componentDidMount() {
+    this.animateBar();
   }
 
-  shouldComponentUpdate(nextProps: Readonly<Props>, nextState: object){
-    if (nextProps.rect.X === this.props.rect.X && nextProps.rect.Y === this.props.rect.Y && nextProps.rect.Width === this.props.rect.Width && nextProps.rect.Height === this.props.rect.Height){
-       return false;
-     }
-     return true;
+  shouldComponentUpdate(nextProps: Readonly<Props>, nextState: object) {
+    if (
+      nextProps.rect.X === this.props.rect.X &&
+      nextProps.rect.Y === this.props.rect.Y &&
+      nextProps.rect.Width === this.props.rect.Width &&
+      nextProps.rect.Height === this.props.rect.Height
+    ) {
+      return false;
+    }
+    return true;
   }
 
-  componentWillUpdate(nextProps: Props, nextState: object){
-  this.previousBar = this.props.rect;
+  componentWillUpdate(nextProps: Props, nextState: object) {
+    this.previousBar = this.props.rect;
   }
 
-  render(){
+  render() {
     return (
       <ReactKonva.Rect
         ref={this.props.color}
@@ -53,28 +57,28 @@ class ScoreBar extends React.Component<Props, {oldProps: Props}>{
     );
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     this.animateBar();
   }
 
-  animateBar(){
+  animateBar() {
     const bar = this.refs[this.props.color] as any;
-    if (bar === undefined){
+    if (bar === undefined) {
       return;
     }
-    
-        bar.x = this.previousBar.X;
-        bar.y = this.previousBar.Y;    
-        bar.width = this.previousBar.Width;
-        bar.height = this.previousBar.Height;
-        bar.to({
-          x: this.props.rect.X,
-          y: this.props.rect.Y,
-          width: this.props.rect.Width,
-          height: this.props.rect.Height,    
-          duration: 0.5,
-          easing: Konva.Easings.EaseInOut
-        });
+
+    bar.x = this.previousBar.X;
+    bar.y = this.previousBar.Y;
+    bar.width = this.previousBar.Width;
+    bar.height = this.previousBar.Height;
+    bar.to({
+      x: this.props.rect.X,
+      y: this.props.rect.Y,
+      width: this.props.rect.Width,
+      height: this.props.rect.Height,
+      duration: 0.5,
+      easing: Konva.Easings.EaseInOut
+    });
   }
 }
 

@@ -1,42 +1,38 @@
 import { claimStartingFields, setStartingPosition } from './CreateWorld';
 import { GameState } from '../../../utils/objectTypes';
 
-export function setPlayersAmount(state: GameState, amount: number): GameState{
-  var gameState: GameState = {...state};
-    
-  if (amount > gameState.activePlayers){
-    gameState.playersByName = {...gameState.playersByName};
-    
-    gameState.playerNames.slice(gameState.activePlayers, amount).forEach((value: string, index: number) => {
+export function setPlayersAmount(state: GameState, amount: number): GameState {
+  var gameState: GameState = { ...state };
 
-      var curPlayer = {...gameState.playersByName[value]};
-      gameState.playersByName[value] = curPlayer;
+  if (amount > gameState.activePlayers) {
+    gameState.playersById = gameState.playersById.slice();
 
-      curPlayer.startCoords = setStartingPosition(gameState.activePlayers + index, gameState.dimension);
-      curPlayer.coords = {...curPlayer.startCoords};
-      gameState = claimStartingFields(gameState, value);
-      
-    });
+  for (let i = 0; i < gameState.activePlayers; i++) {
+    let curPlayer = { ...gameState.playersById[i] };
+    gameState.playersById[i] = curPlayer;
+
+    curPlayer.startCoords = setStartingPosition(
+      gameState.activePlayers + i,
+      gameState.dimension
+    );
+    curPlayer.coords = { ...curPlayer.startCoords };
+    gameState = claimStartingFields(gameState, i);
+  };
   } else if (amount < gameState.activePlayers) {
-    gameState.playersByName = {...gameState.playersByName};
-    
-    gameState.playerNames.slice(amount, gameState.activePlayers).forEach((value: string, index) => {
+    gameState.playersById = gameState.playersById.slice();
 
-      var curPlayer = {...gameState.playersByName[value]};
-      gameState.playersByName[value] = curPlayer;
-      gameState.tailsByName = {...gameState.tailsByName};
-      
-      gameState.tailsByName[value] = [];
+    for (let i = 0; i < gameState.activePlayers; i++) {
+      let curPlayer = { ...gameState.playersById[i] };
+        gameState.playersById[i] = curPlayer;
+        gameState.tailsById = gameState.tailsById.slice();
 
-      curPlayer.coords = {...curPlayer.startCoords};
-    });
+        gameState.tailsById[i] = [];
+
+        curPlayer.coords = { ...curPlayer.startCoords };
+      };
   }
 
   gameState.activePlayers = amount;
-  
+
   return gameState;
 }
-
-
-
-
