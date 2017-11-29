@@ -1,3 +1,9 @@
+export interface Ai {
+  playerId: number;
+  territoryBorder: Point[];
+  setpsDone: number;
+}
+
 export interface Point {
   X: number;
   Y: number;
@@ -14,6 +20,7 @@ export interface Player {
   color: number;
   startCoords: Point;
   deathPenalty: number;
+  AiControlled: boolean;
 }
 
 export interface GameState {

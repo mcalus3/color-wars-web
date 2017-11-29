@@ -4,7 +4,8 @@ import { GameState } from '../../utils/objectTypes';
 import { TypeKeys } from './../constants';
 import { createWorld } from './GameLogic/CreateWorld';
 import { Tick } from './GameLogic/Tick';
-import { ExecuteAction } from './GameLogic/ExecuteAction';
+import { HandleKeyboardInput } from './GameLogic/HandleKeyboardInput';
+import { changeDirection } from './GameLogic/changeDirection';
 import { resizeBoard } from './GameLogic/ResizeBoard';
 import { setPlayersAmount } from './GameLogic/SetPlayersAmount';
 
@@ -24,7 +25,11 @@ export function gameReducer(
       return newState;
 
     case TypeKeys.ACTOR_ACTION:
-      newState = ExecuteAction(newState, action.key);
+      newState = HandleKeyboardInput(newState, action.key);
+      return newState;
+
+      case TypeKeys.CHANGE_DIRECTION:
+      newState = changeDirection(newState, action.id, action.direction);
       return newState;
 
     case TypeKeys.RESIZE_BOARD:

@@ -4,8 +4,8 @@ export const initialState: GameState = {
   gameState: 'running',
   currentTick: 0,
   lastUpdatedCoords: [],
-  activePlayers: 4,
-  dimension: { X: 40, Y: 40 },
+  activePlayers: 3,
+  dimension: { X: 60, Y: 60 },
   startingTerritorySize: 2,
   optimized: false,
   endTime: 60 * 40,
@@ -23,7 +23,8 @@ export const initialState: GameState = {
       startCoords: { X: 3, Y: 3 },
       speed: 4,
       deathPenalty: 100,
-      nextDirection: 'none'
+      nextDirection: 'none',
+      AiControlled: false
     },
     {
       name: 'Maciek',
@@ -34,7 +35,8 @@ export const initialState: GameState = {
       startCoords: { X: 10, Y: 10 },
       speed: 4,
       deathPenalty: 100,
-      nextDirection: 'none'
+      nextDirection: 'none',
+      AiControlled: false
     },
     {
       name: 'Player3',
@@ -45,7 +47,8 @@ export const initialState: GameState = {
       startCoords: { X: 10, Y: 10 },
       speed: 4,
       deathPenalty: 100,
-      nextDirection: 'none'
+      nextDirection: 'none',
+      AiControlled: true
     },
     {
       name: 'Player4',
@@ -56,7 +59,8 @@ export const initialState: GameState = {
       startCoords: { X: 10, Y: 10 },
       speed: 4,
       deathPenalty: 100,
-      nextDirection: 'none'
+      nextDirection: 'none',
+      AiControlled: true
     },
     {
       name: 'Player5',
@@ -67,7 +71,8 @@ export const initialState: GameState = {
       startCoords: { X: 10, Y: 10 },
       speed: 4,
       deathPenalty: 100,
-      nextDirection: 'none'
+      nextDirection: 'none',
+      AiControlled: true
     },
     {
       name: 'Player6',
@@ -78,7 +83,8 @@ export const initialState: GameState = {
       startCoords: { X: 10, Y: 10 },
       speed: 4,
       deathPenalty: 100,
-      nextDirection: 'none'
+      nextDirection: 'none',
+      AiControlled: true
     },
     {
       name: 'Player7',
@@ -89,7 +95,8 @@ export const initialState: GameState = {
       startCoords: { X: 10, Y: 10 },
       speed: 4,
       deathPenalty: 100,
-      nextDirection: 'none'
+      nextDirection: 'none',
+      AiControlled: true
     },
     {
       name: 'Player8',
@@ -100,7 +107,8 @@ export const initialState: GameState = {
       startCoords: { X: 10, Y: 10 },
       speed: 4,
       deathPenalty: 100,
-      nextDirection: 'none'
+      nextDirection: 'none',
+      AiControlled: true
     }
   ],
 

@@ -8,6 +8,7 @@ import { GameState } from './ColorWars/utils/objectTypes';
 import { initialState } from './ColorWars/utils/initialState';
 
 import * as actions from './ColorWars/ReduxStore/actionTypes';
+import AiManager from './ColorWars/ReduxStore/reducers/GameLogic/AI';
 
 import { createStore, Reducer, Store } from 'redux';
 import { Provider } from 'react-redux';
@@ -27,6 +28,12 @@ function initializeGame() {
 
   // initialize game
   requestAnimationFrame(() => store.dispatch(actions.createGame()));
+  
+  // initialize Ai
+  requestAnimationFrame(() => {
+    let aiManager = new AiManager(store);
+    setInterval(() => aiManager.dispatchAiActions(), 500);
+  });
 
   // add listener for key input
   document.addEventListener('keydown', (e: any) => {
@@ -43,7 +50,7 @@ function initializeGame() {
 
   // start game loop
   setInterval(() => store.dispatch(actions.tick()), 25);
-
+  
   return store;
 }
 

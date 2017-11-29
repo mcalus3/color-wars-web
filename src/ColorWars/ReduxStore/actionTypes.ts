@@ -83,6 +83,20 @@ export function removePlayer(id: number): RemovePlayer {
   };
 }
 
+export interface ChangeDirection {
+  type: TypeKeys.CHANGE_DIRECTION;
+  id: number;
+  direction: string
+}
+
+export function changeDirection(id: number, direction: string): ChangeDirection {
+  return {
+    type: TypeKeys.CHANGE_DIRECTION,
+    id,
+    direction
+  };
+}
+
 // settings
 
 export interface SetOptimization {
@@ -185,6 +199,6 @@ export type PlayersAction =
   | AddPlayer
   | RemovePlayer
   | ModifyPlayer
-  | SetPlayersAmount;
-
+  | SetPlayersAmount
+  | ChangeDirection;
 export type Action = PlayersAction | FieldsAction | SettingsAction | GameAction;

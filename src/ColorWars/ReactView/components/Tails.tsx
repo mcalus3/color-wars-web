@@ -31,6 +31,15 @@ class Tails extends React.Component<Props, object> {
   }
 
   componentWillUpdate(nextProps: Props) {
+    if (this.props.activePlayers > nextProps.activePlayers){
+      this.layer.getChildren().forEach((node: Node) => {
+        if (parseInt(node.name()) >= nextProps.activePlayers ) {
+          node.destroy();
+          this.redraw = true;
+        }
+      });    
+    }
+    
     if (nextProps.dimension !== this.dimension) {
       this.createPrototypes(nextProps.dimension);
     }

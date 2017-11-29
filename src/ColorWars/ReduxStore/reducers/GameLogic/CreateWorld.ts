@@ -4,6 +4,7 @@ import {
   outOfBoard
 } from '../../../utils/functions';
 import { GameState, Point } from '../../../utils/objectTypes';
+import { killTail } from './Tick';
 
 export function createWorld(state: GameState): GameState {
   var gameState: GameState = { ...state };
@@ -30,8 +31,8 @@ export function createWorld(state: GameState): GameState {
       var curPlayer = { ...gameState.playersById[i] };
       gameState.playersById[i] = curPlayer;
 
-      // delete tail
-      gameState.tailsById[curPlayer.name] = [];
+      // kill tail
+      gameState = killTail(gameState, i);
 
       // set starting position and move player at it
       curPlayer.startCoords = setStartingPosition(i, gameState.dimension);

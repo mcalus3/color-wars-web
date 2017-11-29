@@ -1,31 +1,25 @@
 import { GameState } from '../../../utils/objectTypes';
 
-export function ExecuteAction(state: GameState, key: number) {
-  if (state.currentTick >= state.endTime) {
+export function changeDirection(state: GameState, id: number, direction: string) {
+  if (state.gameState !== 'running') {
     return state;
   }
 
   var gameState: GameState = { ...state };
   gameState.playersById = gameState.playersById.slice();
 
-  for(let i = 0; i < gameState.activePlayers; i++){
-    var mapping = gameState.keyMappingsById[i];
-    if (key in mapping) {
-      if (
-        PlayerIsAllowedToTurn(
-          mapping[key],
-          gameState.playersById[i].direction,
-          gameState.playersById[i].state
-        )
-      ) {
-        gameState.playersById[i] = {
-          ...gameState.playersById[i],
-          nextDirection: mapping[key]
-        };
-      }
-    }
-  };
-
+  if (
+    PlayerIsAllowedToTurn(
+        direction,
+        gameState.playersById[id].direction,
+        gameState.playersById[id].state
+    )
+  ) {
+    gameState.playersById[id] = {
+      ...gameState.playersById[id],
+      nextDirection: direction
+    };
+  }
   return gameState;
 }
 
