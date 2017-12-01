@@ -1,7 +1,10 @@
 export interface Ai {
   playerId: number;
   territoryBorder: Point[];
-  setpsDone: number;
+  territory: Point[];
+  stepsDone: number;
+  currentTargets: Point[];
+  currentAction: string;
 }
 
 export interface Point {
@@ -21,6 +24,7 @@ export interface Player {
   startCoords: Point;
   deathPenalty: number;
   AiControlled: boolean;
+  AiDifficulty: number;
 }
 
 export interface GameState {

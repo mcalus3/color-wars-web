@@ -32,7 +32,7 @@ function initializeGame() {
   // initialize Ai
   requestAnimationFrame(() => {
     let aiManager = new AiManager(store);
-    setInterval(() => aiManager.dispatchAiActions(), 500);
+    setInterval(() => aiManager.dispatchAiActions(), aiManager.refreshTime);
   });
 
   // add listener for key input

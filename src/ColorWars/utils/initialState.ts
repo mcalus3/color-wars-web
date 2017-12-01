@@ -24,7 +24,8 @@ export const initialState: GameState = {
       speed: 4,
       deathPenalty: 100,
       nextDirection: 'none',
-      AiControlled: false
+      AiControlled: true,
+      AiDifficulty: 1
     },
     {
       name: 'Maciek',
@@ -36,7 +37,8 @@ export const initialState: GameState = {
       speed: 4,
       deathPenalty: 100,
       nextDirection: 'none',
-      AiControlled: false
+      AiControlled: true,
+      AiDifficulty: 1
     },
     {
       name: 'Player3',
@@ -48,7 +50,8 @@ export const initialState: GameState = {
       speed: 4,
       deathPenalty: 100,
       nextDirection: 'none',
-      AiControlled: true
+      AiControlled: true,
+      AiDifficulty: 1
     },
     {
       name: 'Player4',
@@ -60,7 +63,8 @@ export const initialState: GameState = {
       speed: 4,
       deathPenalty: 100,
       nextDirection: 'none',
-      AiControlled: true
+      AiControlled: true,
+      AiDifficulty: 0
     },
     {
       name: 'Player5',
@@ -72,7 +76,8 @@ export const initialState: GameState = {
       speed: 4,
       deathPenalty: 100,
       nextDirection: 'none',
-      AiControlled: true
+      AiControlled: true,
+      AiDifficulty: 0
     },
     {
       name: 'Player6',
@@ -84,7 +89,8 @@ export const initialState: GameState = {
       speed: 4,
       deathPenalty: 100,
       nextDirection: 'none',
-      AiControlled: true
+      AiControlled: true,
+      AiDifficulty: 0
     },
     {
       name: 'Player7',
@@ -96,7 +102,8 @@ export const initialState: GameState = {
       speed: 4,
       deathPenalty: 100,
       nextDirection: 'none',
-      AiControlled: true
+      AiControlled: true,
+      AiDifficulty: 0
     },
     {
       name: 'Player8',
@@ -108,7 +115,8 @@ export const initialState: GameState = {
       speed: 4,
       deathPenalty: 100,
       nextDirection: 'none',
-      AiControlled: true
+      AiControlled: true,
+      AiDifficulty: 0
     }
   ],
 

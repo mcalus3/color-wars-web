@@ -16,6 +16,10 @@ export function addPoints(p1: Point, p2: Point): Point {
   return { X: p1.X + p2.X, Y: p1.Y + p2.Y };
 }
 
+export function multiplyPoint(p1: Point, m: number): Point {
+  return { X: p1.X * m, Y: p1.Y * m };
+}
+
 export function PointsAreEqual(p1: Point, p2: Point): boolean {
   return p1.X === p2.X && p1.Y === p2.Y;
 }

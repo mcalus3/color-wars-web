@@ -77,8 +77,22 @@ export function updatePlayer(state: GameState, id: number) {
   var pX = player.coords.X;
   var pY = player.coords.Y;
 
+  // if player was revived, set player's state
+  if (player.state === 'dead'){
+    if (gameState.fieldColors[pX][pY] !== player.color) {
+      player.state = 'offensive';
+    } else {
+      player.state = 'defensive';
+    }
+  }
+
   // kill enemy tail on entered field
   gameState = EnterField(gameState, player.coords);
+  
+  // if player killed himself, abort update
+  if (gameState.playersById[id].state === 'dead'){
+    return gameState;
+  }
   
   // if player is on enemy territory spawn tail
   if (gameState.fieldColors[pX][pY] !== player.color) {

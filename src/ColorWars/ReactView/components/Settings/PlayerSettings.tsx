@@ -6,7 +6,8 @@ import {
   FormGroup,
   Col,
   FormControl,
-  ControlLabel
+  ControlLabel,
+  Button
 } from 'react-bootstrap';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import * as actions from '../../../ReduxStore/actionTypes';
@@ -21,6 +22,8 @@ export interface Props {
   speed: number;
   deathPenalty: number;
   keys: { [key: number]: string };
+  aiControlled: boolean,
+  aiDifficulty: number,
   onPlayerModify: (
     id: number,
     prop: string,
@@ -65,6 +68,14 @@ class PlayerSettingsControl extends React.Component<Props, object> {
   onPenaltyChange = (v: any) => {
     let penalty = 40 * Math.floor(Math.pow(2, v));
     this.props.onPlayerModify(this.props.id, 'deathPenalty', penalty);
+  }
+
+  onAiControlledChange = () => {
+    this.props.onPlayerModify(this.props.id, 'AiControlled', !this.props.aiControlled);
+  }
+
+  onAiDifficultyChange = (v: any) => {
+    this.props.onPlayerModify(this.props.id, 'AiDifficulty', v);
   }
 
   render() {
@@ -176,9 +187,40 @@ class PlayerSettingsControl extends React.Component<Props, object> {
               />
             </Col>
           </FormGroup>
+          <div className="SettingsGroup">
+                <Button active={this.props.aiControlled} onClick={this.onAiControlledChange}>
+                  aiControlled
+                </Button>
+          </div>
+          {this.renderAiDifficulty()}
         </Form>
       </div>
     );
+  }
+
+  renderAiDifficulty(){
+    if (this.props.aiControlled){
+      return <FormGroup controlId="aiDiff">
+        <Col componentClass={ControlLabel} sm={3}>
+          Ai difficulty
+        </Col>
+        <Col sm={9}>
+          <SliderWithTooltip
+            min={0}
+            max={1}
+            step={1}
+            tipFormatter={this.normalFormatter}
+            defaultValue={this.props.aiDifficulty}
+            onAfterChange={this.onAiDifficultyChange}
+          />
+        </Col>
+      </FormGroup>;
+    }
+    return null;
+  }
+
+  normalFormatter(v: number) {
+    return `${v}`;
   }
 
   myFormatter(v: number) {
