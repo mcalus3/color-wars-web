@@ -28,9 +28,9 @@ class PlayersSettings extends React.Component<Props, { players: number }> {
           max={8}
           step={1}
           dots={true}
-          defaultValue={this.props.playersAmount}
+          value={this.props.playersAmount}
           tipFormatter={myFormatter}
-          onAfterChange={this.playersChanged}
+          onChange={this.playersChanged}
         />
         <div className="PlayersSettings">{players}</div>
       </div>

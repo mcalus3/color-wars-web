@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 export function mapStateToProps(state: GameState) {
   return {
     dim: state.dimension,
-    gameState: state.gameState
+    gameState: state.gamePhase,
+    touchscreen: state.touchscreenDetected
   };
 }
 

@@ -8,7 +8,7 @@ class AiManager {
   store: Store<GameState>;
   Ais: {[id: number]: Ai};
   fields: number[][];
-  public refreshTime = 200;
+  public refreshTime = 100;
   
   constructor(store: Store<GameState>){
 
@@ -282,8 +282,9 @@ function getBorder(fields: number[][], color: number, dim: Point): Point[]{
 }
 
 export function getAttackedTerritorySize(speed: number): number{
-    return Math.floor(20/speed);
-  }
+  return 5;  
+  //return Math.floor(20/speed);
+}
   
 export function getTerritoryPoints(color: number, colorsArr: number[][]): Point[]{
   let points: Point[] = [];
@@ -350,9 +351,13 @@ function createNewAi(state: GameState, id: number): Ai{
   return {
     playerId: id,
     territoryBorder: border,
+    territory: getTerritoryPoints(state.playersById[id].color, state.fieldColors),
     stepsDone: 0,
     currentTargets: [],
-    territory: getTerritoryPoints(state.playersById[id].color, state.fieldColors),
-    currentAction: 'inside'
+    currentAction: 'inside',
+    currentDirection: 'none',
+    precision: 0,
+    PlayerHasDied: false,
+    playerHasntMoved: false
   };
 }

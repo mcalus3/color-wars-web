@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 export function mapStateToProps(state: GameState) {
   return {
-    state: state.gameState,
+    state: state.gamePhase,
     fields: state.fieldColors,
     players: state.playersById
   };

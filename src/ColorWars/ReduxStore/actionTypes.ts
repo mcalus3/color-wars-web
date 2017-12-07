@@ -135,6 +135,30 @@ export function setStartingTerritory(size: number): SetStartingTerritory {
   };
 }
 
+export interface SetTouch {
+  type: TypeKeys.TOUCH_SET;
+  value: boolean;
+}
+
+export function setTouch(value: boolean): SetTouch {
+  return {
+    type: TypeKeys.TOUCH_SET,
+    value
+  };
+}
+
+export interface ChangeMapTemplate {
+  type: TypeKeys.CHANGE_MAP_TEMPLATE;
+  value: number;
+}
+
+export function changeMapTemplate(value: number): ChangeMapTemplate {
+  return {
+    type: TypeKeys.CHANGE_MAP_TEMPLATE,
+    value
+  };
+}
+
 // GAME ACTIONS
 
 export interface Tick {
@@ -179,10 +203,10 @@ export function restart(): Restart {
 
 export interface ActorAction {
   type: TypeKeys.ACTOR_ACTION;
-  key: number;
+  key: string;
 }
 
-export function actorAction(key: number): ActorAction {
+export function actorAction(key: string): ActorAction {
   return {
     type: TypeKeys.ACTOR_ACTION,
     key
@@ -193,7 +217,9 @@ export type GameAction = Tick | ActorAction | Pause | Resume;
 export type SettingsAction =
   | SetOptimization
   | SetStartingTerritory
-  | SetGameTime;
+  | SetGameTime
+  | SetTouch
+  | ChangeMapTemplate;
 export type FieldsAction = ResizeBoard | CreateBoard;
 export type PlayersAction =
   | AddPlayer

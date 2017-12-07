@@ -11,10 +11,10 @@ export default class DynamicTable extends Component<
   }
   render() {
     let rows = [];
-    for (var i = 0; i < this.props.cols; i++) {
+    for (var i = 0; i < Math.min(40, this.props.cols); i++) {
       let rowID = `row${i}`;
       let cell = [];
-      for (var idx = 0; idx < this.props.rows; idx++) {
+      for (var idx = 0; idx < Math.min(40, this.props.rows); idx++) {
         let cellID = `cell${i}-${idx}`;
         cell.push(<td key={cellID} id={cellID} />);
       }

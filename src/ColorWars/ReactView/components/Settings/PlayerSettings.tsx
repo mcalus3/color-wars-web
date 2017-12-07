@@ -11,7 +11,7 @@ import {
 } from 'react-bootstrap';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import * as actions from '../../../ReduxStore/actionTypes';
-import { swap } from '../../../utils/functions';
+import { FRAMES_PER_SEC, swap } from '../../../utils/functions';
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
@@ -21,9 +21,9 @@ export interface Props {
   color: number;
   speed: number;
   deathPenalty: number;
-  keys: { [key: number]: string };
   aiControlled: boolean,
   aiDifficulty: number,
+  keys: { [key: string]: string };
   onPlayerModify: (
     id: number,
     prop: string,
@@ -32,8 +32,9 @@ export interface Props {
 }
 
 class PlayerSettingsControl extends React.Component<Props, object> {
-  maxSpeed: number = 40;
-
+  maxSpeed: number = FRAMES_PER_SEC * 4; // fields/sec
+  maxDeath: number = 10; // seconds of death
+  
   onNameChange = (e: any) => {
     this.props.onPlayerModify(
       this.props.id,
@@ -51,22 +52,32 @@ class PlayerSettingsControl extends React.Component<Props, object> {
   }
 
   onSpeedChange = (v: number) => {
-    let speed = 40 / Math.floor(Math.pow(2, v));
-    this.props.onPlayerModify(this.props.id, 'speed', speed);
+    let MaxFraction = this.maxSpeed / FRAMES_PER_SEC;
+
+    let visualSpeed = Math.round(Math.pow(2, v));
+    let invSpeed = (Math.round(FRAMES_PER_SEC / visualSpeed * MaxFraction) / MaxFraction);
+    this.props.onPlayerModify(this.props.id, 'speed', invSpeed);
   }
 
   onKeyChange = (e: any) => {
     let mapping = { ...this.props.keys };
     let dir = Object.keys(mapping).find(
-      key => mapping[key] === e.placeholder
+      key => mapping[key] === e.target.placeholder
     ) as string;
     delete mapping[dir];
-    mapping[parseInt(e.target.value, 10)] = e.target.placeholder;
+    mapping[e.target.value] = e.target.placeholder;
     this.props.onPlayerModify(this.props.id, 'keyMapping', mapping);
   }
 
   onPenaltyChange = (v: any) => {
-    let penalty = 40 * Math.floor(Math.pow(2, v));
+    let penalty;
+
+    if (v === this.maxDeath){
+      penalty = Infinity;
+    } else {
+      penalty = FRAMES_PER_SEC * v;
+      
+    }
     this.props.onPlayerModify(this.props.id, 'deathPenalty', penalty);
   }
 
@@ -81,7 +92,7 @@ class PlayerSettingsControl extends React.Component<Props, object> {
   render() {
     let dirKeys = swap(this.props.keys);
     Object.keys(dirKeys).forEach((k: string) => {
-      dirKeys[k] = parseInt(dirKeys[k], 10);
+      dirKeys[k] = dirKeys[k];
     });
     return (
       <div className="playerSettings">
@@ -122,10 +133,10 @@ class PlayerSettingsControl extends React.Component<Props, object> {
               <SliderWithTooltip
                 min={0}
                 max={Math.log2(this.maxSpeed)}
-                tipFormatter={this.myFormatter}
-                defaultValue={Math.log2(40/this.props.speed)}
-                onAfterChange={this.onSpeedChange}
-                step={1 / this.maxSpeed}
+                value={Math.log2(FRAMES_PER_SEC/this.props.speed)}
+                step={1 / this.maxSpeed}                
+                tipFormatter={this.speedFormatter}
+                onChange={this.onSpeedChange}
               />
             </Col>
           </FormGroup>
@@ -137,11 +148,10 @@ class PlayerSettingsControl extends React.Component<Props, object> {
             <Col sm={9}>
               <SliderWithTooltip
                 min={0}
-                max={Math.log2(this.maxSpeed)}
-                step={1 / this.maxSpeed}
-                tipFormatter={this.deathFormatter(this.maxSpeed)}
-                defaultValue={Math.log2(this.props.deathPenalty / 40)}
-                onAfterChange={this.onPenaltyChange}
+                max={this.maxDeath}
+                tipFormatter={this.deathFormatter(this.maxDeath)}
+                value={(this.props.deathPenalty / FRAMES_PER_SEC)}
+                onChange={this.onPenaltyChange}
               />
             </Col>
           </FormGroup>
@@ -151,38 +161,34 @@ class PlayerSettingsControl extends React.Component<Props, object> {
               keys
             </Col>
             <Col sm={6} smOffset={1}>
-              <FormControl
-                type="number"
+              <FormControl                
                 placeholder="up"
-                defaultValue={dirKeys.up}
+                value={dirKeys.up}
                 onChange={this.onKeyChange}
               />
             </Col>
           </FormGroup>
           <FormGroup controlId="keyMapping">
             <Col sm={6}>
-              <FormControl
-                type="number"
+              <FormControl                
                 placeholder="left"
-                defaultValue={dirKeys.left}
+                value={dirKeys.left}
                 onChange={this.onKeyChange}
               />
             </Col>
             <Col sm={6}>
-              <FormControl
-                type="number"
+              <FormControl                
                 placeholder="right"
-                defaultValue={dirKeys.right}
+                value={dirKeys.right}
                 onChange={this.onKeyChange}
               />
             </Col>
           </FormGroup>
           <FormGroup controlId="keyMapping">
             <Col sm={6} smOffset={3}>
-              <FormControl
-                type="number"
+              <FormControl                
                 placeholder="down"
-                defaultValue={dirKeys.down}
+                value={dirKeys.down}
                 onChange={this.onKeyChange}
               />
             </Col>
@@ -210,8 +216,8 @@ class PlayerSettingsControl extends React.Component<Props, object> {
             max={1}
             step={1}
             tipFormatter={this.normalFormatter}
-            defaultValue={this.props.aiDifficulty}
-            onAfterChange={this.onAiDifficultyChange}
+            value={this.props.aiDifficulty}
+            onChange={this.onAiDifficultyChange}
           />
         </Col>
       </FormGroup>;
@@ -223,16 +229,17 @@ class PlayerSettingsControl extends React.Component<Props, object> {
     return `${v}`;
   }
 
-  myFormatter(v: number) {
-    return `${Math.floor(Math.pow(2, v))}`;
+  speedFormatter(v: number) {
+    return `${Math.round(Math.pow(2, v))}`;
   }
 
   deathFormatter(max: number) {
     return (v: number) => {
-      if (v === Math.log2(max)) {
-        return 'endless';
+      let calculated = Math.round(v);
+      if (calculated === max) {
+        return 'permament';
       }
-      return `${Math.floor(Math.pow(2, v))}`;
+      return `${calculated}`;
     };
   }
 }

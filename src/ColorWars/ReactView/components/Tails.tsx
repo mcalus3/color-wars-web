@@ -26,6 +26,13 @@ class Tails extends React.Component<Props, object> {
     this.tails = this.props.tails;
   }
 
+  shouldComponentUpdate(nextProps: Props){
+    if(nextProps.activePlayers === this.props.activePlayers && nextProps.dimension === this.props.dimension && nextProps.tails === this.props.tails){
+      return false;
+    }
+    return true;
+  }
+
   componentDidMount() {
     this.createPrototypes(this.props.dimension);
   }
@@ -40,9 +47,8 @@ class Tails extends React.Component<Props, object> {
       });    
     }
     
-    if (nextProps.dimension !== this.dimension) {
-      this.createPrototypes(nextProps.dimension);
-    }
+    this.createPrototypes(nextProps.dimension);
+
     for (let i = 0; i < this.props.activePlayers; i++) {
       var oldTail = this.tails[i];
       var newTail = this.props.tails[i];

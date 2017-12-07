@@ -8,6 +8,7 @@ import { HandleKeyboardInput } from './GameLogic/HandleKeyboardInput';
 import { changeDirection } from './GameLogic/changeDirection';
 import { resizeBoard } from './GameLogic/ResizeBoard';
 import { setPlayersAmount } from './GameLogic/SetPlayersAmount';
+import { changeMapTemplate } from './GameLogic/ChangeMapTemplate';
 
 export function gameReducer(
   oldState: GameState = initialState,
@@ -37,11 +38,11 @@ export function gameReducer(
       return newState;
 
     case TypeKeys.PAUSE:
-      newState.gameState = 'paused';
+      newState.gamePhase = 'paused';
       return newState;
 
     case TypeKeys.RESUME:
-      newState.gameState = 'runing';
+      newState.gamePhase = 'runing';
       return newState;
 
     case TypeKeys.SET_OPTIMIZATION:
@@ -54,10 +55,21 @@ export function gameReducer(
 
     case TypeKeys.MODIFY_PLAYER:
       newState.playersById = newState.playersById.slice();
-      newState.playersById[action.id] = {
-        ...newState.playersById[action.id]
-      };
-      newState.playersById[action.id][action.property] = action.value;
+      
+      if (action.property === 'keyMapping'){
+
+        newState.keyMappingsById[action.id] = {
+          ...newState.keyMappingsById[action.id]
+        };
+        newState.keyMappingsById[action.id] = action.value;          
+
+      } else {
+        newState.playersById[action.id] = {
+          ...newState.playersById[action.id]
+        };
+        newState.playersById[action.id][action.property] = action.value;  
+      }
+
       return newState;
 
     case TypeKeys.SET_PLAYERS_AMOUNT:
@@ -72,7 +84,15 @@ export function gameReducer(
       newState.endTime = action.frames;
       return newState;
 
-    default:
+      case TypeKeys.TOUCH_SET:
+      newState.touchscreenDetected = action.value;
+      return newState;
+
+      case TypeKeys.CHANGE_MAP_TEMPLATE:
+      newState = changeMapTemplate(newState, action.value);
+      return newState;
+
+      default:
       return oldState;
   }
 }

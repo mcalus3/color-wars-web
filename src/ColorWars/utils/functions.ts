@@ -38,8 +38,8 @@ export function layouter(
 }
 
 export var colorNumToName = {
-  32768: 'green',
-  255: 'blue',
+  1: 'green',
+  2: 'blue',
   16777215: 'white',
   8421504: 'grey',
   3: 'orange',
@@ -51,8 +51,8 @@ export var colorNumToName = {
 };
 
 export var colorNameToNum = {
-  green: 32768,
-  blue: 255,
+  green: 1,
+  blue: 2,
   white: 16777215,
   grey: 8421504
 };
@@ -62,6 +62,16 @@ export function ArrayHasCoords(coords: Point, arr: Point[]): boolean {
     if (arr[i].X === coords.X && arr[i].Y === coords.Y) {
       return true;
     }
+  }
+  return false;
+}
+
+export function OptimizedArrayHasCoords(coords: Point, arr: boolean[][]): boolean {
+  
+  if (arr[coords.X] !== undefined){
+    if (arr[coords.X][coords.Y] === true) {
+      return true;
+    }  
   }
   return false;
 }
@@ -142,24 +152,30 @@ export function getFontSize(canvasWidth: number) {
 }
 
 export function getNeighbors(p: Point, d: Point): Point[] {
-  var neighbors: Point[] = [
-    { X: p.X, Y: p.Y - 1 },
-    { X: p.X, Y: p.Y + 1 },
-    { X: p.X + 1, Y: p.Y },
-    { X: p.X - 1, Y: p.Y }
-  ].filter(point => !outOfBoard(point, d));
+  var neighbors: Point[] = [];
+  if (p.Y !== 0){
+    neighbors.push({ X: p.X, Y: p.Y - 1 });
+  }
+  if (p.X !== 0){
+    neighbors.push({ X: p.X - 1, Y: p.Y });
+  }
+  if (p.X !== d.X - 1){
+    neighbors.push({ X: p.X + 1, Y: p.Y });
+  }
+  if (p.Y !== d.Y - 1){
+    neighbors.push({ X: p.X, Y: p.Y + 1 });
+  }
+
   return neighbors;
 }
 
 export function copy2dBoard(inArr: any[][]): any[][] {
-  var newArr: any[][] = [];
+  var newArr: any[][] = inArr.slice();
   var i = inArr.length;
   while (i--) {
-    newArr[i] = [];
-    var j = inArr[i].length;
-    while (j--) {
-      newArr[i][j] = inArr[i][j];
-    }
+    newArr[i] = inArr[i].slice();
   }
   return newArr;
 }
+
+export const FRAMES_PER_SEC = 10;

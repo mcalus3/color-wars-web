@@ -1,7 +1,7 @@
 import { GameState } from '../../../utils/objectTypes';
 
 export function changeDirection(state: GameState, id: number, direction: string) {
-  if (state.gameState !== 'running') {
+  if (state.gamePhase !== 'running') {
     return state;
   }
 

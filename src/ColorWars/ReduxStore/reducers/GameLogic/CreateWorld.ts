@@ -4,7 +4,6 @@ import {
   outOfBoard
 } from '../../../utils/functions';
 import { GameState, Point } from '../../../utils/objectTypes';
-import { killTail } from './Tick';
 
 export function createWorld(state: GameState): GameState {
   var gameState: GameState = { ...state };
@@ -14,6 +13,9 @@ export function createWorld(state: GameState): GameState {
   // create board
   gameState.fieldColors = getEmptyFieldColors(gameState.dimension);
   gameState.fieldOccupiers = getEmptyFieldOccupiers(gameState.dimension);
+  for (let i = 0; i < gameState.tailsById.length; i++){
+    gameState.tailsById[i] = [];
+  }
 
   // clean fields canvas from last game
   gameState = claimFields(
@@ -24,19 +26,18 @@ export function createWorld(state: GameState): GameState {
 
   // set startTime and game state
   gameState.currentTick = 0;
-  gameState.gameState = 'initializing';
+  gameState.gamePhase = 'initializing';
 
   // for each active player:
   for (let i = 0; i < gameState.activePlayers; i++) {
       var curPlayer = { ...gameState.playersById[i] };
       gameState.playersById[i] = curPlayer;
 
-      // kill tail
-      gameState = killTail(gameState, i);
-
       // set starting position and move player at it
       curPlayer.startCoords = setStartingPosition(i, gameState.dimension);
       curPlayer.coords = { ...curPlayer.startCoords };
+      curPlayer.state = 'defensive';
+      gameState.ticksWaitingById[i] = 0;
 
       // claim starting fields
       gameState = claimStartingFields(gameState, i);

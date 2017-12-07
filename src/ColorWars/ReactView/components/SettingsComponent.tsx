@@ -8,14 +8,15 @@ import {
   FormControl,
   Button,
   ButtonToolbar,
-  ToggleButtonGroup,
-  ToggleButton,
-  ControlLabel
+  ControlLabel,
+  DropdownButton,
+  MenuItem
 } from 'react-bootstrap';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 
 import { Point } from '../../utils/objectTypes';
 import DynamicTable from './Settings/DynamicTable';
+import { FRAMES_PER_SEC } from '../../utils/functions';
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
@@ -31,6 +32,7 @@ export interface Props {
   onResizeBoard: (size: Point) => actions.ResizeBoard;
   onChangeStartTerritory: (size: number) => actions.SetStartingTerritory;
   onChangeGameTime: (frames: number) => actions.SetGameTime;
+  onTemplateChange: (no: number) => actions.ChangeMapTemplate;
 }
 
 class SettingsComponent extends React.Component<
@@ -75,11 +77,15 @@ class SettingsComponent extends React.Component<
   }
 
   onChangeGameTime = (e: any) => {
-    this.props.onChangeGameTime(e.target.value * 40);
+    this.props.onChangeGameTime(e.target.value * FRAMES_PER_SEC);
   }
 
   onChangeStartTerritory = (e: any) => {
     this.props.onChangeStartTerritory(e.target.value);
+  }
+
+  onTemplateChange = (e: any) => {
+    return this.props.onTemplateChange(e);
   }
 
   render() {
@@ -103,12 +109,20 @@ class SettingsComponent extends React.Component<
             </Button>
           </ButtonToolbar>
           <div className="SettingsGroup">
-            <ButtonToolbar className="Settings-element inline">
-              <ToggleButtonGroup type="checkbox">
-                <ToggleButton value={1} onChange={this.onOptimizedChange}>
+            <ButtonToolbar>
+                <Button active={this.props.optimized} onClick={this.onOptimizedChange}>
                   toggle optimized rendering
-                </ToggleButton>
-              </ToggleButtonGroup>
+                </Button>
+                <DropdownButton title="Change game template" id="bg-nested-dropdown" onSelect={this.onTemplateChange}>
+                  <MenuItem eventKey="0">Free for all</MenuItem>
+                  <MenuItem eventKey="1">Bots show-off</MenuItem>
+                  <MenuItem eventKey="2">War</MenuItem>
+                  <MenuItem eventKey="3">Pairs</MenuItem>
+                  <MenuItem eventKey="4">Fast duel</MenuItem>
+                  <MenuItem eventKey="5">Slow Duel</MenuItem>
+                  <MenuItem eventKey="6">2 vs 2</MenuItem>
+                  <MenuItem eventKey="7">2 vs 1</MenuItem>
+                </DropdownButton>
             </ButtonToolbar>
           </div>
           <div className="SettingsGroup">
@@ -124,14 +138,14 @@ class SettingsComponent extends React.Component<
               type={'number'}
               placeholder={'game time(in seconds)'}
               className="inline"
-              defaultValue={(this.props.endTime / 40).toString()}
+              value={(this.props.endTime / FRAMES_PER_SEC).toString()}
               onChange={this.onChangeGameTime}
             />
             <FormControl
               type={'number'}
               placeholder={'starting territory size'}
               className="inline"
-              defaultValue={this.props.startingTerritory.toString()}
+              value={this.props.startingTerritory.toString()}
               onChange={this.onChangeStartTerritory}
             />
           </div>

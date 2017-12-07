@@ -23,7 +23,8 @@ export function mapDispatchToProps(dispatch: Dispatch<actions.Action>) {
     onResizeBoard: (size: Point) => dispatch(actions.resizeBoard(size)),
     onChangeStartTerritory: (size: number) =>
       dispatch(actions.setStartingTerritory(size)),
-    onChangeGameTime: (frames: number) => dispatch(actions.setGameTime(frames))
+    onChangeGameTime: (frames: number) => dispatch(actions.setGameTime(frames)),
+    onTemplateChange: (no: number) => dispatch(actions.changeMapTemplate(no))
   };
 }
 

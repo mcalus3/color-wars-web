@@ -1,3 +1,4 @@
+import TouchScreenButtons from '../../ReduxStore/containers/TouchScreenButtons';
 import EndGame from '../../ReduxStore/containers/EndGame';
 import Tails from '../../ReduxStore/containers/Tails';
 import * as React from 'react';
@@ -11,6 +12,7 @@ import { getCanvasDimension } from '../../utils/functions';
 export interface Props {
   dim: Point;
   gameState: string;
+  touchscreen: boolean;
 }
 
 class GameBoard extends React.Component<Props, object> {
@@ -28,6 +30,9 @@ class GameBoard extends React.Component<Props, object> {
           <Players />
 
           {this.renderEndGame()}
+
+          {this.renderTouchButtons()}
+        
         </Stage>
       </div>
     );
@@ -39,6 +44,14 @@ class GameBoard extends React.Component<Props, object> {
     }
     return null;
   }
+  
+  renderTouchButtons() {
+    if (this.props.touchscreen) {
+      return <TouchScreenButtons />;
+    }
+    return null;
+  }
 }
+
 
 export default GameBoard;

@@ -9,22 +9,22 @@ import { claimFields } from './CreateWorld';
 
 export function Tick(state: GameState) {
   // handle pause
-  if (state.gameState === 'paused') {
+  if (state.gamePhase === 'paused') {
     return state;
   }
 
   var gameState: GameState = { ...state };
 
-  if (gameState.gameState === 'initializing') {
-    gameState.gameState = 'running';
+  if (gameState.gamePhase === 'initializing') {
+    gameState.gamePhase = 'running';
   }
 
   // check if the game should end already
   if (gameState.currentTick >= gameState.endTime) {
-    gameState = { ...gameState, gameState: 'endGame' };
+    gameState = { ...gameState, gamePhase: 'endGame' };
     return gameState;
   } else {
-    gameState = { ...gameState, currentTick: gameState.currentTick + 1, gameState: 'running' };
+    gameState = { ...gameState, currentTick: gameState.currentTick + 1, gamePhase: 'running' };
   }
 
   // clear last updated coords table
@@ -36,41 +36,46 @@ export function Tick(state: GameState) {
   for (let i = 0; i < gameState.activePlayers; i++) {
     gameState = updatePlayer(gameState, i);
   }
+
+  gameState = fieldsStatistics(state, gameState);
+
   return gameState;
 }
 
 export function updatePlayer(state: GameState, id: number) {
   var gameState: GameState = { ...state };
+  gameState.ticksWaitingById = gameState.ticksWaitingById.slice();
 
-  // player movement is executed once per couple of ticks
-  if (gameState.ticksWaitingById[id] > 0) {
-    gameState.ticksWaitingById[id] -= 1;
-
-    return gameState;
+  while (gameState.ticksWaitingById[id] < 1){
+    gameState = doPlayerAction(gameState, id);
+    gameState.ticksWaitingById[id] += gameState.playersById[id].speed;
   }
 
+  gameState.ticksWaitingById[id] -= 1;
+
+  return gameState;
+}
+
+
+function doPlayerAction(state: GameState, id: number){
+  var gameState: GameState = { ...state };  
   var playersById: Player[] = gameState.playersById.slice();
   var tailsById: Point[][] = gameState.tailsById.slice();
   var player: Player = { ...playersById[id] };
   var tail: Point[] = tailsById[id].slice();
 
-  playersById[id] = player;
   tailsById[id] = tail;
   gameState.playersById = playersById;
   gameState.tailsById = tailsById;
-  gameState.fieldOccupiers = copy2dBoard(gameState.fieldOccupiers);
-
-  // set next waiting period
-  gameState.ticksWaitingById = gameState.ticksWaitingById.slice();
-  gameState.ticksWaitingById[id] = gameState.playersById[id].speed - 1;
+  gameState.fieldOccupiers = gameState.fieldOccupiers.slice();
 
   // move player
   player.direction = player.nextDirection;
   player = movePlayer(player);
 
-  // if he is out of bounds, kill him and return
+  // if he is out of bounds, kill him and return (if player is AI, just wait)
   if (outOfBoard(player.coords, gameState.dimension)) {
-    return killPlayer(gameState, id);
+      return killPlayer(gameState, id);
   }
 
   gameState.playersById[id] = player;
@@ -100,6 +105,7 @@ export function updatePlayer(state: GameState, id: number) {
     tail.push({ ...player.coords });
 
     // and register it for collision detection
+    gameState.fieldOccupiers[pX] = gameState.fieldOccupiers[pX].slice();
     gameState.fieldOccupiers[pX][pY] = id;
   }
 
@@ -131,7 +137,8 @@ export function killPlayer(state: GameState, id: number): GameState {
   newState.playersById[id] = {
     ...player,
     coords: { ...player.startCoords },
-    state: 'dead'
+    state: player.deathPenalty === Infinity ? 'eliminated' : 'dead',
+    deaths: player.deaths + 1
   };
   newState.ticksWaitingById[id] = player.deathPenalty;
 
@@ -146,7 +153,9 @@ export function killTail(state: GameState, id: number): GameState {
   };
 
   newState.tailsById[id].forEach(t => {
-    newState.fieldOccupiers[t.X][t.Y] = -1;
+    if (newState.fieldOccupiers.length >= t.X && newState.fieldOccupiers[t.X].length >= t.Y){
+      newState.fieldOccupiers[t.X][t.Y] = -1;      
+    }
   });
   newState.tailsById[id] = [];
   return newState;
@@ -180,4 +189,85 @@ function EnterField(state: GameState, field: Point): GameState {
     return killPlayer(state, id);
   }
   return state;
+}
+
+function fieldsStatistics(oldState: GameState, newState: GameState): GameState{
+
+  if (allPlayersAreEliminated(newState.playersById, newState.activePlayers)) {
+    return {...newState, gamePhase: 'endGame', currentTick: newState.endTime};
+  }
+
+  if (newState.fieldColors === oldState.fieldColors) {
+    return newState;
+  }
+
+  var gameState = {...newState};
+  
+  let colors: {[c: number]: any} = colorsOnMap(newState.fieldColors);
+  for (let i = 0; i < gameState.activePlayers; i++){
+    if (!(colors.hasOwnProperty(gameState.playersById[i].color))) {
+
+      gameState = eliminateFromTheGame(gameState, i);
+    }   
+  }
+
+  if (allFieldsHaveOneColor(gameState.fieldColors)) {
+    gameState = {...gameState, gamePhase: 'endGame', currentTick: gameState.endTime};
+  }
+
+  return gameState;
+}
+
+function allFieldsHaveOneColor(fields: number[][]): boolean{
+  let prevColor = fields[0][0];
+  for (let i = 0; i < fields.length; i++){
+    for (let j = 0; j < fields[i].length; j++){
+      if (fields[i][j] !== prevColor){
+        return false;
+      }
+      prevColor = fields[i][j];
+    }      
+  }
+  return true;
+}
+
+function colorsOnMap(fields: number[][]): {[c: number]: any}{
+  let colors: {[c: number]: any} = {};
+  
+  for (let i = 0; i < fields.length; i++){
+    for (let j = 0; j < fields[i].length; j++){
+      if (!(colors.hasOwnProperty(fields[i][j]))){
+        colors[fields[i][j]] = {};
+      }
+    }      
+  }
+  return colors;
+}
+
+function eliminateFromTheGame(state: GameState, id: number){
+  let gameState = {...state};
+  gameState.playersById = gameState.playersById.slice();
+  gameState.ticksWaitingById = gameState.ticksWaitingById.slice();
+
+  gameState.ticksWaitingById[id] = Infinity;
+
+  let player = {...gameState.playersById[id]};
+  player = {
+    ...player,
+    coords: { ...player.startCoords },
+    state: 'eliminated',
+    deaths: player.deaths + 1
+  };
+  gameState.playersById[id] = player;
+
+  return gameState;
+}
+
+function allPlayersAreEliminated(players: Player[], amount: number){
+  for (let i = 0; i < amount; i++){
+    if (players[i].state !== 'eliminated'){
+      return false;
+    }
+  }
+  return true;
 }

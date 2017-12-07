@@ -1,5 +1,5 @@
 import PlayerVisual from '../../ReduxStore/containers/PlayerVisual';
-import { FastLayer } from 'react-konva';
+import { Layer } from 'react-konva';
 import * as React from 'react';
 
 export interface Props {
@@ -14,7 +14,7 @@ class Players extends React.Component<Props, object> {
         playerComponents.push(<PlayerVisual id={i} key={i.toString()} />);
       };
 
-    return <FastLayer>{playerComponents}</FastLayer>;
+    return <Layer>{playerComponents}</Layer>;
   }
 }
 

@@ -1,7 +1,7 @@
 import { GameState } from '../../../utils/objectTypes';
 import { changeDirection } from './changeDirection';
 
-export function HandleKeyboardInput(state: GameState, key: number): GameState {
+export function HandleKeyboardInput(state: GameState, key: string): GameState {
   var gameState: GameState = state;
   
   for(let i = 0; i < gameState.activePlayers; i++){

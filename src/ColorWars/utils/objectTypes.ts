@@ -5,6 +5,10 @@ export interface Ai {
   stepsDone: number;
   currentTargets: Point[];
   currentAction: string;
+  currentDirection: string;
+  precision: number;
+  PlayerHasDied: boolean;
+  playerHasntMoved: boolean;
 }
 
 export interface Point {
@@ -17,7 +21,8 @@ export interface Player {
   coords: Point;
   state: string;
   direction: string;
-  
+  deaths: number;
+
   name: string;
   speed: number;
   color: number;
@@ -28,7 +33,7 @@ export interface Player {
 }
 
 export interface GameState {
-  gameState: string;
+  gamePhase: string;
   currentTick: number;
   lastUpdatedCoords: Point[];
   activePlayers: number;
@@ -42,6 +47,23 @@ export interface GameState {
   
   playersById: Player[];
   tailsById: Point[][];
-  keyMappingsById: { [key: number]: string }[];
+  keyMappingsById: { [key: string]: string }[];
   ticksWaitingById: number[];
+  touchscreenDetected: boolean;
+}
+
+export interface GameSettings {
+  activePlayers: number;
+  dimension: Point;
+  startingTerritorySize: number;
+  endTime: number;
+  
+  playersById: PlayerSettings[];
+}
+
+export interface PlayerSettings {
+  name: string;
+  speed: number;
+  color: number;
+  deathPenalty: number;
 }
