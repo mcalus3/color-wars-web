@@ -3,20 +3,14 @@ body {
 }
 
 .Board {
-  display: inline-block;
-  vertical-align: top;
+  display: flex;
+  justify-content: center;
 }
 
 .GameBoard {
   background-color: #ffffff;
-  margin: 0 auto;
-  display: inline-block;
-  vertical-align: top;
 }
 
 .ScoreBoard {
   background-color: #444444;
-  margin: 0 auto;
-  display: inline-block;
-  vertical-align: top;
 }

@@ -76,18 +76,24 @@ export function OptimizedArrayHasCoords(coords: Point, arr: boolean[][]): boolea
   return false;
 }
 
-export function getCanvasDimension(dim: Point): Point {
+export function getCanvasDimension(dim: Point, mobile: boolean): Point {
   var canvasDimension: Point = { X: 0, Y: 0 };
-  var viewPort: Point = getViewPort();
-  viewPort.X = viewPort.X * 3 / 4;
-  viewPort.Y = viewPort.Y - 75;
+
+  var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+  var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
+  w = w * 3 / 4;
+  if (!mobile){
+    h = h - 75;    
+  }
+  
   const boardRatio: number = dim.X / dim.Y;
 
-  if (viewPort.X / viewPort.Y > boardRatio) {
-    canvasDimension.Y = viewPort.Y;
+  if (w / h > boardRatio) {
+    canvasDimension.Y = h;
     canvasDimension.X = canvasDimension.Y * boardRatio;
   } else {
-    canvasDimension.X = viewPort.X;
+    canvasDimension.X = w;
     canvasDimension.Y = canvasDimension.X / boardRatio;
   }
 

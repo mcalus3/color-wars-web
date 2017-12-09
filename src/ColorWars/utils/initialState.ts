@@ -26,7 +26,7 @@ export const initialState: GameState = {
       speed: 1,
       deathPenalty: 40,
       nextDirection: 'none',
-      AiControlled: true,
+      AiControlled: false,
       AiDifficulty: 1,
       deaths: 0
     },

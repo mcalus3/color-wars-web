@@ -13,18 +13,15 @@ import ScoreBar from './GameElements/ScoreBar';
 export interface Props {
   fieldColors: number[][];
   dimension: Point;
+  mobile: boolean;
 }
 
 class ScoreBoard extends React.Component<Props, object> {
   canvDim: Point = { X: 0, Y: 0 };
 
-  componentWillMount() {
-    this.canvDim = getCanvasDimension(this.props.dimension);
-    this.canvDim.X /= 3;
-  }
 
   render() {
-    this.canvDim = getCanvasDimension(this.props.dimension);
+    this.canvDim = getCanvasDimension(this.props.dimension, this.props.mobile);
     this.canvDim.X /= 3;
     const scoreBars = createScoreBars(this.props.fieldColors, this.canvDim);
     return (

@@ -1,4 +1,5 @@
 import { FastLayer, Text, Rect } from 'react-konva';
+import { Stage } from 'konva';
 import * as React from 'react';
 
 import {
@@ -22,8 +23,8 @@ class EndGame extends Component<Props, object> {
   layer: any;
 
   componentDidMount() {
-    var canvas = this.layer.canvas._canvas as any;
-    this.canvasDim = { X: canvas.width, Y: canvas.height };
+    var Stage = this.layer.getStage() as Stage;
+    this.canvasDim = { X: Stage.width(), Y: Stage.height() };
 
     var colorsArr: number[];
     var valuesArr: number[];

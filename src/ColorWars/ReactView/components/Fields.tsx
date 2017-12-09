@@ -9,6 +9,7 @@ import {
 } from '../../utils/functions';
 import { Component } from 'react';
 import { getAllCoords } from '../../ReduxStore/reducers/GameLogic/CreateWorld';
+import { Stage } from 'konva';
 
 export interface Props {
   fields: number[][];
@@ -59,16 +60,15 @@ class Fields extends Component<Props, object> {
       return;
     }
 
-    let canvas = this.layer.canvas._canvas as any;
+    let stage = this.layer.getStage() as Stage;
     if (
-      canvas.width !== this.canvasDim.X ||
-      canvas.height !== this.canvasDim.Y
+      stage.width() !== this.canvasDim.X ||
+      stage.height() !== this.canvasDim.Y
     ) {
       this.redraw = true;
     }
 
-    this.canvasDim = { X: canvas.width, Y: canvas.height };
-
+    this.canvasDim = { X: stage.width(), Y: stage.height() };
     let fields = this.props.fields;
 
     let color: number =

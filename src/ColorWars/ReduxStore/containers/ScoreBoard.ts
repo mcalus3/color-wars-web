@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 export function mapStateToProps(state: GameState) {
   return {
     fieldColors: state.fieldColors,
-    dimension: state.dimension
+    dimension: state.dimension,
+    mobile: state.touchscreenDetected
   };
 }
 

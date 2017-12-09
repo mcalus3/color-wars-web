@@ -1,5 +1,5 @@
 import { Layer } from 'react-konva';
-import { Rect, Node } from 'konva';
+import { Rect, Node, Stage } from 'konva';
 import * as React from 'react';
 
 import { Point, Player } from '../../utils/objectTypes';
@@ -90,9 +90,9 @@ class Tails extends React.Component<Props, object> {
   }
 
   createPrototypes(dim: Point) {
-    let canvas = this.layer.canvas._canvas as HTMLCanvasElement;
-    this.canvasDimension = { X: canvas.width, Y: canvas.height };
-
+    let stage = this.layer.getStage() as Stage;
+    this.canvasDimension = { X: stage.width(), Y: stage.height() };
+    
     let X, Y, Width, Height;
     ({ X, Y, Width, Height } = layouter(dim, this.canvasDimension, {
       X: 0,

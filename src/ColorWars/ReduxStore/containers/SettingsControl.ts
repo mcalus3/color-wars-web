@@ -9,7 +9,8 @@ export function mapStateToProps(state: GameState) {
     dimension: state.dimension,
     startingTerritory: state.startingTerritorySize,
     endTime: state.endTime,
-    optimized: state.optimized
+    optimized: state.optimized,
+    phase: state.gamePhase
   };
 }
 

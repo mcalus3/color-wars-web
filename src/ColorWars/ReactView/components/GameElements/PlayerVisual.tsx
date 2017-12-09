@@ -13,7 +13,7 @@ export interface Props {
 
 class PlayerComponent extends React.Component<Props, {image: HTMLImageElement}> {
   rect: any;
-  canvas: any;
+  stage: Konva.Stage;
   rectangle: any;
 
   constructor(props: Props){
@@ -23,7 +23,7 @@ class PlayerComponent extends React.Component<Props, {image: HTMLImageElement}> 
   
   componentDidMount() {
     this.rect = this.refs.rect as any;
-    this.canvas = this.rect.getCanvas() as any;
+    this.stage = this.rect.getStage() as any;
 
 
     const image = new Image();
@@ -47,10 +47,10 @@ class PlayerComponent extends React.Component<Props, {image: HTMLImageElement}> 
 
   render() {
     var canvasDimension: Point = { X: 0, Y: 0 };
-    if (!(this.canvas === undefined)) {
+    if (!(this.stage === undefined)) {
       canvasDimension = {
-        X: this.canvas.width,
-        Y: this.canvas.height
+        X: this.stage.width(),
+        Y: this.stage.height()
       };
     }
 
@@ -90,7 +90,7 @@ class PlayerComponent extends React.Component<Props, {image: HTMLImageElement}> 
       this.rect.to({
         x: this.rectangle.X,
         y: this.rectangle.Y,
-        duration: 1 / FRAMES_PER_SEC,
+        duration: this.props.player.speed / FRAMES_PER_SEC,
         easing: Konva.Easings.Linear
       });
     }

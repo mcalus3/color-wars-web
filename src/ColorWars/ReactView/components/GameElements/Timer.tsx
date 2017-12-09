@@ -1,16 +1,17 @@
 import * as React from 'react';
+import * as Konva from 'konva';
 import * as ReactKonva from 'react-konva';
 
 class Timer extends React.Component<{ secondsLeft: number }, object> {
-  canvas: HTMLCanvasElement;
+  stage: Konva.Stage;
   text: any;
 
   componentDidMount() {
-    this.canvas = this.text.getCanvas() as any;
+    this.stage = this.text.getStage() as any;
   }
 
   render() {
-    let fontWidth = this.canvas ? this.canvas.width / 3 : 0;
+    let fontWidth = this.stage ? this.stage.width() / 3 : 0;
     return (
       <ReactKonva.Text
         ref={(c) => { this.text = c; }}

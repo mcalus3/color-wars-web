@@ -6,7 +6,7 @@ export function mapStateToProps(state: GameState) {
   return {
     dim: state.dimension,
     gameState: state.gamePhase,
-    touchscreen: state.touchscreenDetected
+    touchscreen: state.touchscreenDetected,
   };
 }
 

@@ -10,21 +10,21 @@ import {
   ButtonToolbar,
   ControlLabel,
   DropdownButton,
-  MenuItem
+  MenuItem,
+  Form,
+  FormGroup
 } from 'react-bootstrap';
-import Slider, { createSliderWithTooltip } from 'rc-slider';
 
 import { Point } from '../../utils/objectTypes';
-import DynamicTable from './Settings/DynamicTable';
 import { FRAMES_PER_SEC } from '../../utils/functions';
 
-const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 export interface Props {
   dimension: Point;
   startingTerritory: number;
   endTime: number;
   optimized: boolean;
+  phase: string;
   onOptimization: (value: boolean) => actions.SetOptimization;
   onCreateGame: () => actions.CreateBoard;
   onPauseGame: () => actions.Pause;
@@ -54,25 +54,21 @@ class SettingsComponent extends React.Component<
     this.props.onOptimization(!this.props.optimized);
   }
 
-  changeRows = (v: number) => {
-    this.setState({ bWidth: Math.floor(Math.pow(2, v)) });
+  changeRows = (e: any) => {
+    let val = clipMapDim(e.target.value);
+    this.setState({ bWidth: val });
     this.props.onResizeBoard({
-      X: Math.floor(Math.pow(2, v)),
+      X: val,
       Y: this.state.bHeight
     });
   }
 
-  changeCols = (v: number) => {
-    this.setState({
-      bHeight: Math.floor(
-        Math.pow(2, Math.log2(this.maxBoard) + Math.log2(this.minBoard) - v)
-      )
-    });
+  changeCols = (e: any) => {
+    let val = clipMapDim(e.target.value);    
+    this.setState({ bHeight: val });
     this.props.onResizeBoard({
       X: this.state.bWidth,
-      Y: Math.floor(
-        Math.pow(2, Math.log2(this.maxBoard) + Math.log2(this.minBoard) - v)
-      )
+      Y: val
     });
   }
 
@@ -88,96 +84,107 @@ class SettingsComponent extends React.Component<
     return this.props.onTemplateChange(e);
   }
 
+  onPauseResume = (e: any) => {
+    if (this.props.phase === 'paused'){
+      this.props.onResumeGame();
+    } else {
+      this.props.onPauseGame();
+    }
+  }
+
   render() {
     return (
       <span>
         <div className="Settings">
           <h1>Game Settings</h1>
           <ButtonToolbar>
+            <DropdownButton title="Change map" id="bg-nested-dropdown" onSelect={this.onTemplateChange}>
+              <MenuItem eventKey="0">Free for all</MenuItem>
+              <MenuItem eventKey="1">Bots show-off</MenuItem>
+              <MenuItem eventKey="2">War</MenuItem>
+              <MenuItem eventKey="3">Pairs</MenuItem>
+              <MenuItem eventKey="4">Fast duel</MenuItem>
+              <MenuItem eventKey="5">Slow Duel</MenuItem>
+              <MenuItem eventKey="6">2 vs 2</MenuItem>
+              <MenuItem eventKey="7">2 vs 1</MenuItem>
+            </DropdownButton>
+
             <Button
               bsStyle="primary"
-              bsSize="small"
               onClick={this.props.onCreateGame}
             >
               Restart game
             </Button>
-            <Button bsSize="small" onClick={this.props.onPauseGame}>
-              pause game
-            </Button>
-            <Button bsSize="small" onClick={this.props.onResumeGame}>
-              resume game
-            </Button>
           </ButtonToolbar>
+
           <div className="SettingsGroup">
             <ButtonToolbar>
-                <Button active={this.props.optimized} onClick={this.onOptimizedChange}>
-                  toggle optimized rendering
-                </Button>
-                <DropdownButton title="Change game template" id="bg-nested-dropdown" onSelect={this.onTemplateChange}>
-                  <MenuItem eventKey="0">Free for all</MenuItem>
-                  <MenuItem eventKey="1">Bots show-off</MenuItem>
-                  <MenuItem eventKey="2">War</MenuItem>
-                  <MenuItem eventKey="3">Pairs</MenuItem>
-                  <MenuItem eventKey="4">Fast duel</MenuItem>
-                  <MenuItem eventKey="5">Slow Duel</MenuItem>
-                  <MenuItem eventKey="6">2 vs 2</MenuItem>
-                  <MenuItem eventKey="7">2 vs 1</MenuItem>
-                </DropdownButton>
+
+              <Button onClick={this.onPauseResume}>
+                {this.props.phase === 'paused' ? 'resume game' : 'pause game'}
+              </Button>
+
+              <Button active={this.props.optimized} onClick={this.onOptimizedChange}>
+                toggle optimized rendering
+              </Button>
             </ButtonToolbar>
           </div>
           <div className="SettingsGroup">
-            <ControlLabel className="inline">
-              game time(in seconds)
-            </ControlLabel>
-            <ControlLabel className="inline">
+            <Form>
+              <FormGroup>
+                <ControlLabel>
+                  game time(in seconds)
+                </ControlLabel>
+                  <FormControl
+                    type={'number'}
+                    placeholder={'game time(in seconds)'}
+                    value={(this.props.endTime / FRAMES_PER_SEC).toString()}
+                    onChange={this.onChangeGameTime}
+                  />
+              </FormGroup>
+              <FormGroup>
+              <ControlLabel>
               starting territory size
-            </ControlLabel>
-          </div>
-          <div className="SettingsGroup">
-            <FormControl
-              type={'number'}
-              placeholder={'game time(in seconds)'}
-              className="inline"
-              value={(this.props.endTime / FRAMES_PER_SEC).toString()}
-              onChange={this.onChangeGameTime}
-            />
-            <FormControl
-              type={'number'}
-              placeholder={'starting territory size'}
-              className="inline"
-              value={this.props.startingTerritory.toString()}
-              onChange={this.onChangeStartTerritory}
-            />
+              </ControlLabel>
+                <FormControl
+                  type={'number'}
+                  placeholder={'starting territory size'}
+                  value={this.props.startingTerritory.toString()}
+                  onChange={this.onChangeStartTerritory}
+                />
+              </FormGroup>
+            </Form>
           </div>
 
           <h2>Board dimension</h2>
-          <SliderWithTooltip
-            min={Math.log2(this.minBoard)}
-            max={Math.log2(this.maxBoard)}
-            defaultValue={Math.log2(this.props.dimension.X)}
-            onAfterChange={this.changeRows}
-            tipFormatter={myFormatter}
-            step={1 / (this.maxBoard - this.minBoard)}
-            className="horizontalBar"
-          />
+          
           <div className="SettingsGroup">
-            <SliderWithTooltip
-              vertical={true}
-              min={Math.log2(this.minBoard)}
-              max={Math.log2(this.maxBoard)}
-              defaultValue={
-                Math.log2(this.maxBoard) +
-                Math.log2(this.minBoard) -
-                Math.log2(this.props.dimension.Y)
-              }
-              onAfterChange={this.changeCols}
-              tipFormatter={invertedFormatter(
-                Math.log2(this.maxBoard) + Math.log2(this.minBoard)
-              )}
-              step={1 / (this.maxBoard - this.minBoard)}
-              className="verticalBar"
-            />
-            <DynamicTable rows={this.state.bWidth} cols={this.state.bHeight} />
+            <FormGroup>
+              <ControlLabel>
+              width
+              </ControlLabel>
+              <FormControl
+                type={'number'}
+                placeholder={'width'}
+                min={this.minBoard}
+                max={this.maxBoard}
+                value={this.props.dimension.X}
+                onChange={this.changeRows}
+              />
+            </FormGroup>
+              <FormGroup>
+              <ControlLabel>
+              height
+              </ControlLabel>
+                  <FormControl
+                    type={'number'}
+                    placeholder={'height'}
+                    min={this.minBoard}
+                    max={this.maxBoard}
+                    value={this.props.dimension.Y}
+                    onChange={this.changeCols}
+                  />
+              </FormGroup>
           </div>
         </div>
         <PlayersSettings />
@@ -188,12 +195,6 @@ class SettingsComponent extends React.Component<
 
 export default SettingsComponent;
 
-function myFormatter(v: number) {
-  return `${Math.ceil(Math.pow(2, v))}`;
-}
-
-function invertedFormatter(max: number) {
-  return (v: number) => {
-    return `${Math.floor(Math.pow(2, max - v))}`;
-  };
+function clipMapDim(dim: number): number{
+  return Math.round(Math.max(Math.min(dim, 200),1));
 }

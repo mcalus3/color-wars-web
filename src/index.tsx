@@ -69,13 +69,20 @@ function initializeGame() {
 function renderReactDom(store: Store<GameState>) {
   ReactDOM.render(
     <div className="App">
-      <div className="App-header">
-        <h2>Welcome to Color Wars</h2>
-      </div>
+      {renderAppHeader()}
       <Provider store={store}>
         <Game />
       </Provider>
     </div>,
     document.getElementById('root') as HTMLElement
   );
+}
+
+function renderAppHeader(){
+  if (!gStore.getState().touchscreenDetected) {
+    return <div className="App-header">
+        <h2>Welcome to Color Wars</h2>
+      </div>
+  }
+  return null;
 }
