@@ -6,31 +6,34 @@ import { Point } from '../../utils/objectTypes';
 import {
   colorNumToName,
   createHistogram,
-  getCanvasDimension
+  getDimensionForCanvas
 } from '../../utils/functions';
 import ScoreBar from './GameElements/ScoreBar';
 
 export interface Props {
   fieldColors: number[][];
   dimension: Point;
-  mobile: boolean;
+  mobile: number;
 }
 
 class ScoreBoard extends React.Component<Props, object> {
-  canvDim: Point = { X: 0, Y: 0 };
-
 
   render() {
-    this.canvDim = getCanvasDimension(this.props.dimension, this.props.mobile);
-    this.canvDim.X /= 3;
-    const scoreBars = createScoreBars(this.props.fieldColors, this.canvDim);
+    let canvDim = getDimensionForCanvas(this.props.dimension, this.props.mobile !== 0);
+    canvDim.X /= 3;
+    const scoreBars = createScoreBars(this.props.fieldColors, canvDim);
     return (
       <div className="ScoreBoard">
-        <Stage width={this.canvDim.X} height={this.canvDim.Y}>
-          <FastLayer>{scoreBars}</FastLayer>
+        <Stage width={canvDim.X} height={canvDim.Y}>
+          
+          <FastLayer>
+            {scoreBars}
+          </FastLayer>
+          
           <FastLayer>
             <Timer />
           </FastLayer>
+
         </Stage>
       </div>
     );

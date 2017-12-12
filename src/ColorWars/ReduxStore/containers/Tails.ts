@@ -6,7 +6,6 @@ export function mapStateToProps(state: GameState) {
   return {
     tails: state.tailsById,
     players: state.playersById,
-    activePlayers: state.activePlayers,
     dimension: state.dimension
   };
 }

@@ -25,6 +25,7 @@ export interface Props {
   endTime: number;
   optimized: boolean;
   phase: string;
+  touch: number;
   onOptimization: (value: boolean) => actions.SetOptimization;
   onCreateGame: () => actions.CreateBoard;
   onPauseGame: () => actions.Pause;
@@ -33,64 +34,13 @@ export interface Props {
   onChangeStartTerritory: (size: number) => actions.SetStartingTerritory;
   onChangeGameTime: (frames: number) => actions.SetGameTime;
   onTemplateChange: (no: number) => actions.ChangeMapTemplate;
+  onTouchChange: (val: number) => actions.SetTouch;
 }
 
-class SettingsComponent extends React.Component<
-  Props,
-  { bHeight: number; bWidth: number }
-> {
+class SettingsComponent extends React.Component<Props, object> {
+
   maxBoard: number = 100;
   minBoard: number = 3;
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      bHeight: this.props.dimension.Y,
-      bWidth: this.props.dimension.X
-    };
-  }
-
-  onOptimizedChange = () => {
-    this.props.onOptimization(!this.props.optimized);
-  }
-
-  changeRows = (e: any) => {
-    let val = clipMapDim(e.target.value);
-    this.setState({ bWidth: val });
-    this.props.onResizeBoard({
-      X: val,
-      Y: this.state.bHeight
-    });
-  }
-
-  changeCols = (e: any) => {
-    let val = clipMapDim(e.target.value);    
-    this.setState({ bHeight: val });
-    this.props.onResizeBoard({
-      X: this.state.bWidth,
-      Y: val
-    });
-  }
-
-  onChangeGameTime = (e: any) => {
-    this.props.onChangeGameTime(e.target.value * FRAMES_PER_SEC);
-  }
-
-  onChangeStartTerritory = (e: any) => {
-    this.props.onChangeStartTerritory(e.target.value);
-  }
-
-  onTemplateChange = (e: any) => {
-    return this.props.onTemplateChange(e);
-  }
-
-  onPauseResume = (e: any) => {
-    if (this.props.phase === 'paused'){
-      this.props.onResumeGame();
-    } else {
-      this.props.onPauseGame();
-    }
-  }
 
   render() {
     return (
@@ -98,7 +48,7 @@ class SettingsComponent extends React.Component<
         <div className="Settings">
           <h1>Game Settings</h1>
           <ButtonToolbar>
-            <DropdownButton title="Change map" id="bg-nested-dropdown" onSelect={this.onTemplateChange}>
+            <DropdownButton title="Change map" id="map-dropdown" onSelect={this.onTemplateChange}>
               <MenuItem eventKey="0">Free for all</MenuItem>
               <MenuItem eventKey="1">Bots show-off</MenuItem>
               <MenuItem eventKey="2">War</MenuItem>
@@ -127,6 +77,8 @@ class SettingsComponent extends React.Component<
               <Button active={this.props.optimized} onClick={this.onOptimizedChange}>
                 toggle optimized rendering
               </Button>
+
+              {this.renderTouchscreenSettings()}
             </ButtonToolbar>
           </div>
           <div className="SettingsGroup">
@@ -190,6 +142,61 @@ class SettingsComponent extends React.Component<
         <PlayersSettings />
       </span>
     );
+  }
+
+  renderTouchscreenSettings() {
+    if (this.props.touch !== 0) {
+      return <DropdownButton title={'Touchscreen mode'} id={"touch-dropdown"} onSelect={this.onTouch}>
+      <MenuItem eventKey={1}>Relative directions</MenuItem>
+      <MenuItem eventKey={2}>absolute directions</MenuItem>
+      <MenuItem eventKey={3}>following touch</MenuItem>
+    </DropdownButton>;
+    }
+    return null;
+  }
+
+  onOptimizedChange = () => {
+    this.props.onOptimization(!this.props.optimized);
+  }
+
+  changeRows = (e: any) => {
+    let val = clipMapDim(e.target.value);
+    this.props.onResizeBoard({
+      X: val,
+      Y: this.props.dimension.Y
+    });
+  }
+
+  changeCols = (e: any) => {
+    let val = clipMapDim(e.target.value);    
+    this.props.onResizeBoard({
+      X: this.props.dimension.X,
+      Y: val
+    });
+  }
+
+  onChangeGameTime = (e: any) => {
+    this.props.onChangeGameTime(e.target.value * FRAMES_PER_SEC);
+  }
+
+  onChangeStartTerritory = (e: any) => {
+    this.props.onChangeStartTerritory(e.target.value);
+  }
+
+  onTemplateChange = (e: any) => {
+    return this.props.onTemplateChange(e);
+  }
+
+  onTouch = (e: any) => {
+    return this.props.onTouchChange(e);
+  }
+
+  onPauseResume = (e: any) => {
+    if (this.props.phase === 'paused'){
+      this.props.onResumeGame();
+    } else {
+      this.props.onPauseGame();
+    }
   }
 }
 

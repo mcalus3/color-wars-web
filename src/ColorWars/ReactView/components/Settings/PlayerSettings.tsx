@@ -32,9 +32,179 @@ export interface Props {
 }
 
 class PlayerSettingsControl extends React.Component<Props, object> {
+
   maxSpeed: number = FRAMES_PER_SEC * 4; // fields/sec
   maxDeath: number = 10; // seconds of death
-  
+
+  render() {    
+    return (
+      <div className="playerSettings">
+
+        {this.renderGeneralSection()}
+        {this.renderKeysSection()}
+        {this.renderAiSection()}
+
+      </div>
+    );
+  }
+
+  renderGeneralSection(){
+    return <Form horizontal={true}>    
+    <FormGroup controlId="playerName">
+      <Col componentClass={ControlLabel} sm={3}>
+        Name
+      </Col>
+      <Col sm={9}>
+        <FormControl
+          type="string"
+          placeholder="name"
+          value={this.props.name}
+          onChange={this.onNameChange}
+        />
+      </Col>
+    </FormGroup>
+
+    <FormGroup controlId="playerColor">
+      <Col componentClass={ControlLabel} sm={3}>
+        color
+      </Col>
+      <Col sm={9}>
+        <FormControl
+          type="string"
+          placeholder="color"
+          value={this.props.color}
+          onChange={this.onColorChange}
+        />
+      </Col>
+    </FormGroup>
+
+    <FormGroup controlId="playerSpeed">
+      <Col componentClass={ControlLabel} sm={3}>
+        speed
+      </Col>
+      <Col sm={9}>
+        <SliderWithTooltip
+          min={0}
+          max={Math.log2(this.maxSpeed)}
+          value={Math.log2(FRAMES_PER_SEC/this.props.speed)}
+          step={1 / this.maxSpeed}                
+          tipFormatter={this.speedFormatter}
+          onChange={this.onSpeedChange}
+        />
+      </Col>
+    </FormGroup>
+
+    <FormGroup controlId="playerPenalty">
+      <Col componentClass={ControlLabel} sm={3}>
+        death penalty
+      </Col>
+      <Col sm={9}>
+        <SliderWithTooltip
+          min={0}
+          max={this.maxDeath}
+          tipFormatter={this.deathFormatter(this.maxDeath)}
+          value={(this.props.deathPenalty / FRAMES_PER_SEC)}
+          onChange={this.onPenaltyChange}
+        />
+      </Col>
+    </FormGroup>
+    </Form>
+  }
+
+  renderKeysSection(){
+    let dirKeys = swap(this.props.keys);
+    
+    return <Form horizontal={true}>    
+      <FormGroup controlId="keyMappingUp">
+    <Col componentClass={ControlLabel} sm={2}>
+      keys
+    </Col>
+    <Col sm={6} smOffset={1}>
+      <FormControl                
+        placeholder="up"
+        value={dirKeys.up}
+        onChange={this.onKeyChange}
+      />
+    </Col>
+  </FormGroup>
+  <FormGroup controlId="keyMappingSides">
+    <Col sm={6}>
+      <FormControl                
+        placeholder="left"
+        value={dirKeys.left}
+        onChange={this.onKeyChange}
+      />
+    </Col>
+    <Col sm={6}>
+      <FormControl                
+        placeholder="right"
+        value={dirKeys.right}
+        onChange={this.onKeyChange}
+      />
+    </Col>
+  </FormGroup>
+  <FormGroup controlId="keyMappingDown">
+    <Col sm={6} smOffset={3}>
+      <FormControl                
+        placeholder="down"
+        value={dirKeys.down}
+        onChange={this.onKeyChange}
+      />
+    </Col>
+  </FormGroup>
+  </Form>
+  }
+
+  renderAiSection(){
+    return <div>
+    <div className="SettingsGroup">
+    <Button active={this.props.aiControlled} onClick={this.onAiControlledChange}>
+      aiControlled
+    </Button>
+    </div>
+    {this.renderAiDifficulty()}
+    </div>
+  }
+
+  renderAiDifficulty(){
+    if (this.props.aiControlled){
+      return <FormGroup controlId="aiDiff">
+        <Col componentClass={ControlLabel} sm={3}>
+          Ai difficulty
+        </Col>
+        <Col sm={9}>
+          <SliderWithTooltip
+            min={0}
+            max={1}
+            step={1}
+            tipFormatter={this.normalFormatter}
+            value={this.props.aiDifficulty}
+            onChange={this.onAiDifficultyChange}
+          />
+        </Col>
+      </FormGroup>;
+    }
+    return null;
+  }
+
+  normalFormatter(v: number) {
+    return `${v}`;
+  }
+
+  speedFormatter(v: number) {
+    return `${Math.round(Math.pow(2, v))}`;
+  }
+
+  deathFormatter(max: number) {
+    return (v: number) => {
+      let calculated = Math.round(v);
+      if (calculated === max) {
+        return 'permament';
+      }
+      return `${calculated}`;
+    };
+  }
+
   onNameChange = (e: any) => {
     this.props.onPlayerModify(
       this.props.id,
@@ -87,160 +257,6 @@ class PlayerSettingsControl extends React.Component<Props, object> {
 
   onAiDifficultyChange = (v: any) => {
     this.props.onPlayerModify(this.props.id, 'AiDifficulty', v);
-  }
-
-  render() {
-    let dirKeys = swap(this.props.keys);
-    Object.keys(dirKeys).forEach((k: string) => {
-      dirKeys[k] = dirKeys[k];
-    });
-    return (
-      <div className="playerSettings">
-        <Form horizontal={true}>
-          <FormGroup controlId="playerName">
-            <Col componentClass={ControlLabel} sm={3}>
-              Name
-            </Col>
-            <Col sm={9}>
-              <FormControl
-                type="string"
-                placeholder="name"
-                value={this.props.name}
-                onChange={this.onNameChange}
-              />
-            </Col>
-          </FormGroup>
-
-          <FormGroup controlId="playerColor">
-            <Col componentClass={ControlLabel} sm={3}>
-              color
-            </Col>
-            <Col sm={9}>
-              <FormControl
-                type="string"
-                placeholder="color"
-                value={this.props.color}
-                onChange={this.onColorChange}
-              />
-            </Col>
-          </FormGroup>
-
-          <FormGroup controlId="playerSpeed">
-            <Col componentClass={ControlLabel} sm={3}>
-              speed
-            </Col>
-            <Col sm={9}>
-              <SliderWithTooltip
-                min={0}
-                max={Math.log2(this.maxSpeed)}
-                value={Math.log2(FRAMES_PER_SEC/this.props.speed)}
-                step={1 / this.maxSpeed}                
-                tipFormatter={this.speedFormatter}
-                onChange={this.onSpeedChange}
-              />
-            </Col>
-          </FormGroup>
-
-          <FormGroup controlId="playerPenalty">
-            <Col componentClass={ControlLabel} sm={3}>
-              death penalty
-            </Col>
-            <Col sm={9}>
-              <SliderWithTooltip
-                min={0}
-                max={this.maxDeath}
-                tipFormatter={this.deathFormatter(this.maxDeath)}
-                value={(this.props.deathPenalty / FRAMES_PER_SEC)}
-                onChange={this.onPenaltyChange}
-              />
-            </Col>
-          </FormGroup>
-
-          <FormGroup controlId="keyMapping">
-            <Col componentClass={ControlLabel} sm={2}>
-              keys
-            </Col>
-            <Col sm={6} smOffset={1}>
-              <FormControl                
-                placeholder="up"
-                value={dirKeys.up}
-                onChange={this.onKeyChange}
-              />
-            </Col>
-          </FormGroup>
-          <FormGroup controlId="keyMapping">
-            <Col sm={6}>
-              <FormControl                
-                placeholder="left"
-                value={dirKeys.left}
-                onChange={this.onKeyChange}
-              />
-            </Col>
-            <Col sm={6}>
-              <FormControl                
-                placeholder="right"
-                value={dirKeys.right}
-                onChange={this.onKeyChange}
-              />
-            </Col>
-          </FormGroup>
-          <FormGroup controlId="keyMapping">
-            <Col sm={6} smOffset={3}>
-              <FormControl                
-                placeholder="down"
-                value={dirKeys.down}
-                onChange={this.onKeyChange}
-              />
-            </Col>
-          </FormGroup>
-          <div className="SettingsGroup">
-                <Button active={this.props.aiControlled} onClick={this.onAiControlledChange}>
-                  aiControlled
-                </Button>
-          </div>
-          {this.renderAiDifficulty()}
-        </Form>
-      </div>
-    );
-  }
-
-  renderAiDifficulty(){
-    if (this.props.aiControlled){
-      return <FormGroup controlId="aiDiff">
-        <Col componentClass={ControlLabel} sm={3}>
-          Ai difficulty
-        </Col>
-        <Col sm={9}>
-          <SliderWithTooltip
-            min={0}
-            max={1}
-            step={1}
-            tipFormatter={this.normalFormatter}
-            value={this.props.aiDifficulty}
-            onChange={this.onAiDifficultyChange}
-          />
-        </Col>
-      </FormGroup>;
-    }
-    return null;
-  }
-
-  normalFormatter(v: number) {
-    return `${v}`;
-  }
-
-  speedFormatter(v: number) {
-    return `${Math.round(Math.pow(2, v))}`;
-  }
-
-  deathFormatter(max: number) {
-    return (v: number) => {
-      let calculated = Math.round(v);
-      if (calculated === max) {
-        return 'permament';
-      }
-      return `${calculated}`;
-    };
   }
 }
 

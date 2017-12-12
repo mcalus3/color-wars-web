@@ -10,7 +10,8 @@ export function mapStateToProps(state: GameState) {
     startingTerritory: state.startingTerritorySize,
     endTime: state.endTime,
     optimized: state.optimized,
-    phase: state.gamePhase
+    phase: state.gamePhase,
+    touch: state.touchscreenMode
   };
 }
 
@@ -25,7 +26,8 @@ export function mapDispatchToProps(dispatch: Dispatch<actions.Action>) {
     onChangeStartTerritory: (size: number) =>
       dispatch(actions.setStartingTerritory(size)),
     onChangeGameTime: (frames: number) => dispatch(actions.setGameTime(frames)),
-    onTemplateChange: (no: number) => dispatch(actions.changeMapTemplate(no))
+    onTemplateChange: (no: number) => dispatch(actions.changeMapTemplate(no)),
+    onTouchChange: (val: number) => dispatch(actions.setTouch(val))
   };
 }
 

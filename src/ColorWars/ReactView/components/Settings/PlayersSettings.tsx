@@ -12,7 +12,7 @@ export interface Props {
   onPlayersChange: (amount: number) => actions.SetPlayersAmount;
 }
 
-class PlayersSettings extends React.Component<Props, { players: number }> {
+class PlayersSettings extends React.Component<Props, object> {
   render() {
     var players = [];
     for (var i: number = 0; i < this.props.playersAmount; i++) {
@@ -26,20 +26,14 @@ class PlayersSettings extends React.Component<Props, { players: number }> {
         <SliderWithTooltip
           min={1}
           max={8}
-          step={1}
           dots={true}
           value={this.props.playersAmount}
           tipFormatter={myFormatter}
-          onChange={this.playersChanged}
+          onChange={this.props.onPlayersChange}
         />
         <div className="PlayersSettings">{players}</div>
       </div>
     );
-  }
-
-  playersChanged = (v: number) => {
-    this.setState({ players: v });
-    this.props.onPlayersChange(v);
   }
 }
 

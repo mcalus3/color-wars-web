@@ -1,4 +1,4 @@
-import { Layer } from 'react-konva';
+import { FastLayer } from 'react-konva';
 import { Rect, Node, Stage } from 'konva';
 import * as React from 'react';
 
@@ -8,98 +8,101 @@ import { colorNumToName, layouter } from '../../utils/functions';
 export interface Props {
   tails: Point[][];
   players: Player[];
-  activePlayers: number;
   dimension: Point;
 }
 
 class Tails extends React.Component<Props, object> {
-  redraw: boolean;
-  tails: Point[][];
-  dimension: Point;
+  
   canvasDimension: Point = { X: 0, Y: 0 };
   layer: any;
   tailPrototypes: Rect[] = [];
 
-  constructor(props: Props) {
-    super(props);
-    this.dimension = props.dimension;
-    this.tails = this.props.tails;
-  }
-
   shouldComponentUpdate(nextProps: Props){
-    if(nextProps.activePlayers === this.props.activePlayers && nextProps.dimension === this.props.dimension && nextProps.tails === this.props.tails){
+    this.createPrototypesIfNecessary(nextProps);
+    
+    if(nextProps.tails === this.props.tails){
       return false;
     }
     return true;
   }
 
   componentDidMount() {
-    this.createPrototypes(this.props.dimension);
+    this.createPrototypes(this.props);
   }
 
   componentWillUpdate(nextProps: Props) {
-    if (this.props.activePlayers > nextProps.activePlayers){
-      this.layer.getChildren().forEach((node: Node) => {
-        if (parseInt(node.name()) >= nextProps.activePlayers ) {
-          node.destroy();
-          this.redraw = true;
-        }
-      });    
-    }
-    
-    this.createPrototypes(nextProps.dimension);
 
-    for (let i = 0; i < this.props.activePlayers; i++) {
-      var oldTail = this.tails[i];
-      var newTail = this.props.tails[i];
-      if (newTail.length > oldTail.length) {
-        newTail.slice(oldTail.length, newTail.length).forEach((p: Point) => {
-          let X, Y, Width, Height;
-          ({ X, Y, Width, Height } = layouter(
-            nextProps.dimension,
-            this.canvasDimension,
-            p
-          ));
+    let tailsToDestroy: number[] = this.calculateTailsToDestroy(nextProps.tails);
+    let nodesToDraw: Point[][] = this.calculateNodesToDraw(nextProps.tails);
 
-          let clone = this.tailPrototypes[i].clone({
-            x: X,
-            y: Y
-          });
-          this.layer.add(clone);
-          this.tails[i].push({ ...p });
-          clone.draw();
-        });
-      } else if (newTail.length === 0) {
-        this.layer.getChildren().forEach((node: Node) => {
-          if (node.name() === i.toString()) {
+      tailsToDestroy.forEach(num => {
+        let tail = this.layer.getChildren((node: Node) => parseInt(node.name()) === num);
+        tail.forEach((node: Node) => {
             node.destroy();
-            this.redraw = true;
-          }
         });
-        this.tails[i] = [];
+      });
+
+    for (let i = 0; i < nodesToDraw.length; i++) {
+      if (nodesToDraw[i] === undefined){
+        continue;
       }
-      if (this.redraw) {
-        this.layer.draw();
-        this.redraw = false;
+
+      for (let j = 0; j < nodesToDraw[i].length; j++) {
+        let p = nodesToDraw[i][j];
+        let X, Y, Width, Height;
+        ({ X, Y, Width, Height } = layouter(
+          nextProps.dimension,
+          this.canvasDimension,
+          p
+        ));
+
+        let clone = this.tailPrototypes[i].clone({
+          x: X,
+          y: Y
+        });
+        this.layer.add(clone);
       }
-    };
+    }
+  
+    this.layer.draw();
+
   }
 
   render() {
-    return <Layer ref={(c) => { this.layer = c; }} />;
+    return <FastLayer ref={(c) => { this.layer = c; }} />;
   }
 
-  createPrototypes(dim: Point) {
+  createPrototypesIfNecessary(nextProps: Props){
+    if (nextProps.dimension !== this.props.dimension || this.colorsHasChanged(nextProps.players)){      
+      this.createPrototypes(nextProps);
+    }
+  }
+
+  colorsHasChanged(players: Player[]): boolean{
+    for (let i = 0; i < players.length; i++){
+      if (players[i].color !== this.props.players[i].color){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  createPrototypes(nextProps: Props) {    
     let stage = this.layer.getStage() as Stage;
     this.canvasDimension = { X: stage.width(), Y: stage.height() };
     
     let X, Y, Width, Height;
-    ({ X, Y, Width, Height } = layouter(dim, this.canvasDimension, {
+    ({ X, Y, Width, Height } = layouter(nextProps.dimension, this.canvasDimension, {
       X: 0,
       Y: 0
     }));
-    for (let i = 0; i < this.props.players.length; i++) {
-      let color = colorNumToName[this.props.players[i].color];
+    for (let i = 0; i < nextProps.players.length; i++) {
+
+      if (this.tailPrototypes[i] !== undefined){
+        this.tailPrototypes[i].clearCache();        
+      }
+
+      let color = colorNumToName[nextProps.players[i].color];
       this.tailPrototypes[i] = new Rect({
         width: Width,
         height: Height,
@@ -110,6 +113,26 @@ class Tails extends React.Component<Props, object> {
       });
       this.tailPrototypes[i].cache();
     }
+  }
+
+  calculateTailsToDestroy(tails: Point[][]){
+    let ret = [];
+    for (let i = 0; i < this.props.tails.length; i++){
+      if (this.props.tails[i].length > tails[i].length){
+        ret.push(i);
+      }
+    }
+    return ret;
+  }
+
+  calculateNodesToDraw(tails: Point[][]){
+    let ret = [];
+    for (let i = 0; i < tails.length; i++){
+      if (this.props.tails[i].length < tails[i].length){
+        ret[i] = tails[i].slice(this.props.tails[i].length);
+      }      
+    }
+    return ret;      
   }
 }
 

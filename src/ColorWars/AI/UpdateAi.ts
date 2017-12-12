@@ -1,21 +1,24 @@
 import { Point, GameState, Ai, Player } from "../utils/objectTypes";
-import { outOfBoard } from '../utils/functions';
-import { getRandomDirection, pointsAreClose, directionToTarget, getAttackedTerritorySize, getRandomClosePointFromArray, getClosestPoint, getFirstPointOfAttack, turnRandomLeftOrRight, getAdjecentEnemyFieldDirection, trimPointToBoard, directions } from "./AiFunctions";
+import { multiplyPoint, outOfBoard, addPoints } from '../utils/functions';
+import { pointsAreClose, directionToTarget, getAttackedTerritorySize, getRandomClosePointFromArray, getClosestPoint, getFirstPointOfAttack, turnRandomLeftOrRight, getDirectionToAdjecentEnemyField, trimPointToBoard, vectors } from "./AiFunctions";
 
 export function UpdateAiDirection(ai: Ai, state: GameState): Ai{
-  let curDiff = state.playersById[ai.playerId].AiDifficulty;
+  let curDifficulty = state.playersById[ai.playerId].AiDifficulty;
 
-  if (curDiff === 0){
-    return noAiUpdateDirection(ai);
-      
-  } else if (curDiff === 1){
+  if (curDifficulty === 0){
+    return noAiUpdateDirection(ai);    
+  }
+
+  if (curDifficulty === 1){
     return dumbAiUpdateDirection(ai, state);
   }
+
   return ai;
 }
 
 export function noAiUpdateDirection(ai: Ai): Ai{
-  return {...ai, currentDirection: getRandomDirection()};
+  
+  return {...ai, currentDirection: turnRandomLeftOrRight(ai.currentDirection)};
 }
 
 export function dumbAiUpdateDirection(ai: Ai, state: GameState): Ai{
@@ -34,12 +37,10 @@ export function dumbAiUpdateDirection(ai: Ai, state: GameState): Ai{
       newAi.currentTargets = newAi.currentTargets.slice(1);
     }
 
-    if (newAi.currentTargets.length === 0){
-      return newAi;
-    }
+  } else {
+    newAi.currentDirection = directionToTarget(player.coords, newAi.currentTargets[0], player.direction);    
   }
 
-  newAi.currentDirection = directionToTarget(player.coords, newAi.currentTargets[0], player.direction);
   return newAi;
 }
 
@@ -69,11 +70,12 @@ export function shouldSetNewTarget(ai: Ai, player: Player): boolean{
 }
 
 export function setTargets(ai: Ai, coords: Point, speed: number, dim: Point, precision: number): Point[]{
+
   if(ai.territoryBorder.length === 0){
     return [{...coords}];
   }
   
-  let size = getAttackedTerritorySize(speed);
+  let size = getAttackedTerritorySize();
 
   let targets = [];
 
@@ -81,14 +83,16 @@ export function setTargets(ai: Ai, coords: Point, speed: number, dim: Point, pre
   
   targets[1] = getFirstPointOfAttack(ai.territory, targets[0], size);
   
-  let turnVector = directions[turnRandomLeftOrRight(getAdjecentEnemyFieldDirection(coords, ai.territory))];
-  targets[2] = {X: targets[1].X + (turnVector.X*size), Y: targets[1].Y + (turnVector.Y*size)};
+  let turnVector = vectors[turnRandomLeftOrRight(getDirectionToAdjecentEnemyField(targets[0], ai.territory))];
+  turnVector = multiplyPoint(turnVector, size);
+
+  targets[2] = addPoints(targets[1], turnVector);
   
   targets[3] = getClosestPoint(ai.territoryBorder, targets[2]);
 
   for(let i = 0; i < targets.length ; i++){
     if (outOfBoard(targets[i], dim)){
-      targets[i] = trimPointToBoard(targets[i], dim);
+      targets[i] = trimPointToBoard(targets[i], dim, precision);
     }
   }
 

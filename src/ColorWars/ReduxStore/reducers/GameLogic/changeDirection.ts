@@ -1,6 +1,7 @@
 import { GameState } from '../../../utils/objectTypes';
 
 export function changeDirection(state: GameState, id: number, direction: string) {
+  
   if (state.gamePhase !== 'running') {
     return state;
   }
@@ -36,6 +37,7 @@ function PlayerIsAllowedToTurn(
   oldState: string
 ): boolean {
   if (newDir !== oldDir) {
+    // player would eat his own tail it he reverted while attacking
     if (oldState !== 'offensive' || oldDir !== reverseDirections[newDir]) {
       return true;
     }

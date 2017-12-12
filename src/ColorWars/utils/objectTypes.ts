@@ -49,7 +49,8 @@ export interface GameState {
   tailsById: Point[][];
   keyMappingsById: { [key: string]: string }[];
   ticksWaitingById: number[];
-  touchscreenDetected: boolean;
+  touchscreenMode: number;
+  pauseGameKey: string;
 }
 
 export interface GameSettings {

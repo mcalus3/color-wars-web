@@ -10,8 +10,9 @@ export const initialState: GameState = {
   startingTerritorySize: 2,
   optimized: false,
   endTime: 60 * FRAMES_PER_SEC,
-  touchscreenDetected: false,
-
+  touchscreenMode: 0,
+  pauseGameKey: ' ',
+  
   fieldColors: [[]],
   fieldOccupiers: [[]],
 

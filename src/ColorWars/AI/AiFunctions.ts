@@ -1,20 +1,20 @@
 import { Point } from "../utils/objectTypes";
-import { addPoints, getNeighbors, PointsAreEqual, FRAMES_PER_SEC } from '../utils/functions';
+import { addPoints, getNeighborsPoints, PointsAreEqual, FRAMES_PER_SEC } from '../utils/functions';
 
-export function trimPointToBoard(point: Point, dim: Point): Point{
+export function trimPointToBoard(point: Point, dim: Point, precision: number): Point{
   var newPoint = {...point};
   
-  if (point.X < 0){
-    newPoint.X = 0;
+  if (point.X < precision){
+    newPoint.X = precision;
   }
-  if (point.Y < 0){
-    newPoint.Y = 0;
+  if (point.Y < precision){
+    newPoint.Y = precision;
   }
-  if (point.X >= dim.X){
-    newPoint.X = dim.X - 1;
+  if (point.X >= dim.X - precision){
+    newPoint.X = dim.X - precision - 1;
   }
-  if (point.Y >= dim.Y){
-    newPoint.Y = dim.Y - 1;
+  if (point.Y >= dim.Y - precision){
+    newPoint.Y = dim.Y - precision - 1;
   }
 
   return newPoint;
@@ -72,28 +72,29 @@ export function reverseDirection(direction: string): string{
 }
 
 export function getFirstPointOfAttack(territory: Point[], coords: Point, size: number): Point{
-  let dir = getAdjecentEnemyFieldDirection(coords, territory);
-  let closestEnemyFieldVector: Point = directions[dir];
-  return {X: coords.X + closestEnemyFieldVector.X*size, Y: coords.Y + closestEnemyFieldVector.Y*size};
+  let dir = getDirectionToAdjecentEnemyField(coords, territory);
+  let vector: Point = vectors[dir];
+  return {X: coords.X + vector.X*size, Y: coords.Y + vector.Y*size};
 }
 
-export var directions: {[dir: string]:Point} = {
+export var vectors: {[dir: string]:Point} = {
   'up': {X: 0, Y: -1},
   'down': {X: 0, Y: 1},
   'left': {X: -1, Y: 0},
   'right': {X: 1, Y: 0}
 }
 
-export function getAdjecentEnemyFieldDirection(coords: Point, territory: Point[]){
-  let dirs = Object.keys(directions);
+export function getDirectionToAdjecentEnemyField(coords: Point, territory: Point[]){
+  let dirs = Object.keys(vectors);
   shuffle(dirs);
   for (let i = 0; i < dirs.length; i++){
-    let vector = directions[dirs[i]];
+    let vector = vectors[dirs[i]];
     if(territory.find(p => {return PointsAreEqual(p, (addPoints(coords, vector)))}) === undefined){
       return dirs[i];
     }
   }
-  return 'up';
+  // fail silently
+  return dirs[0];
 }
 
 export function pointsAreClose(currentPoint: Point, target: Point, precision: number): boolean{
@@ -103,6 +104,7 @@ export function pointsAreClose(currentPoint: Point, target: Point, precision: nu
 
 export function directionToTarget(currentPoint: Point, target: Point, direction: string): string{
   let retDir = 'none';
+  
   if(currentPoint.X > target.X && currentPoint.Y <= target.Y){
     retDir = 'left';
   }else if (currentPoint.X <= target.X && currentPoint.Y < target.Y){
@@ -113,6 +115,7 @@ export function directionToTarget(currentPoint: Point, target: Point, direction:
     retDir = 'up';
   }
 
+  // turning back is not possibleduring attacking
   if(retDir === reverseDirection(direction)){
      retDir = turnRandomLeftOrRight(retDir);
    }
@@ -127,24 +130,26 @@ export function getRandomDirection(){
     'left',
     'right'
   ];
+
   let rNum = Math.floor(Math.random()*3.99);
   return dirs[rNum];
 }
 
 export function calculatePrecision(speed: number, refresh: number): number{
   
-    let precision = (refresh/speed)/(1000/FRAMES_PER_SEC);
-    return 1 + Math.ceil(precision);
-  }
+  let precision = (refresh/speed)/(1000/FRAMES_PER_SEC);
+  return 1 + Math.ceil(precision);
+}
   
 export function getBorder(fields: number[][], color: number, dim: Point): Point[]{
 
   return getBorderPoints(getTerritoryPoints(color, fields), dim, fields);
 }
 
-export function getAttackedTerritorySize(speed: number): number{
-    return 5 + Math.floor(Math.random()*5);
-  }
+export function getAttackedTerritorySize(): number{
+
+  return 5 + Math.floor(Math.random() * 5);
+}
   
 export function getTerritoryPoints(color: number, colorsArr: number[][]): Point[]{
   let points: Point[] = [];
@@ -162,17 +167,23 @@ export function getTerritoryPoints(color: number, colorsArr: number[][]): Point[
 
 export function getBorderPoints(allPoints: Point[], dim: Point, colors: number[][]): Point[]{
 
-  var match: Point[] = [];
+  let match: Point[] = [];
+
+  if (allPoints === undefined || allPoints.length === 0){
+    return match;
+  }
+
+  var color = colors[allPoints[0].X][allPoints[0].Y];
   
   for (var i = 0; i < allPoints.length; i++)
   {
-    let curNeighbors = getNeighbors(allPoints[i], dim);
+    let curNeighbors = getNeighborsPoints(allPoints[i], dim);
   
     let isOnBorder: boolean = false;
 
     for (var j = 0; j < curNeighbors.length; j++)
     {
-      if (colors[curNeighbors[j].X][curNeighbors[j].Y] !== colors[allPoints[i].X][allPoints[i].Y]){
+      if (fieldShouldBeClaimed(curNeighbors[j], colors, dim, color)){
         isOnBorder = true;
       }
     }
@@ -193,11 +204,18 @@ export function getClosestPoint(coords: Point[], curCoord: Point): Point{
   return coords[closestDistIndex];
 }
 
-export function getRandomClosePointFromArray(point: Point, arr: Point[], precision: number): Point{
+export function getRandomClosePointFromArray(point: Point, arr: Point[], range: number): Point{
   
-  let filtered = arr.filter(p => {return Math.abs(p.X - point.X) < precision && Math.abs(p.Y - point.Y) < precision});
+  let filteredPoints = arr.filter(p => {return Math.abs(p.X - point.X) < range && Math.abs(p.Y - point.Y) < range});
 
-  return {...filtered[Math.floor(Math.random()*filtered.length)]};
+  let randomPoint = filteredPoints[Math.floor(Math.random()*filteredPoints.length)];
+
+  return {...randomPoint};
+}
+
+export function fieldShouldBeClaimed(field: Point, colors: number[][], dim: Point, color: number): boolean{
+  return colors[field.X][field.Y] !== color &&
+  (field.X !== dim.X - 1 || field.Y === dim.Y - 1 || field.X !== 0 || field.Y !== 0)
 }
 
 export function shuffle(b: any[]): any[] {

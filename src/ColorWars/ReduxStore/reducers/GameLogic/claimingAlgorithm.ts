@@ -1,4 +1,4 @@
-import { OptimizedArrayHasCoords, getNeighbors, ArrayHasCoords } from '../../../utils/functions';
+import { OptimizedArrayHasCoords, getNeighborsPoints, ArrayHasCoords } from '../../../utils/functions';
 import { Point } from '../../../utils/objectTypes';
 
 export function claimTerritoryAlgorithm(
@@ -6,6 +6,7 @@ export function claimTerritoryAlgorithm(
   fields: number[][],
   color: number
 ): Point[] {
+  
   if (tail.length === 0) {
     return [];
   }
@@ -14,28 +15,20 @@ export function claimTerritoryAlgorithm(
 
   var tailNeighbours: Point[] = [];
   var outerNeighbours: boolean[][] = [];
-  var claimedFields: boolean[][] = [];
+  var claimedFields: boolean[][] = createClaimedFields(fields, color);
   var returnFields: Point[] = [];
 
   for (let i: number = 0; i < fields.length; i++) {    
     outerNeighbours[i] = [];
-    claimedFields[i] = [];
-  }
-
-  for (let i: number = 0; i < fields.length; i++) {
-
-    var row = i;
-    for (let j: number = 0; j < fields[i].length; j++) {
-      if (fields[i][j] === color) {
-        claimedFields[row][j] = true;
-      }
-    }
   }
 
   for (let i: number = 0; i < tail.length; i++) {
-    claimedFields[tail[i].X][tail[i].Y] = true;
-    returnFields.push(tail[i]);
-    let neigh = getNeighbors(tail[i], dimension);
+    let t: Point = tail[i];
+
+    claimedFields[t.X][t.Y] = true;
+    returnFields.push(t);
+    let neigh = getNeighborsPoints(t, dimension);
+    
     for (let j: number = 0; j < neigh.length; j++) {
       if (
         !OptimizedArrayHasCoords(neigh[j], claimedFields) &&
@@ -45,6 +38,7 @@ export function claimTerritoryAlgorithm(
       }
     }
   }
+
   for (let i: number = 0; i < tailNeighbours.length; i++) {
       // check for performance boost (won't start algorithm for fields already classified as outer or taken,
       // so most of the cases algorithm will run only twice)
@@ -80,12 +74,9 @@ function ClaimTerritoryRecursive(
   dimension: Point
 ): boolean {
 
-  if (joinedArea[currentField.X] === undefined){
-    joinedArea[currentField.X] = [];
-  }
-  joinedArea[currentField.X][currentField.Y] = true;
+  joinField(joinedArea, currentField);
 
-  var currentNeighbors: Point[] = getNeighbors(currentField, dimension);
+  var currentNeighbors: Point[] = getNeighborsPoints(currentField, dimension);
   if (currentNeighbors.length !== 4) {
     outerNeighbours.push.apply(joinedArea);
     return false;
@@ -94,15 +85,16 @@ function ClaimTerritoryRecursive(
   var eachNeighbourReturnsTrue: boolean = true;
 
   for (let i: number = 0; i < currentNeighbors.length; i++) {
+    
     if (!eachNeighbourReturnsTrue) {
       break;
     }
+    
     if (
       !OptimizedArrayHasCoords(currentNeighbors[i], claimedFields) &&
       !OptimizedArrayHasCoords(currentNeighbors[i], joinedArea)
     ) {
-      if (
-        !ClaimTerritoryRecursive(
+      if (!ClaimTerritoryRecursive(
           currentNeighbors[i],
           outerNeighbours,
           joinedArea,
@@ -120,27 +112,33 @@ function ClaimTerritoryRecursive(
 function ChangeOptimizedToNormal(inArr: boolean[][]){
 
   let ret: Point[] = []; 
+
   inArr.forEach((value, index) => {
     let row = index;
+
     value.forEach((value, index) => {
+      
       if (value === true){
         ret.push({X: row, Y: index});
       }
     });
   });
+
   return ret;
 }
 
 function MergeOptimizedTables(arr1: boolean[][], arr2: boolean[][]){
   
-  let ret: boolean[][] = []; 
+  let ret: boolean[][] = [];
 
   arr1.forEach((value, index) => {
     let row = index;
-    value.forEach((value, index) => {
-      if (value === true){
 
+    value.forEach((value, index) => {
+
+      if (value === true){
         if (ret[row] === undefined){
+
           ret[row] = [];
         }
       
@@ -151,6 +149,7 @@ function MergeOptimizedTables(arr1: boolean[][], arr2: boolean[][]){
 
   arr2.forEach((value, index) => {
     let row = index;
+
     value.forEach((value, index) => {
       if (value === true){
         
@@ -164,4 +163,28 @@ function MergeOptimizedTables(arr1: boolean[][], arr2: boolean[][]){
   });
 
   return ret;
+}
+
+function createClaimedFields(fields: number[][], color: number){
+  let claimedFields: boolean[][] = [];
+
+  for (let i: number = 0; i < fields.length; i++) {
+    claimedFields[i] = [];
+    
+    for (let j: number = 0; j < fields[i].length; j++) {
+      if (fields[i][j] === color) {
+
+        claimedFields[i][j] = true;
+      }
+    }
+  }
+
+  return claimedFields;
+}
+
+function joinField(joinedArea: boolean[][], field: Point){
+  if (joinedArea[field.X] === undefined){
+    joinedArea[field.X] = [];
+  }
+  joinedArea[field.X][field.Y] = true;
 }

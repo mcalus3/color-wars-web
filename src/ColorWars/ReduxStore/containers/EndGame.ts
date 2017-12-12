@@ -6,7 +6,8 @@ export function mapStateToProps(state: GameState) {
   return {
     state: state.gamePhase,
     fields: state.fieldColors,
-    players: state.playersById
+    players: state.playersById,
+    mobile: state.touchscreenMode
   };
 }
 

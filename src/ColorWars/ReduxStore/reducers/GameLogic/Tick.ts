@@ -1,4 +1,4 @@
-import { copy2dBoard, outOfBoard } from '../../../utils/functions';
+import { outOfBoard } from '../../../utils/functions';
 import {
   GameState,
   Player,
@@ -149,12 +149,13 @@ export function killTail(state: GameState, id: number): GameState {
   var newState: GameState = {
     ...state,
     tailsById: state.tailsById.slice(),
-    fieldOccupiers: copy2dBoard(state.fieldOccupiers)
+    fieldOccupiers: state.fieldOccupiers.slice()
   };
 
   newState.tailsById[id].forEach(t => {
     if (newState.fieldOccupiers.length >= t.X && newState.fieldOccupiers[t.X].length >= t.Y){
-      newState.fieldOccupiers[t.X][t.Y] = -1;      
+      newState.fieldOccupiers[t.X] = newState.fieldOccupiers[t.X].slice();
+      newState.fieldOccupiers[t.X][t.Y] = -1;
     }
   });
   newState.tailsById[id] = [];

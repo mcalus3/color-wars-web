@@ -1,16 +1,32 @@
 import { Point } from './objectTypes';
 
-export function get2DCoords(dimension: Point): Point[] {
-  var fields: Point[] = [];
+export const FRAMES_PER_SEC = 10;
 
-  for (var x: number = 0; x < dimension.X; x++) {
-    for (var y: number = 0; y < dimension.Y; y++) {
-      fields[x * dimension.Y + y] = { X: x, Y: y };
-    }
-  }
+export var colorNumToName = {
+  1: 'green',
+  2: 'blue',
+  3: 'orange',
+  4: 'red',
+  5: 'Brown',
+  6: 'CadetBlue',
+  7: 'Chartreuse',
+  8: 'DarkGoldenRod',
+  8421504: 'grey',
+  16777215: 'white'
+};
 
-  return fields;
-}
+export var colorNameToNum = {
+  green: 1,
+  blue: 2,
+  orange: 3,
+  red: 4,
+  Brown: 5,
+  CadetBlue: 6,
+  Chartreuse: 7,
+  DarkGoldenRod: 8,
+  grey: 8421504,
+  white: 16777215
+};
 
 export function addPoints(p1: Point, p2: Point): Point {
   return { X: p1.X + p2.X, Y: p1.Y + p2.Y };
@@ -24,11 +40,7 @@ export function PointsAreEqual(p1: Point, p2: Point): boolean {
   return p1.X === p2.X && p1.Y === p2.Y;
 }
 
-export function layouter(
-  boardDimension: Point,
-  canvasDimension: Point,
-  fieldLocation: Point
-) {
+export function layouter(boardDimension: Point, canvasDimension: Point, fieldLocation: Point) {
   return {
     X: canvasDimension.X / boardDimension.X * fieldLocation.X,
     Y: canvasDimension.Y / boardDimension.Y * fieldLocation.Y,
@@ -37,29 +49,10 @@ export function layouter(
   };
 }
 
-export var colorNumToName = {
-  1: 'green',
-  2: 'blue',
-  16777215: 'white',
-  8421504: 'grey',
-  3: 'orange',
-  4: 'red',
-  5: 'Brown',
-  6: 'CadetBlue',
-  7: 'Chartreuse',
-  8: 'DarkGoldenRod'
-};
-
-export var colorNameToNum = {
-  green: 1,
-  blue: 2,
-  white: 16777215,
-  grey: 8421504
-};
-
 export function ArrayHasCoords(coords: Point, arr: Point[]): boolean {
+  
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i].X === coords.X && arr[i].Y === coords.Y) {
+    if (PointsAreEqual(arr[i], coords)) {
       return true;
     }
   }
@@ -76,7 +69,8 @@ export function OptimizedArrayHasCoords(coords: Point, arr: boolean[][]): boolea
   return false;
 }
 
-export function getCanvasDimension(dim: Point, mobile: boolean): Point {
+export function getDimensionForCanvas(dim: Point, mobile: boolean): Point {
+  
   var canvasDimension: Point = { X: 0, Y: 0 };
 
   var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -103,26 +97,23 @@ export function getCanvasDimension(dim: Point, mobile: boolean): Point {
   return canvasDimension;
 }
 
-export function getViewPort(): Point {
-  var w = Math.max(document.documentElement.clientWidth || 0);
-  var h = Math.max(document.documentElement.clientHeight || 0);
-  return { X: w, Y: h };
-}
+export function createHistogram(fields: number[][]): { colorsArr: number[]; valuesArr: number[] } {
 
-export function createHistogram(
-  fields: number[][]
-): { colorsArr: number[]; valuesArr: number[] } {
   var colors: {} = {};
+
   fields.forEach(row => {
     row.forEach(element => {
+
       if (element === colorNameToNum.white) {
         return;
       }
+
       if (colors.hasOwnProperty(element)) {
         colors[element] += 1;
       } else {
         colors[element] = 1;
       }
+
     });
   });
 
@@ -130,7 +121,9 @@ export function createHistogram(
   colorsArr.sort(function(a: number, b: number) {
     return parseFloat(colors[b]) - parseFloat(colors[a]);
   });
+
   var valuesArr = colorsArr.map((color: number) => colors[color]);
+
   return { colorsArr, valuesArr };
 }
 
@@ -152,13 +145,14 @@ export function swap(json: any): any {
 }
 
 export function getFontSize(canvasWidth: number) {
-  var ratio = 1 / 10; // calc ratio
-  var size = canvasWidth * ratio; // get font size based on current width
-  return size || 0; // set font
+
+  return canvasWidth / 10;
 }
 
-export function getNeighbors(p: Point, d: Point): Point[] {
+export function getNeighborsPoints(p: Point, d: Point): Point[] {
+  
   var neighbors: Point[] = [];
+  
   if (p.Y !== 0){
     neighbors.push({ X: p.X, Y: p.Y - 1 });
   }
@@ -174,14 +168,3 @@ export function getNeighbors(p: Point, d: Point): Point[] {
 
   return neighbors;
 }
-
-export function copy2dBoard(inArr: any[][]): any[][] {
-  var newArr: any[][] = inArr.slice();
-  var i = inArr.length;
-  while (i--) {
-    newArr[i] = inArr[i].slice();
-  }
-  return newArr;
-}
-
-export const FRAMES_PER_SEC = 10;

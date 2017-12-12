@@ -7,11 +7,12 @@ import { UpdateAiDirection } from "./UpdateAi";
 var store: Store<GameState>;
 var Ais: Ai[];
 var lastState: GameState;
+
 export var refreshTime = 100;
   
-export function createAiManager(inStore: Store<GameState>){
+export function createAiManager(s: Store<GameState>){
 
-  store = inStore;
+  store = s;
     
   lastState = store.getState();
   Ais = [];
@@ -47,16 +48,19 @@ export function dispatchAiActions(){
 
 function updateAiStates(state: GameState){
 
+  // if map has changed, update territories
   if(state.fieldColors !== lastState.fieldColors){
     updateAiTerritories(state)
   }
 
+  // if game has restarted, create new Ais
   if(state.currentTick < lastState.currentTick){
     Ais = [];
   }
 
   var players = state.playersById;
   
+  // create or delete Ais due to players change
   for(let i = 0; i < players.length; i++) {
     if (players[i].AiControlled && Ais[i] === undefined && i < state.activePlayers){
       Ais[i] = createNewAi(state, i, refreshTime);
@@ -67,9 +71,10 @@ function updateAiStates(state: GameState){
     }
   }
 
+  // update other Ai properties
   for (let i = 0; i < Ais.length; i++){
     if (Ais[i] === undefined){
-      break;
+      continue;
     }
     Ais[i].precision = calculatePrecision(players[i].speed, refreshTime);
     Ais[i].PlayerHasDied = (players[i].deaths !== lastState.playersById[i].deaths);
@@ -80,7 +85,11 @@ function updateAiStates(state: GameState){
 
 function updateAiTerritories(state: GameState){
 
-  for (let i = 0; i < Object.keys(Ais).length; i++){
+  for (let i = 0; i < Ais.length; i++){
+    if (Ais[i] === undefined){
+      continue;
+    }
+
     let color = state.playersById[i].color;
     let territoryBorder: Point[] = shuffle(getBorder(state.fieldColors, color, state.dimension));
     let territory: Point[] = shuffle(getTerritoryPoints(color, state.fieldColors));

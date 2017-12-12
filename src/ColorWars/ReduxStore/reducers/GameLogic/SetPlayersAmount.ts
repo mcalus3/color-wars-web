@@ -20,6 +20,7 @@ export function setPlayersAmount(state: GameState, amount: number): GameState {
     curPlayer.coords = { ...curPlayer.startCoords };
     gameState = claimStartingFields(gameState, i);
   };
+
   // if amount is lower, then kill deactivated players
   } else if (amount < gameState.activePlayers) {
     gameState.playersById = gameState.playersById.slice();
@@ -27,7 +28,6 @@ export function setPlayersAmount(state: GameState, amount: number): GameState {
     for (let i = amount-1; i < gameState.activePlayers; i++) {
 
         gameState = killPlayer(gameState, i);
-
       };
   }
 

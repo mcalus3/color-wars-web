@@ -10,8 +10,7 @@ export function mapStateToProps(
   return {
     player: state.playersById[ownProps.id],
     dim: state.dimension,
-    optimized: state.optimized,
-    keys: state.keyMappingsById[ownProps.id]
+    optimized: state.optimized
   };
 }
 

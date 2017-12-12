@@ -1,5 +1,4 @@
 import {
-  copy2dBoard,
   colorNameToNum,
   outOfBoard
 } from '../../../utils/functions';
@@ -138,8 +137,9 @@ export function claimFields(
   color: number
 ): GameState {
   var newState = { ...state };
-  var newFields: number[][] = copy2dBoard(newState.fieldColors);
+  var newFields: number[][] = newState.fieldColors.slice();
   coords.forEach((p: Point) => {
+    newFields[p.X] = newFields[p.X].slice();
     newFields[p.X][p.Y] = color;
   });
   newState.lastUpdatedCoords = newState.lastUpdatedCoords.concat(coords);

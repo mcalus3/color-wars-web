@@ -9,71 +9,47 @@ import { changeDirection } from './GameLogic/changeDirection';
 import { resizeBoard } from './GameLogic/ResizeBoard';
 import { setPlayersAmount } from './GameLogic/SetPlayersAmount';
 import { changeMapTemplate } from './GameLogic/ChangeMapTemplate';
+import { modifyPlayer } from './GameLogic/modifyPlayer';
 
-export function gameReducer(
-  oldState: GameState = initialState,
-  action: Action
-): GameState {
+export function gameReducer(oldState: GameState = initialState, action: Action): GameState {
   var newState: GameState = { ...oldState };
 
   switch (action.type) {
+
     case TypeKeys.TICK:
-      newState = Tick(newState);
-      return newState;
+      return Tick(newState);
 
     case TypeKeys.CREATE_BOARD:
-      newState = createWorld(newState);
-      return newState;
+      return createWorld(newState);
 
     case TypeKeys.ACTOR_ACTION:
-      newState = HandleKeyboardInput(newState, action.key);
-      return newState;
+      return HandleKeyboardInput(newState, action.key);
 
-      case TypeKeys.CHANGE_DIRECTION:
-      newState = changeDirection(newState, action.id, action.direction);
-      return newState;
+    case TypeKeys.CHANGE_DIRECTION:
+      return changeDirection(newState, action.id, action.direction);
 
     case TypeKeys.RESIZE_BOARD:
-      newState = resizeBoard(newState, action.size);
-      return newState;
+      return resizeBoard(newState, action.size);
+
+    case TypeKeys.MODIFY_PLAYER:
+      return modifyPlayer(newState, action);
+
+    case TypeKeys.SET_PLAYERS_AMOUNT:
+      return setPlayersAmount(newState, action.amount);
+
+    case TypeKeys.CHANGE_MAP_TEMPLATE:
+      return changeMapTemplate(newState, action.value);
 
     case TypeKeys.PAUSE:
       newState.gamePhase = 'paused';
       return newState;
 
     case TypeKeys.RESUME:
-      newState.gamePhase = 'runing';
+      newState.gamePhase = 'running';
       return newState;
 
     case TypeKeys.SET_OPTIMIZATION:
       newState.optimized = action.value;
-      return newState;
-
-    case TypeKeys.RESIZE_BOARD:
-      newState = resizeBoard(newState, action.size);
-      return newState;
-
-    case TypeKeys.MODIFY_PLAYER:
-      newState.playersById = newState.playersById.slice();
-      
-      if (action.property === 'keyMapping'){
-
-        newState.keyMappingsById[action.id] = {
-          ...newState.keyMappingsById[action.id]
-        };
-        newState.keyMappingsById[action.id] = action.value;          
-
-      } else {
-        newState.playersById[action.id] = {
-          ...newState.playersById[action.id]
-        };
-        newState.playersById[action.id][action.property] = action.value;  
-      }
-
-      return newState;
-
-    case TypeKeys.SET_PLAYERS_AMOUNT:
-      newState = setPlayersAmount(newState, action.amount);
       return newState;
 
     case TypeKeys.SET_STARTING_TERRITORY:
@@ -84,15 +60,11 @@ export function gameReducer(
       newState.endTime = action.frames;
       return newState;
 
-      case TypeKeys.TOUCH_SET:
-      newState.touchscreenDetected = action.value;
+    case TypeKeys.TOUCH_SET:
+      newState.touchscreenMode = action.value;
       return newState;
 
-      case TypeKeys.CHANGE_MAP_TEMPLATE:
-      newState = changeMapTemplate(newState, action.value);
-      return newState;
-
-      default:
+    default:
       return oldState;
   }
 }

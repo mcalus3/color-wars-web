@@ -14,36 +14,9 @@ export interface Props {
 }
 
 class ScoreBar extends React.Component<Props, { oldProps: Props }> {
-  private previousBar: {
-    X: number;
-    Y: number;
-    Width: number;
-    Height: number;
-  };
-
-  constructor(props: Props) {
-    super(props);
-    this.previousBar = this.props.rect;
-  }
 
   componentDidMount() {
     this.animateBar();
-  }
-
-  shouldComponentUpdate(nextProps: Readonly<Props>, nextState: object) {
-    if (
-      nextProps.rect.X === this.props.rect.X &&
-      nextProps.rect.Y === this.props.rect.Y &&
-      nextProps.rect.Width === this.props.rect.Width &&
-      nextProps.rect.Height === this.props.rect.Height
-    ) {
-      return false;
-    }
-    return true;
-  }
-
-  componentWillUpdate(nextProps: Props, nextState: object) {
-    this.previousBar = this.props.rect;
   }
 
   render() {
@@ -67,10 +40,6 @@ class ScoreBar extends React.Component<Props, { oldProps: Props }> {
       return;
     }
 
-    bar.x = this.previousBar.X;
-    bar.y = this.previousBar.Y;
-    bar.width = this.previousBar.Width;
-    bar.height = this.previousBar.Height;
     bar.to({
       x: this.props.rect.X,
       y: this.props.rect.Y,

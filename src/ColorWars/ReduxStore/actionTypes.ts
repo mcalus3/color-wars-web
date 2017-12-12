@@ -137,10 +137,10 @@ export function setStartingTerritory(size: number): SetStartingTerritory {
 
 export interface SetTouch {
   type: TypeKeys.TOUCH_SET;
-  value: boolean;
+  value: number;
 }
 
-export function setTouch(value: boolean): SetTouch {
+export function setTouch(value: number): SetTouch {
   return {
     type: TypeKeys.TOUCH_SET,
     value

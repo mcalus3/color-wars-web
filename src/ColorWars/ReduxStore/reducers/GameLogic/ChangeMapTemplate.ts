@@ -4,30 +4,30 @@ import { createWorld } from './CreateWorld';
 
 export function changeMapTemplate(state: GameState, templateNo: number): GameState {
 
-  return setMapTemplate(state, preconfiguredSettings[templateNo]);
-}  
-
-export function setMapTemplate(state: GameState, settings: GameSettings): GameState {
   var gameState: GameState = { ...state };
-
-  // Aassign settings
-  for (let key in settings){
-    if (key !== 'playersById'){
-      gameState[key] = settings[key];      
-    }
-  }
-  for (let i = 0; i < settings.playersById.length; i++){
-
-    gameState.playersById[i] = {...gameState.playersById[i] };
-
-    for (let key in settings.playersById[i]){
-      
-      gameState.playersById[i][key] = settings.playersById[i][key];
-    }
-  }
-  // Restart game
+  let settings: GameSettings = preconfiguredSettings[templateNo];
   
-  let gameState2 = createWorld(gameState);
+    // Assign settings that are not named 'playersById'
+    for (let key in settings){
+      
+      if (key !== 'playersById'){
+        gameState[key] = settings[key];      
+      }
+    }
 
-  return gameState2;
-}
+    // Assign players separately
+    for (let i = 0; i < settings.playersById.length; i++){
+  
+      gameState.playersById[i] = {...gameState.playersById[i] };
+  
+      for (let key in settings.playersById[i]){
+        
+        gameState.playersById[i][key] = settings.playersById[i][key];
+      }
+    }
+
+    // Restart game
+    gameState = createWorld(gameState);
+  
+    return gameState;
+  }
