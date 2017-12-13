@@ -1,5 +1,5 @@
 import {
-  colorNameToNum,
+  COLOR_NUMS,
   outOfBoard
 } from '../../../utils/functions';
 import { GameState, Point } from '../../../utils/objectTypes';
@@ -20,7 +20,7 @@ export function createWorld(state: GameState): GameState {
   gameState = claimFields(
     gameState,
     getAllCoords(gameState.dimension),
-    colorNameToNum.white
+    COLOR_NUMS.White
   );
 
   // set startTime and game state
@@ -50,7 +50,7 @@ export function getEmptyFieldColors(dimension: Point): number[][] {
   for (var x: number = 0; x < dimension.X; x++) {
     fields[x] = [];
     for (var y: number = 0; y < dimension.Y; y++) {
-      fields[x][y] = colorNameToNum.white;
+      fields[x][y] = COLOR_NUMS.White;
     }
   }
 
@@ -107,7 +107,9 @@ export function setStartingPosition(index: number, dim: Point): Point {
       x = Math.floor(dim.X / 4);
       y = Math.floor(dim.Y / 2);
       break;
-    default: break;
+    default:
+    x = Math.ceil(Math.random()*(dim.X-2));
+    y = Math.ceil(Math.random()*(dim.Y-2));
   }
   return { X: x, Y: y };
 }
@@ -138,10 +140,12 @@ export function claimFields(
 ): GameState {
   var newState = { ...state };
   var newFields: number[][] = newState.fieldColors.slice();
+
   coords.forEach((p: Point) => {
     newFields[p.X] = newFields[p.X].slice();
     newFields[p.X][p.Y] = color;
   });
+
   newState.lastUpdatedCoords = newState.lastUpdatedCoords.concat(coords);
   newState.fieldColors = newFields;
   return newState;

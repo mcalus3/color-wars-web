@@ -13,6 +13,7 @@ export interface Props {
   dim: Point;
   gameState: string;
   touchscreen: number;
+  tick: number;
 }
 
 class GameBoard extends React.Component<Props, object> {

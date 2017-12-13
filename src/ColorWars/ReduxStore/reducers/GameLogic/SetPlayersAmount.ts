@@ -1,10 +1,18 @@
 import { claimStartingFields, setStartingPosition } from './CreateWorld';
 import { GameState } from '../../../utils/objectTypes';
 import { killPlayer } from './Tick';
+import { addPlayer } from './addPlayer';
 
 export function setPlayersAmount(state: GameState, amount: number): GameState {
   var gameState: GameState = { ...state };
 
+  // if amount is highet that playersById array length, create some players
+  if (amount >= gameState.playersById.length){
+    for (let i = gameState.playersById.length; i < amount; i++){
+      gameState = addPlayer(gameState);
+    }
+  }
+  
   // if amount is higher, then for each new player set starting position and claim starting fields
   if (amount > gameState.activePlayers) {
     gameState.playersById = gameState.playersById.slice();

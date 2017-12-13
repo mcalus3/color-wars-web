@@ -4,7 +4,7 @@ import {
   setStartingPosition
 } from './CreateWorld';
 import { GameState, Point } from '../../../utils/objectTypes';
-import { colorNameToNum } from '../../../utils/functions';
+import { COLOR_NUMS } from '../../../utils/functions';
 
 export function resizeBoard(state: GameState, size: Point): GameState {
   var gameState: GameState = { ...state };
@@ -47,7 +47,7 @@ export function trim2dBoard(inArr: any[][], size: Point): any[][] {
     newArr[i] = [];
     for (let j = 0; j < size.Y; j++) {
       if (i >= inArr.length || j >= inArr[i].length) {
-        newArr[i][j] = colorNameToNum.white;
+        newArr[i][j] = COLOR_NUMS.White;
       } else {
         newArr[i][j] = inArr[i][j];
       }

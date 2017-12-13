@@ -10,6 +10,7 @@ import { resizeBoard } from './GameLogic/ResizeBoard';
 import { setPlayersAmount } from './GameLogic/SetPlayersAmount';
 import { changeMapTemplate } from './GameLogic/ChangeMapTemplate';
 import { modifyPlayer } from './GameLogic/modifyPlayer';
+import { addPlayer } from './GameLogic/addPlayer';
 
 export function gameReducer(oldState: GameState = initialState, action: Action): GameState {
   var newState: GameState = { ...oldState };
@@ -64,7 +65,10 @@ export function gameReducer(oldState: GameState = initialState, action: Action):
       newState.touchscreenMode = action.value;
       return newState;
 
-    default:
+      case TypeKeys.ADD_PLAYER:
+      return addPlayer(newState);
+
+      default:
       return oldState;
   }
 }

@@ -3,7 +3,7 @@ import { Stage } from 'konva';
 import * as React from 'react';
 
 import {
-  colorNumToName,
+  COLORS,
   createHistogram,
   getFontSize
 } from '../../utils/functions';
@@ -30,7 +30,7 @@ class EndGame extends Component<Props, object> {
     var colorsArr: number[];
     var valuesArr: number[];
     ({ colorsArr, valuesArr } = createHistogram(this.props.fields));
-    this.color = colorNumToName[colorsArr[0]];
+    this.color = COLORS[colorsArr[0]];
 
     let winner = this.props.players.filter(p => p.color === colorsArr[0])[0];
     this.winner = winner.name;

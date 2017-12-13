@@ -4,7 +4,7 @@ import { Stage, FastLayer } from 'react-konva';
 
 import { Point } from '../../utils/objectTypes';
 import {
-  colorNumToName,
+  COLORS,
   createHistogram,
   getDimensionForCanvas
 } from '../../utils/functions';
@@ -52,9 +52,9 @@ function createScoreBars(fields: number[][], canvasDimension: Point) {
   colorsArr.forEach((value: number, index: number) => {
     bars.push(
       <ScoreBar
-        color={colorNumToName[value]}
+        color={COLORS[value]}
         rect={scoreBoardLayouter(valuesArr, index, canvasDimension)}
-        key={colorNumToName[value]}
+        key={COLORS[value]}
       />
     );
   });

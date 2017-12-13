@@ -7,6 +7,7 @@ export function mapStateToProps(state: GameState) {
     dim: state.dimension,
     gameState: state.gamePhase,
     touchscreen: state.touchscreenMode,
+    tick: state.currentTick
   };
 }
 

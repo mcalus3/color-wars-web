@@ -13,6 +13,9 @@ export interface Props {
 }
 
 class PlayersSettings extends React.Component<Props, object> {
+
+  maxPlayers = 50;
+
   render() {
     var players = [];
     for (var i: number = 0; i < this.props.playersAmount; i++) {
@@ -24,21 +27,26 @@ class PlayersSettings extends React.Component<Props, object> {
       <div className="Settings">
         <h2>Players</h2>
         <SliderWithTooltip
-          min={1}
-          max={8}
-          dots={true}
-          value={this.props.playersAmount}
+          min={0}
+          max={Math.log2(this.maxPlayers)}
+          value={Math.log2(this.props.playersAmount)}
+          step={1 / this.maxPlayers}
           tipFormatter={myFormatter}
-          onChange={this.props.onPlayersChange}
+          onChange={this.onSpeedChange}
         />
         <div className="PlayersSettings">{players}</div>
       </div>
     );
   }
+
+  onSpeedChange = (v: number) => {
+    let realAmount = Math.round(Math.pow(2, v));
+    this.props.onPlayersChange(realAmount);
+  }
 }
 
 export default PlayersSettings;
 
-function myFormatter(v: {}) {
-  return `${v}`;
+function myFormatter(v: number) {
+  return `${Math.round(Math.pow(2, v))}`;
 }

@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { Point } from '../../utils/objectTypes';
 import {
-  colorNumToName,
+  COLORS,
   layouter,
   PointsAreEqual
 } from '../../utils/functions';
@@ -18,101 +18,90 @@ export interface Props {
 }
 
 class Fields extends Component<Props, object> {
-  redraw: boolean;
   layer: any;
   ctx: CanvasRenderingContext2D;
-  lastUpdatedCoords: Point[];
-  canvasDim: Point = { X: 0, Y: 0 };
+  canvasDim: Point;
+  coords: Point[] = [];
+  redraw: boolean; // workaround for bug, konva overwrites my fields during canvas resize
 
   componentDidMount() {
     var canvas = this.layer.canvas._canvas as any;
     this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-
-    this.lastUpdatedCoords = this.props.lastUpdatedCoords;
-    this.drawFields();
+    let stage = this.layer.getStage() as Stage;
+    this.canvasDim = { X: stage.width(), Y: stage.height() };
   }
 
   componentWillUpdate(nextProps: Props) {
-    if (!PointsAreEqual(nextProps.dimension, this.props.dimension)) {
-      this.redraw = true;
+    let stage = this.layer.getStage() as Stage;
+    
+    if (!PointsAreEqual(this.props.dimension, nextProps.dimension) ||
+        !PointsAreEqual(this.canvasDim, {X: stage.width(), Y: stage.height()})) {
+      
+          this.coords = getAllCoords(nextProps.dimension);
+          this.redraw = true;
+    
+    } else if (this.props.lastUpdatedCoords !== nextProps.lastUpdatedCoords){
+      if (!this.redraw){
+        this.coords = nextProps.lastUpdatedCoords;              
+      } else {
+        this.redraw = false;        
+      }
     }
 
-    nextProps.lastUpdatedCoords.forEach((p: Point) =>
-      this.lastUpdatedCoords.push(p)
-    );
+    this.canvasDim = { X: stage.width(), Y: stage.height() };
   }
 
   render() {
     return <FastLayer ref={(c) => { this.layer = c; }} />;
   }
 
-  componentDidUpdate() {
-    this.drawFields();
-  }
+  componentDidUpdate(){
+    let fields = this.props.fields;
 
-  drawFields() {
-    if (this.redraw) {
-      this.lastUpdatedCoords = getAllCoords(this.props.dimension);
-      this.redraw = false;
-    }
-
-    if (this.lastUpdatedCoords.length === 0) {
+    if (this.coords.length === 0) {
       return;
     }
 
-    let stage = this.layer.getStage() as Stage;
-    if (
-      stage.width() !== this.canvasDim.X ||
-      stage.height() !== this.canvasDim.Y
-    ) {
-      this.redraw = true;
-    }
-
-    this.canvasDim = { X: stage.width(), Y: stage.height() };
-    let fields = this.props.fields;
-
-    let color: number =
-      fields[this.lastUpdatedCoords[0].X][this.lastUpdatedCoords[0].Y];
-    this.ctx.fillStyle = colorNumToName[color];
-    this.ctx.shadowColor = 'grey';
-    this.ctx.shadowBlur = colorNumToName[color] === 'white' ? 0 : 2;
-    this.ctx.globalAlpha = colorNumToName[color] === 'white' ? 1 : 0.7;
+    let color: number = fields[this.coords[0].X][this.coords[0].Y];
+    this.ctx.fillStyle = COLORS[color];
+    this.ctx.shadowColor = 'Grey';
+    this.ctx.shadowBlur = COLORS[color] === 'White' ? 0 : 2;
+    this.ctx.globalAlpha = COLORS[color] === 'White' ? 1 : 0.7;
     this.ctx.beginPath();
 
-    this.lastUpdatedCoords.forEach(coord => {
+    this.coords.forEach(coord => {
+
       if (fields[coord.X][coord.Y] !== color) {
         this.ctx.fill();
         this.ctx.closePath();
         this.ctx.beginPath();
 
         color = fields[coord.X][coord.Y];
-        this.ctx.shadowBlur = colorNumToName[color] === 'white' ? 0 : 2;
-        this.ctx.globalAlpha = colorNumToName[color] === 'white' ? 1 : 0.7;
-        this.ctx.fillStyle = colorNumToName[color];
+        this.ctx.shadowBlur = COLORS[color] === 'White' ? 0 : 2;
+        this.ctx.globalAlpha = COLORS[color] === 'White' ? 1 : 0.7;
+        this.ctx.fillStyle = COLORS[color];
       }
 
-      this.drawRectangle(coord, this.ctx, this.canvasDim);
+      this.drawRectangle(coord, this.props.dimension);
     });
 
     this.ctx.fill();
     this.ctx.closePath();
     this.ctx.globalAlpha = 1;
-    this.lastUpdatedCoords = [];
   }
 
   drawRectangle(
     fieldLocation: Point,
-    ctx: CanvasRenderingContext2D,
-    canvasDimension: Point
+    dim: Point
   ) {
     var X, Y, Width, Height;
     ({ X, Y, Width, Height } = layouter(
-      this.props.dimension,
-      canvasDimension,
+      dim,
+      this.canvasDim,
       fieldLocation
     ));
 
-    ctx.rect(X, Y, Width, Height);
+    this.ctx.rect(X, Y, Width, Height);
   }
 }
 

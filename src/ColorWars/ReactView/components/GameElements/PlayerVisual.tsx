@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactKonva from 'react-konva';
 import * as Konva from 'konva';
-import { colorNumToName, FRAMES_PER_SEC, layouter } from '../../../utils/functions';
+import { COLORS, FRAMES_PER_SEC, layouter } from '../../../utils/functions';
 import { Player, Point } from '../../../utils/objectTypes';
 
 export interface Props {
@@ -77,7 +77,7 @@ class PlayerComponent extends React.Component<Props, {images: {[key: string]: HT
   }
 
   renderRect(){
-    let color: string = colorNumToName[this.props.player.color];    
+    let color: string = COLORS[this.props.player.color];    
     let props = this.getTextureProps('small', this.props.optimized)
 
     return <ReactKonva.Rect

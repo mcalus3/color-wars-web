@@ -13,7 +13,7 @@ export interface Props {
   key: string;
 }
 
-class ScoreBar extends React.Component<Props, { oldProps: Props }> {
+class ScoreBar extends React.Component<Props, object> {
 
   componentDidMount() {
     this.animateBar();

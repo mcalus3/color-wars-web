@@ -112,6 +112,9 @@ class PlayerSettingsControl extends React.Component<Props, object> {
   }
 
   renderKeysSection(){
+    if (Object.keys(this.props.keys).length === 0){
+      return;
+    }
     let dirKeys = swap(this.props.keys);
     
     return <Form horizontal={true}>    

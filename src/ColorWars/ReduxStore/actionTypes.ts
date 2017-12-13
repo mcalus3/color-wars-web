@@ -1,5 +1,5 @@
 import { TypeKeys } from './constants';
-import { Point, Player } from '../utils/objectTypes';
+import { Point } from '../utils/objectTypes';
 
 // Board
 
@@ -41,13 +41,11 @@ export function setPlayersAmount(amount: number): SetPlayersAmount {
 
 export interface AddPlayer {
   type: TypeKeys.ADD_PLAYER;
-  player: Player;
 }
 
-export function addPlayer(player: Player): AddPlayer {
+export function addPlayer(): AddPlayer {
   return {
     type: TypeKeys.ADD_PLAYER,
-    player
   };
 }
 

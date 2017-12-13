@@ -77,7 +77,10 @@ function updateAiStates(state: GameState){
       continue;
     }
     Ais[i].precision = calculatePrecision(players[i].speed, refreshTime);
-    Ais[i].PlayerHasDied = (players[i].deaths !== lastState.playersById[i].deaths);
+
+    if (lastState.playersById[i] !== undefined){
+      Ais[i].PlayerHasDied = (players[i].deaths !== lastState.playersById[i].deaths);
+    }
   }
 
   lastState = state;

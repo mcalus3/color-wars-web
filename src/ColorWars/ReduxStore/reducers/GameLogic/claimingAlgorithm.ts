@@ -63,7 +63,7 @@ export function claimTerritoryAlgorithm(
         }
       }
     }
-  return returnFields.concat(tail);
+  return returnFields;
 }
 
 function ClaimTerritoryRecursive(
@@ -170,7 +170,7 @@ function createClaimedFields(fields: number[][], color: number){
 
   for (let i: number = 0; i < fields.length; i++) {
     claimedFields[i] = [];
-    
+
     for (let j: number = 0; j < fields[i].length; j++) {
       if (fields[i][j] === color) {
 
