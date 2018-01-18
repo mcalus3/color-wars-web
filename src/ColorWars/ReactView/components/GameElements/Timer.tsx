@@ -11,18 +11,24 @@ class Timer extends React.Component<{ secondsLeft: number }, object> {
   }
 
   render() {
-    let fontWidth = this.stage ? this.stage.width() / 3 : 0;
+    if (this.stage === undefined) return <ReactKonva.Label ref={(c) => { this.text = c; }}/>;
+
+    let fontWidth = this.stage.width() / 3;
+
     return (
+      <ReactKonva.Label y={0} x={this.stage.width() / 2}>      
+      <ReactKonva.Tag
+      pointerDirection='up'
+      />
       <ReactKonva.Text
         ref={(c) => { this.text = c; }}
-        x={0}
-        y={0}
         text={this.getTimerText(this.props.secondsLeft)}
         fontSize={fontWidth}
         fontFamily={'Calibri'}
         fill={this.props.secondsLeft > 5 ? 'white' : 'red'}
         stroke={'black'}
       />
+      </ReactKonva.Label>
     );
   }
 

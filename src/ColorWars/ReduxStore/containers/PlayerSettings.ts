@@ -13,8 +13,9 @@ export function mapStateToProps(
     color: state.playersById[ownProps.id].color,
     speed: state.playersById[ownProps.id].speed,
     deathPenalty: state.playersById[ownProps.id].deathPenalty,
-    aiControlled: state.playersById[ownProps.id].AiControlled,
-    aiDifficulty: state.playersById[ownProps.id].AiDifficulty,
+    avatar: state.playersById[ownProps.id].avatar,
+    aiControlled: state.playersById[ownProps.id].aiControlled,
+    aiDifficulty: state.playersById[ownProps.id].aiDifficulty,
     keys: state.keyMappingsById[ownProps.id]
   };
 }

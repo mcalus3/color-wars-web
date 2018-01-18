@@ -12,12 +12,14 @@ export function addPlayer(oldState: GameState){
       speed: 1,
       deathPenalty: 40,
       nextDirection: 'none',
-      AiControlled: true,
-      AiDifficulty: 1,
-      deaths: 0
+      aiControlled: true,
+      aiDifficulty: 1,
+      deaths: 0,
+      avatar: 0
     };
   let newState: GameState = {...oldState, playersById: oldState.playersById.concat(player)};
   newState = {...newState, tailsById: newState.tailsById.concat([[]])};
   newState = {...newState, keyMappingsById: newState.keyMappingsById.concat({})};
+  newState = {...newState, ticksWaitingById: newState.ticksWaitingById.concat(0)};
   return newState;
 }

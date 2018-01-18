@@ -23,6 +23,7 @@ export interface Props {
   deathPenalty: number;
   aiControlled: boolean,
   aiDifficulty: number,
+  avatar: number,
   keys: { [key: string]: string };
   onPlayerModify: (
     id: number,
@@ -166,6 +167,7 @@ class PlayerSettingsControl extends React.Component<Props, object> {
     </Button>
     </div>
     {this.renderAiDifficulty()}
+    {this.renderAvatarSlider()}
     </div>
   }
 
@@ -183,6 +185,27 @@ class PlayerSettingsControl extends React.Component<Props, object> {
             tipFormatter={this.normalFormatter}
             value={this.props.aiDifficulty}
             onChange={this.onAiDifficultyChange}
+          />
+        </Col>
+      </FormGroup>;
+    }
+    return null;
+  }
+
+  renderAvatarSlider(){
+    if (!this.props.aiControlled){
+      return <FormGroup controlId="avatarSlider">
+        <Col componentClass={ControlLabel} sm={3}>
+          avatar
+        </Col>
+        <Col sm={9}>
+          <SliderWithTooltip
+            min={1}
+            max={5}
+            step={1}
+            tipFormatter={this.normalFormatter}
+            value={this.props.avatar === 0 ? 1 : this.props.avatar}
+            onChange={this.onAvatarChange}
           />
         </Col>
       </FormGroup>;
@@ -255,11 +278,16 @@ class PlayerSettingsControl extends React.Component<Props, object> {
   }
 
   onAiControlledChange = () => {
-    this.props.onPlayerModify(this.props.id, 'AiControlled', !this.props.aiControlled);
+    this.props.onPlayerModify(this.props.id, 'aiControlled', !this.props.aiControlled);
   }
 
   onAiDifficultyChange = (v: any) => {
-    this.props.onPlayerModify(this.props.id, 'AiDifficulty', v);
+    this.props.onPlayerModify(this.props.id, 'aiDifficulty', v);
+  }
+
+  onAvatarChange = (v: number) => {
+    this.props.onPlayerModify(this.props.id, 'avatar', v);
+    console.log(v);
   }
 }
 

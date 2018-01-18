@@ -1,6 +1,6 @@
 import Timer from '../../ReduxStore/containers/Timer';
 import * as React from 'react';
-import { Stage, FastLayer } from 'react-konva';
+import { Stage, FastLayer, Layer } from 'react-konva';
 
 import { Point } from '../../utils/objectTypes';
 import {
@@ -30,9 +30,9 @@ class ScoreBoard extends React.Component<Props, object> {
             {scoreBars}
           </FastLayer>
           
-          <FastLayer>
+          <Layer>
             <Timer />
-          </FastLayer>
+          </Layer>
 
         </Stage>
       </div>

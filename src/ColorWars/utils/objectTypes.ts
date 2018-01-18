@@ -28,8 +28,9 @@ export interface Player {
   color: number;
   startCoords: Point;
   deathPenalty: number;
-  AiControlled: boolean;
-  AiDifficulty: number;
+  aiControlled: boolean;
+  aiDifficulty: number;
+  avatar: number;
 }
 
 export interface GameState {

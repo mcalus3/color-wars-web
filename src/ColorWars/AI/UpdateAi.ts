@@ -3,7 +3,7 @@ import { multiplyPoint, outOfBoard, addPoints } from '../utils/functions';
 import { pointsAreClose, directionToTarget, getAttackedTerritorySize, getRandomClosePointFromArray, getClosestPoint, getFirstPointOfAttack, turnRandomLeftOrRight, getDirectionToAdjecentEnemyField, trimPointToBoard, vectors } from "./AiFunctions";
 
 export function UpdateAiDirection(ai: Ai, state: GameState): Ai{
-  let curDifficulty = state.playersById[ai.playerId].AiDifficulty;
+  let curDifficulty = state.playersById[ai.playerId].aiDifficulty;
 
   if (curDifficulty === 0){
     return noAiUpdateDirection(ai);    

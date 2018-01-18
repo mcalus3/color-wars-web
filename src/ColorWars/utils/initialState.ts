@@ -27,9 +27,10 @@ export const initialState: GameState = {
       speed: 1,
       deathPenalty: 40,
       nextDirection: 'none',
-      AiControlled: false,
-      AiDifficulty: 1,
-      deaths: 0
+      aiControlled: false,
+      aiDifficulty: 1,
+      deaths: 0,
+      avatar: 1
     },
     {
       name: 'Maciek',
@@ -41,9 +42,10 @@ export const initialState: GameState = {
       speed: 1,
       deathPenalty: 40,
       nextDirection: 'none',
-      AiControlled: true,
-      AiDifficulty: 1,
-      deaths: 0
+      aiControlled: true,
+      aiDifficulty: 1,
+      deaths: 0,
+      avatar: 0
     },
     {
       name: 'Player3',
@@ -55,9 +57,10 @@ export const initialState: GameState = {
       speed: 1,
       deathPenalty: 40,
       nextDirection: 'none',
-      AiControlled: true,
-      AiDifficulty: 1,
-      deaths: 0
+      aiControlled: true,
+      aiDifficulty: 1,
+      deaths: 0,
+      avatar: 0
     },
     {
       name: 'Player4',
@@ -69,9 +72,10 @@ export const initialState: GameState = {
       speed: 1,
       deathPenalty: 40,
       nextDirection: 'none',
-      AiControlled: true,
-      AiDifficulty: 1,
-      deaths: 0
+      aiControlled: true,
+      aiDifficulty: 1,
+      deaths: 0,
+      avatar: 0
     },
     {
       name: 'Player5',
@@ -83,9 +87,10 @@ export const initialState: GameState = {
       speed: 1,
       deathPenalty: 40,
       nextDirection: 'none',
-      AiControlled: true,
-      AiDifficulty: 1,
-      deaths: 0
+      aiControlled: true,
+      aiDifficulty: 1,
+      deaths: 0,
+      avatar: 0
     },
     {
       name: 'Player6',
@@ -97,9 +102,10 @@ export const initialState: GameState = {
       speed: 1,
       deathPenalty: 40,
       nextDirection: 'none',
-      AiControlled: true,
-      AiDifficulty: 1,
-      deaths: 0
+      aiControlled: true,
+      aiDifficulty: 1,
+      deaths: 0,
+      avatar: 0
     },
     {
       name: 'Player7',
@@ -111,9 +117,10 @@ export const initialState: GameState = {
       speed: 1,
       deathPenalty: 40,
       nextDirection: 'none',
-      AiControlled: true,
-      AiDifficulty: 1,
-      deaths: 0
+      aiControlled: true,
+      aiDifficulty: 1,
+      deaths: 0,
+      avatar: 0
     },
     {
       name: 'Player8',
@@ -125,9 +132,10 @@ export const initialState: GameState = {
       speed: 1,
       deathPenalty: 40,
       nextDirection: 'none',
-      AiControlled: true,
-      AiDifficulty: 1,
-      deaths: 0
+      aiControlled: true,
+      aiDifficulty: 1,
+      deaths: 0,
+      avatar: 0
     }
   ],
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactKonva from 'react-konva';
 import * as Konva from 'konva';
-import { COLORS, FRAMES_PER_SEC, layouter } from '../../../utils/functions';
+import { COLORS, FRAMES_PER_SEC, layouter, getRotation } from '../../../utils/functions';
 import { Player, Point } from '../../../utils/objectTypes';
 
 export interface Props {
@@ -21,7 +21,6 @@ class PlayerComponent extends React.Component<Props, {images: {[key: string]: HT
   }
   
   componentDidMount() {
-    this.playerRef = this.refs.rect as any;
     this.stage = this.playerRef.getStage() as any;
 
     this.loadImages();
@@ -54,7 +53,6 @@ class PlayerComponent extends React.Component<Props, {images: {[key: string]: HT
     return <ReactKonva.Group>
 
       {this.renderPlayerTexture()}
-      {this.renderSkull()}
 
     </ReactKonva.Group>;
   }
@@ -62,18 +60,32 @@ class PlayerComponent extends React.Component<Props, {images: {[key: string]: HT
   componentDidUpdate() {
     if (!this.props.optimized) {
 
+      if (this.playerRef === null){
+        return;
+      }  
+
       this.playerRef.to({
-        x: this.playerRectangle.X,
-        y: this.playerRectangle.Y,
-        duration: Math.max(this.props.player.speed, 1) / FRAMES_PER_SEC,
-        easing: Konva.Easings.Linear
-      });
+          x: this.playerRectangle.X + this.playerRectangle.Width/2,
+          y: this.playerRectangle.Y + this.playerRectangle.Height/2,
+          duration: Math.max(this.props.player.speed, 1) / FRAMES_PER_SEC,
+          easing: Konva.Easings.Linear,
+          rotation: getRotation(this.props.player.direction, )        
+        });
     }
   }
 
   renderPlayerTexture(){
-    // for now only basic rectangle is available as a texture 
-    return this.renderRect();
+    
+    if (this.props.player.state === 'eliminated'){
+      return null;
+    }
+  
+    if (this.props.player.avatar === 1){
+      return this.renderRect();
+    
+    } else {
+      return this.renderPoly();
+    }
   }
 
   renderRect(){
@@ -82,14 +94,44 @@ class PlayerComponent extends React.Component<Props, {images: {[key: string]: HT
 
     return <ReactKonva.Rect
       {...props}
-      ref={'rect'}
+      ref={(c) => { this.playerRef = c; }}
+      fill={color}
+      offset={{
+        x: props.width/2,
+        y: props.height/2
+        }
+      }
+    />
+  }
+
+  renderPoly(){
+    let color: string = COLORS[this.props.player.color];
+    let props: any = {};
+    if (this.props.optimized){
+      props.x = this.playerRectangle.X + this.playerRectangle.Width/2;
+      props.y = this.playerRectangle.Y + this.playerRectangle.Height/2;  
+    }
+
+    return <ReactKonva.RegularPolygon
+      {...props}
+      shadowBlur={5}
+      shadowColor={'white'}
+      stroke={'black'}
+      strokeWidth={0.5}
+      opacity={1}
+      sides={this.props.player.avatar + 3}
+      radius={this.playerRectangle.Width*2/3}
+      ref={(c) => { this.playerRef = c; }}
       fill={color}
     />
   }
 
   renderSkull(){
     if (this.props.player.state === 'eliminated'){
-      return this.renderImage('skull', 'big');
+    //Optimization problems
+    //return this.renderImage('skull', 'big');
+    
+    //return this.renderLabel();
     }
       return null;
   }
@@ -102,33 +144,68 @@ class PlayerComponent extends React.Component<Props, {images: {[key: string]: HT
       ref={'img'}
       {...props}
       image={this.state.images[imageName]}
+      offset={{
+        x: props.width/2,
+        y: props.height/2
+        }
+      }
     />;
     
     return img;
   }
 
+  renderLabel(){
+    let color: string = COLORS[this.props.player.color];
+    let props: any = {};
+    props.x = this.playerRectangle.X + this.playerRectangle.Width/2;
+    props.y = this.playerRectangle.Y + this.playerRectangle.Height/2;  
+
+    return  <ReactKonva.Label x={props.x} y={props.y}>
+      <ReactKonva.Tag
+
+          fill={color}
+          pointerDirection= 'down'
+          pointerWidth={10}
+          pointerHeight={10}
+          lineJoin= 'round'
+          shadowColor= 'white'
+      />
+      <ReactKonva.Text
+
+          text='Dead'
+      fontFamily='Calibri'
+      fontSize={this.playerRectangle.Width}
+      padding={5}
+      fill='white'
+      stroke='black'
+      strokeWidth={0.25}
+      />
+    </ReactKonva.Label>
+  }
+
   getTextureProps(size: string, optimized: boolean){
     let props: any = {
-      shadowBlur: 7,
+      shadowBlur: 5,
+      shadowColor: 'white',
+      stroke: 'black',
+      strokeWidth: 0.5,
       opacity: 1
     };
 
     if (size === 'big'){
       props.width = this.playerRectangle.Width*2;
       props.height = this.playerRectangle.Height*2;
-      if (optimized){
-        props.x = this.playerRectangle.X - this.playerRectangle.Width/2;
-        props.y = this.playerRectangle.Y - this.playerRectangle.Height/2;  
-      }
 
     } else {
       props.width = this.playerRectangle.Width;
       props.height = this.playerRectangle.Height;
-      if (optimized){
-        props.x = this.playerRectangle.X;
-        props.y = this.playerRectangle.Y;
-      }
     }
+
+    if (optimized){
+      props.x = this.playerRectangle.X + this.playerRectangle.Width/2;
+      props.y = this.playerRectangle.Y + this.playerRectangle.Height/2;  
+    }
+
     return props;
   }
 

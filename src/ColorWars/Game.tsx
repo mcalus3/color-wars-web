@@ -13,8 +13,6 @@ class Game extends React.Component<Props, object> {
     return (
       <div className="Game">
 
-      {this.renderAppHeader()} 
-
         <div className="Board">
           <div className="ScoreBoard">
             <ScoreBoard />
@@ -28,15 +26,6 @@ class Game extends React.Component<Props, object> {
         
       </div>
     );
-  }
-
-  renderAppHeader(){
-    if (this.props.touch === 0) {
-      return <div className="App-header">
-          <h2>Welcome to Color Wars</h2>
-        </div>
-    }
-    return null;
   }
 }
 

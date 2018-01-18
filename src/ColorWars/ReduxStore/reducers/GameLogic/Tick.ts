@@ -1,4 +1,4 @@
-import { outOfBoard } from '../../../utils/functions';
+import { outOfBoard, getClosestPointOfColor } from '../../../utils/functions';
 import {
   GameState,
   Player,
@@ -8,16 +8,13 @@ import { claimTerritoryAlgorithm } from './claimingAlgorithm';
 import { claimFields } from './CreateWorld';
 
 export function Tick(state: GameState) {
+
   // handle pause
-  if (state.gamePhase === 'paused') {
+  if (state.gamePhase === 'paused' || state.gamePhase === 'initializing') {
     return state;
   }
 
   var gameState: GameState = { ...state };
-
-  if (gameState.gamePhase === 'initializing') {
-    gameState.gamePhase = 'running';
-  }
 
   // check if the game should end already
   if (gameState.currentTick >= gameState.endTime) {
@@ -132,7 +129,9 @@ export function killPlayer(state: GameState, id: number): GameState {
   var newState = killTail(state, id);
   newState.playersById = newState.playersById.slice();
   newState.ticksWaitingById = newState.ticksWaitingById.slice();
+  
   var player = newState.playersById[id];
+  player = adjustStartCoords(player, state.fieldColors);
 
   newState.playersById[id] = {
     ...player,
@@ -160,6 +159,13 @@ export function killTail(state: GameState, id: number): GameState {
   });
   newState.tailsById[id] = [];
   return newState;
+}
+
+function adjustStartCoords(player: Player, fieldColors: number[][]): Player {
+  if (!(fieldColors[player.startCoords.X][player.startCoords.Y] === player.color)){
+    return {...player, startCoords: getClosestPointOfColor(player.startCoords, player.color, fieldColors)};
+  }
+  return player;
 }
 
 function movePlayer(player: Player): Player {

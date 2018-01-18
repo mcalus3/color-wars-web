@@ -18,7 +18,7 @@ export function createAiManager(s: Store<GameState>){
   Ais = [];
 
   for (let i = 0; i < lastState.activePlayers; i++){
-    if (lastState.playersById[i].AiControlled){
+    if (lastState.playersById[i].aiControlled){
       Ais[i] = createNewAi(lastState, i, refreshTime);
     }
   }
@@ -38,7 +38,7 @@ export function dispatchAiActions(){
     let oldAi = Ais[i];
     let newAi = UpdateAiDirection(oldAi, state)
     
-    if (newAi.currentDirection !== oldAi.currentDirection){
+    if (newAi.currentDirection !== oldAi.currentDirection || newAi.currentDirection !== state.playersById[i].direction){
       store.dispatch(actions.changeDirection(newAi.playerId, newAi.currentDirection));
     }
 
@@ -62,11 +62,11 @@ function updateAiStates(state: GameState){
   
   // create or delete Ais due to players change
   for(let i = 0; i < players.length; i++) {
-    if (players[i].AiControlled && Ais[i] === undefined && i < state.activePlayers){
+    if (players[i].aiControlled && Ais[i] === undefined && i < state.activePlayers){
       Ais[i] = createNewAi(state, i, refreshTime);
     }
     
-    if (!(players[i].AiControlled) || i >= state.activePlayers) {
+    if (!(players[i].aiControlled) || i >= state.activePlayers) {
       delete Ais[i];
     }
   }

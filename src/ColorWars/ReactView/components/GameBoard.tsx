@@ -1,5 +1,5 @@
 import TouchScreen from '../../ReduxStore/containers/TouchScreen';
-import EndGame from '../../ReduxStore/containers/EndGame';
+import Message from '../../ReduxStore/containers/Message';
 import Tails from '../../ReduxStore/containers/Tails';
 import * as React from 'react';
 import { Stage } from 'react-konva';
@@ -33,7 +33,7 @@ class GameBoard extends React.Component<Props, object> {
 
           <Players />
 
-          {this.renderEndGame()}
+          {this.renderMessage()}
 
           {this.renderTouchScreen()}
         
@@ -42,13 +42,13 @@ class GameBoard extends React.Component<Props, object> {
     );
   }
 
-  renderEndGame() {
-    if (this.props.gameState === 'endGame') {
-      return <EndGame />;
+  renderMessage() {
+    if (this.props.gameState === 'endGame' || this.props.gameState === 'paused' || this.props.gameState === 'initializing') {
+      return <Message />;
     }
     return null;
   }
-  
+
   renderTouchScreen() {
     if (this.props.touchscreen !== 0) {
       return <TouchScreen />;

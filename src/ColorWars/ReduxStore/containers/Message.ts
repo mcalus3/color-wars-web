@@ -1,4 +1,4 @@
-import EndGame from '../../ReactView/components/EndGame';
+import Message from '../../ReactView/components/Message';
 import { GameState } from '../../utils/objectTypes';
 import { connect } from 'react-redux';
 
@@ -11,4 +11,4 @@ export function mapStateToProps(state: GameState) {
   };
 }
 
-export default connect(mapStateToProps)(EndGame);
+export default connect(mapStateToProps)(Message);

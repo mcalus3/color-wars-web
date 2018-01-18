@@ -11,12 +11,15 @@ export function HandleKeyboardInput(state: GameState, key: string): GameState {
     }
 
     if (gameState.gamePhase === 'paused'){
-        gameState = {...gameState, gamePhase: 'running'};
+      gameState = {...gameState, gamePhase: 'running'};
 
     } else if (gameState.gamePhase === 'running'){
-        gameState = {...gameState, gamePhase: 'paused'};
-    }
-  } else {
+      gameState = {...gameState, gamePhase: 'paused'};
+
+    } else if (gameState.gamePhase === 'initializing'){
+      gameState = {...gameState, gamePhase: 'running'};
+}
+} else {
 
     for(let i = 0; i < gameState.activePlayers; i++){
       var mapping = gameState.keyMappingsById[i];
