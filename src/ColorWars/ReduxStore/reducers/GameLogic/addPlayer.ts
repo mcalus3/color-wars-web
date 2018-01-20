@@ -15,6 +15,7 @@ export function addPlayer(oldState: GameState){
       aiControlled: true,
       aiDifficulty: 1,
       deaths: 0,
+      kills: 0,
       avatar: 0
     };
   let newState: GameState = {...oldState, playersById: oldState.playersById.concat(player)};

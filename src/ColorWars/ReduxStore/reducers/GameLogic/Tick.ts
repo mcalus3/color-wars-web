@@ -89,7 +89,7 @@ function doPlayerAction(state: GameState, id: number){
   }
 
   // kill enemy tail on entered field
-  gameState = EnterField(gameState, player.coords);
+  gameState = EnterField(gameState, player.coords, id);
   
   // if player killed himself, abort update
   if (gameState.playersById[id].state === 'dead'){
@@ -190,10 +190,18 @@ function movePlayer(player: Player): Player {
   return player;
 }
 
-function EnterField(state: GameState, field: Point): GameState {
+function EnterField(state: GameState, field: Point, enteringId: number): GameState {
   var id: number = state.fieldOccupiers[field.X][field.Y];
   if (id !== -1) {
-    return killPlayer(state, id);
+
+    const newEntering: Player = {...state.playersById[enteringId], kills: state.playersById[enteringId].kills + 1};
+    const newState = {...state, playersById: state.playersById.slice()};
+
+    if (id !== enteringId){
+      newState.playersById[enteringId] = newEntering;
+    }
+
+    return killPlayer(newState, id);
   }
   return state;
 }

@@ -30,6 +30,7 @@ export const initialState: GameState = {
       aiControlled: false,
       aiDifficulty: 1,
       deaths: 0,
+      kills: 0,
       avatar: 1
     },
     {
@@ -45,6 +46,7 @@ export const initialState: GameState = {
       aiControlled: true,
       aiDifficulty: 1,
       deaths: 0,
+      kills: 0,
       avatar: 0
     },
     {
@@ -60,6 +62,7 @@ export const initialState: GameState = {
       aiControlled: true,
       aiDifficulty: 1,
       deaths: 0,
+      kills: 0,
       avatar: 0
     },
     {
@@ -75,6 +78,7 @@ export const initialState: GameState = {
       aiControlled: true,
       aiDifficulty: 1,
       deaths: 0,
+      kills: 0,
       avatar: 0
     },
     {
@@ -90,6 +94,7 @@ export const initialState: GameState = {
       aiControlled: true,
       aiDifficulty: 1,
       deaths: 0,
+      kills: 0,
       avatar: 0
     },
     {
@@ -105,6 +110,7 @@ export const initialState: GameState = {
       aiControlled: true,
       aiDifficulty: 1,
       deaths: 0,
+      kills: 0,
       avatar: 0
     },
     {
@@ -120,6 +126,7 @@ export const initialState: GameState = {
       aiControlled: true,
       aiDifficulty: 1,
       deaths: 0,
+      kills: 0,
       avatar: 0
     },
     {
@@ -135,6 +142,7 @@ export const initialState: GameState = {
       aiControlled: true,
       aiDifficulty: 1,
       deaths: 0,
+      kills: 0,
       avatar: 0
     }
   ],

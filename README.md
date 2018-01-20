@@ -7,7 +7,7 @@ The game rules are simple - try to paint as much territory as possible until tim
 ## Gameplay
 
 **ColorWars** can be played by up to 8 players. To enable more players, switch off "AI controlled" button in given player settings. The game has dynamic settings, so you can change every aspect of the game during the match. The aim of the game is to have more territory than other players when game ends. You can die by hitting edge of the screen, or when someone cuts your tail. When the death penalty is set to infinite or you don't have any territory left, you are eliminated from the game.
-Simple touchscreen support has been added, so you can try it on your mobile device.
+**The game supports touchscreen control, so you can try it on your mobile device!**
 
 ![gameplay](https://github.com/mcalus3/color-wars-web/blob/master/resources/gameplay.gif)
 

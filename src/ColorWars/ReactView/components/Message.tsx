@@ -40,7 +40,7 @@ class EndGame extends Component<Props, object> {
     this.subText = this.props.mobile === 0 ? 'Press space to' : 'Tap screen to'
     
     if (this.props.state === 'initializing'){
-      this.text = 'Press space \nto start';
+      this.text = this.subText + '\nstart/pause';
       this.subText = ' ';
 
     } else if (this.props.state === 'endGame'){

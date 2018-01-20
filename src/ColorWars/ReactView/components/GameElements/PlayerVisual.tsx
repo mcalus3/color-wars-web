@@ -8,6 +8,7 @@ export interface Props {
   player: Player;
   dim: Point;
   optimized: boolean;
+  state: string;
 }
 
 class PlayerComponent extends React.Component<Props, {images: {[key: string]: HTMLImageElement}}> {
@@ -130,8 +131,6 @@ class PlayerComponent extends React.Component<Props, {images: {[key: string]: HT
     if (this.props.player.state === 'eliminated'){
     //Optimization problems
     //return this.renderImage('skull', 'big');
-    
-    //return this.renderLabel();
     }
       return null;
   }
@@ -152,35 +151,6 @@ class PlayerComponent extends React.Component<Props, {images: {[key: string]: HT
     />;
     
     return img;
-  }
-
-  renderLabel(){
-    let color: string = COLORS[this.props.player.color];
-    let props: any = {};
-    props.x = this.playerRectangle.X + this.playerRectangle.Width/2;
-    props.y = this.playerRectangle.Y + this.playerRectangle.Height/2;  
-
-    return  <ReactKonva.Label x={props.x} y={props.y}>
-      <ReactKonva.Tag
-
-          fill={color}
-          pointerDirection= 'down'
-          pointerWidth={10}
-          pointerHeight={10}
-          lineJoin= 'round'
-          shadowColor= 'white'
-      />
-      <ReactKonva.Text
-
-          text='Dead'
-      fontFamily='Calibri'
-      fontSize={this.playerRectangle.Width}
-      padding={5}
-      fill='white'
-      stroke='black'
-      strokeWidth={0.25}
-      />
-    </ReactKonva.Label>
   }
 
   getTextureProps(size: string, optimized: boolean){

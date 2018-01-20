@@ -1,4 +1,4 @@
-import PlayerVisual from '../../ReactView/components/GameElements/PlayerVisual';
+import KillsLabel from '../../ReactView/components/GameElements/KillsLabel';
 import { connect } from 'react-redux';
 
 import { GameState } from '../../utils/objectTypes';
@@ -10,9 +10,8 @@ export function mapStateToProps(
   return {
     player: state.playersById[ownProps.id],
     dim: state.dimension,
-    optimized: state.optimized,
-    state: state.gamePhase
+    mapping: state.keyMappingsById[ownProps.id]
   };
 }
 
-export default connect(mapStateToProps)(PlayerVisual);
+export default connect(mapStateToProps)(KillsLabel);

@@ -22,7 +22,8 @@ export interface Player {
   state: string;
   direction: string;
   deaths: number;
-
+  kills: number;
+  
   name: string;
   speed: number;
   color: number;
