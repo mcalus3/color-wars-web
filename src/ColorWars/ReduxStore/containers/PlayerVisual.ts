@@ -1,17 +1,17 @@
 import PlayerVisual from '../../ReactView/components/GameElements/PlayerVisual';
 import { connect } from 'react-redux';
 
-import { GameState } from '../../utils/objectTypes';
+import { AppState } from '../../utils/objectTypes';
 
 export function mapStateToProps(
-  state: GameState,
-  ownProps: { id: number } = { id: 0 }
+  state: AppState,
+  ownProps: { id: number; key: string } = { id: 0, key: '' }
 ) {
   return {
-    player: state.playersById[ownProps.id],
-    dim: state.dimension,
-    optimized: state.optimized,
-    state: state.gamePhase
+    player: state.gameState.playersById[ownProps.id],
+    dim: state.gameState.dimension,
+    optimized: state.gameState.optimized,
+    state: state.gameState.gamePhase
   };
 }
 

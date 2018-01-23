@@ -195,10 +195,10 @@ class PlayerSettingsControl extends React.Component<Props, object> {
   renderAvatarSlider(){
     if (!this.props.aiControlled){
       return <FormGroup controlId="avatarSlider">
-        <Col componentClass={ControlLabel} sm={3}>
+        <Col componentClass={ControlLabel} sm={4}>
           avatar
         </Col>
-        <Col sm={9}>
+        <Col sm={8}>
           <SliderWithTooltip
             min={1}
             max={5}

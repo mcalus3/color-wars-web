@@ -1,5 +1,33 @@
+.HiddenSettings {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  min-height: 100%;
+  background-color:rgba(0, 0, 0, 0.5);
+
+  vertical-align: top;
+  display: inline-block;
+  padding: 10px;
+  transition: all 0.5s ease;
+}
+
 .Settings {
-  background-color: #cccccc;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100%;
+  background-color:rgba(0, 0, 0, 0.5);
+
+  vertical-align: top;
+  display: inline-block;
+  padding: 10px;
+  transition: all 0.5s ease;
+}
+
+.SettingsPanel {
+  background-color:rgba(255, 255, 255, 0.7);
   vertical-align: top;
   display: inline-block;
   padding: 10px;
@@ -10,13 +38,13 @@
   margin-bottom: 10px;
   display: flex;
   justify-content: flex-start;
-  max-width: 400px;
+  max-width: 600px;
 }
 
 .PlayersSettings {
   display: flex;
   justify-content: left;
-  width: 400px;
+  width: 600px;
   flex-wrap: wrap;
 }
 
@@ -28,6 +56,6 @@
   border: 1px solid black;
   display: inline-block;
   justify-content: left;
-  width: 200px;
+  max-width: 200px;
 }
 

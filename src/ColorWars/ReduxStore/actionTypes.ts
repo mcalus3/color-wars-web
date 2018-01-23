@@ -97,6 +97,18 @@ export function changeDirection(id: number, direction: string): ChangeDirection 
 
 // settings
 
+export interface ShowSettings {
+  type: TypeKeys.SHOW_SETTINGS;
+  value: boolean;
+}
+
+export function ShowSettings(value: boolean): ShowSettings {
+  return {
+    type: TypeKeys.SHOW_SETTINGS,
+    value
+  };
+}
+
 export interface SetOptimization {
   type: TypeKeys.SET_OPTIMIZATION;
   value: boolean;
@@ -213,6 +225,7 @@ export function actorAction(key: string): ActorAction {
 
 export type GameAction = Tick | ActorAction | Pause | Resume;
 export type SettingsAction =
+  | ShowSettings
   | SetOptimization
   | SetStartingTerritory
   | SetGameTime

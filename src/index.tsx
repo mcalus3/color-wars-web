@@ -5,8 +5,8 @@ import * as ReactDOM from 'react-dom';
 import Game from './ColorWars/ReduxStore/containers/Game';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
-import { gameReducer } from './ColorWars/ReduxStore/reducers/GameReducer';
-import { GameState } from './ColorWars/utils/objectTypes';
+import { appReducer } from './ColorWars/ReduxStore/reducers/GameReducer';
+import { AppState } from './ColorWars/utils/objectTypes';
 import { initialState } from './ColorWars/utils/initialState';
 
 import * as actions from './ColorWars/ReduxStore/actionTypes';
@@ -22,8 +22,8 @@ registerServiceWorker();
 
 function initializeGame() {
   // create a store
-  const store: Store<GameState> = createStore<GameState>(
-    gameReducer as Reducer<GameState>,
+  const store: Store<AppState> = createStore<AppState>(
+    appReducer as Reducer<AppState>,
     initialState
   );
 
@@ -61,7 +61,7 @@ function initializeGame() {
   return store;
 }
 
-function renderReactDom(store: Store<GameState>) {
+function renderReactDom(store: Store<AppState>) {
   ReactDOM.render(
     <div className="App">
       <Provider store={store}>

@@ -1,6 +1,6 @@
 import { initialState } from '../../utils/initialState';
 import { Action } from '../actionTypes';
-import { GameState } from '../../utils/objectTypes';
+import { AppState, GameState } from '../../utils/objectTypes';
 import { TypeKeys } from './../constants';
 import { createWorld } from './GameLogic/CreateWorld';
 import { Tick } from './GameLogic/Tick';
@@ -12,7 +12,18 @@ import { changeMapTemplate } from './GameLogic/ChangeMapTemplate';
 import { modifyPlayer } from './GameLogic/modifyPlayer';
 import { addPlayer } from './GameLogic/addPlayer';
 
-export function gameReducer(oldState: GameState = initialState, action: Action): GameState {
+export function appReducer(oldState: AppState = initialState, action: Action): AppState {
+  
+  var newState: AppState = {
+    ...oldState,
+    gameState: gameReducer(oldState.gameState, action),
+    settingsVisible: settingsReducer(oldState.settingsVisible, action)
+  };
+  
+  return newState;
+}
+
+function gameReducer(oldState: GameState = initialState.gameState, action: Action): GameState {
   var newState: GameState = { ...oldState };
 
   switch (action.type) {
@@ -72,3 +83,16 @@ export function gameReducer(oldState: GameState = initialState, action: Action):
       return oldState;
   }
 }
+
+function settingsReducer(oldState: boolean = initialState.settingsVisible, action: Action): boolean {
+
+  switch (action.type) {
+    
+        case TypeKeys.SHOW_SETTINGS:
+          return !oldState;
+
+          default:
+          return oldState;
+      }
+    }
+    

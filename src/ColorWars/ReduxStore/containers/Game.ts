@@ -1,10 +1,10 @@
 import Game from '../../Game';
-import { GameState } from '../../utils/objectTypes';
+import { AppState } from '../../utils/objectTypes';
 import { connect } from 'react-redux';
 
-export function mapStateToProps(state: GameState) {
+export function mapStateToProps(state: AppState) {
   return {
-    touch: state.touchscreenMode,
+    touch: state.gameState.touchscreenMode,
   };
 }
 

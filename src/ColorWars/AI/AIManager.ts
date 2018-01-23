@@ -1,20 +1,20 @@
-import { Point, GameState, Ai } from "../utils/objectTypes";
+import { Point, AppState, Ai, GameState } from "../utils/objectTypes";
 import { Store } from "redux";
 import * as actions from '../ReduxStore/actionTypes';
 import { calculatePrecision, shuffle, getBorder, getTerritoryPoints } from "./AiFunctions";
 import { UpdateAiDirection } from "./UpdateAi";
 
-var store: Store<GameState>;
+var store: Store<AppState>;
 var Ais: Ai[];
 var lastState: GameState;
 
 export var refreshTime = 100;
   
-export function createAiManager(s: Store<GameState>){
+export function createAiManager(s: Store<AppState>){
 
   store = s;
     
-  lastState = store.getState();
+  lastState = store.getState().gameState;
   Ais = [];
 
   for (let i = 0; i < lastState.activePlayers; i++){
@@ -25,7 +25,7 @@ export function createAiManager(s: Store<GameState>){
 }
 
 export function dispatchAiActions(){
-  let state = store.getState();
+  let state = store.getState().gameState;
   
   updateAiStates(state);
   

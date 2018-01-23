@@ -40,7 +40,7 @@ class EndGame extends Component<Props, object> {
     this.subText = this.props.mobile === 0 ? 'Press space to' : 'Tap screen to'
     
     if (this.props.state === 'initializing'){
-      this.text = this.subText + '\nstart/pause';
+      this.text = 'Press space \nto start';
       this.subText = ' ';
 
     } else if (this.props.state === 'endGame'){
@@ -79,7 +79,6 @@ class EndGame extends Component<Props, object> {
           fill={this.color}
           shadowColor={'white'}
           stroke='black'
-          strokeWidth={0.5}
           shadowOffsetX={2}
           shadowOffsetY={2}
           />
@@ -96,7 +95,6 @@ class EndGame extends Component<Props, object> {
           fill={this.color}
           shadowColor={'white'}
           stroke='black'
-          strokeWidth={0.5}
           shadowOffsetX={2}
           shadowOffsetY={2}
           />

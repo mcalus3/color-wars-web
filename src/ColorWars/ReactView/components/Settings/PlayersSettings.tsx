@@ -24,7 +24,7 @@ class PlayersSettings extends React.Component<Props, object> {
       );
     }
     return (
-      <div className="Settings">
+      <div className="SettingsPanel">
         <h2>Players</h2>
         <SliderWithTooltip
           min={0}

@@ -2,21 +2,21 @@ import PlayerSettings from '../../ReactView/components/Settings/PlayerSettings';
 import * as actions from '../actionTypes';
 import { connect, Dispatch } from 'react-redux';
 
-import { GameState } from '../../utils/objectTypes';
+import { AppState } from '../../utils/objectTypes';
 
 export function mapStateToProps(
-  state: GameState,
+  state: AppState,
   ownProps: { id: number; key: string } = { id: 0, key: '0' }
 ) {
   return {
-    name: state.playersById[ownProps.id].name,
-    color: state.playersById[ownProps.id].color,
-    speed: state.playersById[ownProps.id].speed,
-    deathPenalty: state.playersById[ownProps.id].deathPenalty,
-    avatar: state.playersById[ownProps.id].avatar,
-    aiControlled: state.playersById[ownProps.id].aiControlled,
-    aiDifficulty: state.playersById[ownProps.id].aiDifficulty,
-    keys: state.keyMappingsById[ownProps.id]
+    name: state.gameState.playersById[ownProps.id].name,
+    color: state.gameState.playersById[ownProps.id].color,
+    speed: state.gameState.playersById[ownProps.id].speed,
+    deathPenalty: state.gameState.playersById[ownProps.id].deathPenalty,
+    avatar: state.gameState.playersById[ownProps.id].avatar,
+    aiControlled: state.gameState.playersById[ownProps.id].aiControlled,
+    aiDifficulty: state.gameState.playersById[ownProps.id].aiDifficulty,
+    keys: state.gameState.keyMappingsById[ownProps.id]
   };
 }
 

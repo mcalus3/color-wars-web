@@ -112,15 +112,19 @@ class Tails extends React.Component<Props, object> {
       }
 
       let color = COLORS[nextProps.players[i].color];
-      this.tailPrototypes[i] = new Rect({
+
+      let sh = new Rect({
         width: Width,
         height: Height,
         shadowBlur: 3,
         opacity: 0.25,
         fill: color,
         name: i.toString()
-      });
-      this.tailPrototypes[i].cache();
+      }) as any;
+      sh.perfectDrawEnabled(false);
+      sh.cache();
+
+      this.tailPrototypes[i] = sh;
     }
   }
 

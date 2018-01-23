@@ -1,12 +1,12 @@
 import ScoreBoard from '../../ReactView/components/ScoreBoard';
-import { GameState } from '../../utils/objectTypes';
+import { AppState } from '../../utils/objectTypes';
 import { connect } from 'react-redux';
 
-export function mapStateToProps(state: GameState) {
+export function mapStateToProps(state: AppState) {
   return {
-    fieldColors: state.fieldColors,
-    dimension: state.dimension,
-    mobile: state.touchscreenMode
+    fieldColors: state.gameState.fieldColors,
+    dimension: state.gameState.dimension,
+    mobile: state.gameState.touchscreenMode
   };
 }
 

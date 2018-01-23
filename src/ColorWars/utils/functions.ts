@@ -52,9 +52,6 @@ export function getDimensionForCanvas(dim: Point, mobile: boolean): Point {
   var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
   w = w * 3 / 4;
-  if (!mobile){
-    h = h - 75;    
-  }
   
   const boardRatio: number = dim.X / dim.Y;
 

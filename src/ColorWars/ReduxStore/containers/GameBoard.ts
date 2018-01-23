@@ -1,13 +1,13 @@
 import GameBoard from '../../ReactView/components/GameBoard';
-import { GameState } from '../../utils/objectTypes';
+import { AppState } from '../../utils/objectTypes';
 import { connect } from 'react-redux';
 
-export function mapStateToProps(state: GameState) {
+export function mapStateToProps(state: AppState) {
   return {
-    dim: state.dimension,
-    gameState: state.gamePhase,
-    touchscreen: state.touchscreenMode,
-    tick: state.currentTick
+    dim: state.gameState.dimension,
+    gameState: state.gameState.gamePhase,
+    touchscreen: state.gameState.touchscreenMode,
+    tick: state.gameState.currentTick
   };
 }
 

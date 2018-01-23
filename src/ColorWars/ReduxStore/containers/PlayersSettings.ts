@@ -2,11 +2,11 @@ import PlayersSettings from '../../ReactView/components/Settings/PlayersSettings
 import * as actions from '../actionTypes';
 import { connect, Dispatch } from 'react-redux';
 
-import { GameState } from '../../utils/objectTypes';
+import { AppState } from '../../utils/objectTypes';
 
-export function mapStateToProps(state: GameState) {
+export function mapStateToProps(state: AppState) {
   return {
-    playersAmount: state.activePlayers
+    playersAmount: state.gameState.activePlayers
   };
 }
 

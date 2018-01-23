@@ -1,16 +1,16 @@
 import TouchScreen from '../../ReactView/components/TouchScreen';
 import * as actions from '../actionTypes';
 import { connect, Dispatch } from 'react-redux';
-import { GameState } from '../../utils/objectTypes';
+import { AppState } from '../../utils/objectTypes';
 
-export function mapStateToProps(state: GameState) {
+export function mapStateToProps(state: AppState) {
   return {
-    tick: state.currentTick,
-    mode: state.touchscreenMode,
-    playerCoords: state.playersById[0].coords,
-    nextDirection: state.playersById[0].nextDirection,
-    dim: state.dimension,
-    phase: state.gamePhase
+    tick: state.gameState.currentTick,
+    mode: state.gameState.touchscreenMode,
+    playerCoords: state.gameState.playersById[0].coords,
+    nextDirection: state.gameState.playersById[0].nextDirection,
+    dim: state.gameState.dimension,
+    phase: state.gameState.gamePhase
   };
 }
 

@@ -1,12 +1,12 @@
 import Fields from '../../ReactView/components/Fields';
-import { GameState } from '../../utils/objectTypes';
+import { AppState } from '../../utils/objectTypes';
 import { connect } from 'react-redux';
 
-export function mapStateToProps(state: GameState) {
+export function mapStateToProps(state: AppState) {
   return {
-    fields: state.fieldColors,
-    lastUpdatedCoords: state.lastUpdatedCoords,
-    dimension: state.dimension
+    fields: state.gameState.fieldColors,
+    lastUpdatedCoords: state.gameState.lastUpdatedCoords,
+    dimension: state.gameState.dimension
   };
 }
 

@@ -1,7 +1,9 @@
 import { FRAMES_PER_SEC } from './functions';
-import { GameState } from './objectTypes';
+import { AppState } from './objectTypes';
 
-export const initialState: GameState = {
+export const initialState: AppState = {
+  settingsVisible: false,
+  gameState: {
   gamePhase: 'running',
   currentTick: 0,
   lastUpdatedCoords: [],
@@ -217,4 +219,5 @@ export const initialState: GameState = {
       'PageDown': 'right'
     }
   ]
+}
 };

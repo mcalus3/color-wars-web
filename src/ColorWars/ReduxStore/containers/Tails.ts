@@ -1,12 +1,12 @@
 import Tails from '../../ReactView/components/Tails';
-import { GameState } from '../../utils/objectTypes';
+import { AppState } from '../../utils/objectTypes';
 import { connect } from 'react-redux';
 
-export function mapStateToProps(state: GameState) {
+export function mapStateToProps(state: AppState) {
   return {
-    tails: state.tailsById,
-    players: state.playersById,
-    dimension: state.dimension
+    tails: state.gameState.tailsById,
+    players: state.gameState.playersById,
+    dimension: state.gameState.dimension
   };
 }
 

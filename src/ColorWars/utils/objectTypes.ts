@@ -34,6 +34,11 @@ export interface Player {
   avatar: number;
 }
 
+export interface AppState {
+  gameState: GameState;
+  settingsVisible: boolean;
+}
+
 export interface GameState {
   gamePhase: string;
   currentTick: number;

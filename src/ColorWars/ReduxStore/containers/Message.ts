@@ -1,13 +1,13 @@
 import Message from '../../ReactView/components/Message';
-import { GameState } from '../../utils/objectTypes';
+import { AppState } from '../../utils/objectTypes';
 import { connect } from 'react-redux';
 
-export function mapStateToProps(state: GameState) {
+export function mapStateToProps(state: AppState) {
   return {
-    state: state.gamePhase,
-    fields: state.fieldColors,
-    players: state.playersById,
-    mobile: state.touchscreenMode
+    state: state.gameState.gamePhase,
+    fields: state.gameState.fieldColors,
+    players: state.gameState.playersById,
+    mobile: state.gameState.touchscreenMode
   };
 }
 

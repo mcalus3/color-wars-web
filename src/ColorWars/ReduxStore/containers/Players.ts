@@ -1,12 +1,12 @@
 import Players from '../../ReactView/components/Players';
-import { GameState } from '../../utils/objectTypes';
+import { AppState } from '../../utils/objectTypes';
 import { connect } from 'react-redux';
 
-export function mapStateToProps(state: GameState) {
+export function mapStateToProps(state: AppState) {
   return {
-    activePlayers: state.activePlayers,
-    phase: state.gamePhase, 
-    players: state.playersById
+    activePlayers: state.gameState.activePlayers,
+    phase: state.gameState.gamePhase,
+    players: state.gameState.playersById
   };
 }
 

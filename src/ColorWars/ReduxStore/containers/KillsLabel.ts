@@ -1,16 +1,16 @@
 import KillsLabel from '../../ReactView/components/GameElements/KillsLabel';
 import { connect } from 'react-redux';
 
-import { GameState } from '../../utils/objectTypes';
+import { AppState } from '../../utils/objectTypes';
 
 export function mapStateToProps(
-  state: GameState,
+  state: AppState,
   ownProps: { id: number } = { id: 0 }
 ) {
   return {
-    player: state.playersById[ownProps.id],
-    dim: state.dimension,
-    mapping: state.keyMappingsById[ownProps.id]
+    player: state.gameState.playersById[ownProps.id],
+    dim: state.gameState.dimension,
+    mapping: state.gameState.keyMappingsById[ownProps.id]
   };
 }
 

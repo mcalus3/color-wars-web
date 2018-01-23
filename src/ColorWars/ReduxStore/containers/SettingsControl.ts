@@ -2,22 +2,25 @@ import SettingsComponent from '../../ReactView/components/SettingsComponent';
 import * as actions from '../actionTypes';
 import { connect, Dispatch } from 'react-redux';
 
-import { GameState, Point } from '../../utils/objectTypes';
+import { AppState, Point } from '../../utils/objectTypes';
 
-export function mapStateToProps(state: GameState) {
+export function mapStateToProps(state: AppState) {
   return {
-    dimension: state.dimension,
-    startingTerritory: state.startingTerritorySize,
-    endTime: state.endTime,
-    optimized: state.optimized,
-    phase: state.gamePhase,
-    touch: state.touchscreenMode
+    visible: state.settingsVisible,
+    dimension: state.gameState.dimension,
+    startingTerritory: state.gameState.startingTerritorySize,
+    endTime: state.gameState.endTime,
+    optimized: state.gameState.optimized,
+    phase: state.gameState.gamePhase,
+    touch: state.gameState.touchscreenMode
   };
 }
 
 export function mapDispatchToProps(dispatch: Dispatch<actions.Action>) {
   return {
-    onOptimization: (value: boolean) =>
+    onShow: (value: boolean) =>
+    dispatch(actions.ShowSettings(value)),
+  onOptimization: (value: boolean) =>
       dispatch(actions.setOptimization(value)),
     onCreateGame: () => dispatch(actions.createGame()),
     onPauseGame: () => dispatch(actions.pause()),
