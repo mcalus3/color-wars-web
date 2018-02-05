@@ -51,7 +51,7 @@ export function getDimensionForCanvas(dim: Point, mobile: boolean): Point {
   var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
   var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
-  w = w * 3 / 4;
+  h = h * 20 / 21;
   
   const boardRatio: number = dim.X / dim.Y;
 
@@ -69,7 +69,7 @@ export function getDimensionForCanvas(dim: Point, mobile: boolean): Point {
   return canvasDimension;
 }
 
-export function createHistogram(fields: number[][]): { colorsArr: number[]; valuesArr: number[] } {
+export function createHistogram(fields: number[][], sorted = true): { colorsArr: number[]; valuesArr: number[] } {
 
   var colors: {} = {};
 
@@ -90,9 +90,12 @@ export function createHistogram(fields: number[][]): { colorsArr: number[]; valu
   });
 
   var colorsArr: number[] = Object.keys(colors).map((n: string) => parseInt(n, 10));
-  colorsArr.sort(function(a: number, b: number) {
-    return parseFloat(colors[b]) - parseFloat(colors[a]);
-  });
+  
+  if (sorted){
+    colorsArr.sort(function(a: number, b: number) {
+      return parseFloat(colors[b]) - parseFloat(colors[a]);
+    });
+  }
 
   var valuesArr = colorsArr.map((color: number) => colors[color]);
 

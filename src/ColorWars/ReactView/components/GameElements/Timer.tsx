@@ -13,10 +13,10 @@ class Timer extends React.Component<{ secondsLeft: number }, object> {
   render() {
     if (this.stage === undefined) return <ReactKonva.Label ref={(c) => { this.text = c; }}/>;
 
-    let fontWidth = this.stage.width() / 3;
+    let fontWidth = this.stage.height();
 
     return (
-      <ReactKonva.Label y={0} x={this.stage.width() / 2}>      
+      <ReactKonva.Label y={0} x={fontWidth*1.25}>      
       <ReactKonva.Tag
       pointerDirection='up'
       />
@@ -27,6 +27,7 @@ class Timer extends React.Component<{ secondsLeft: number }, object> {
         fontFamily={'Calibri'}
         fill={this.props.secondsLeft > 5 ? 'white' : 'red'}
         stroke={'black'}
+        strokeWidth={0.5}
       />
       </ReactKonva.Label>
     );

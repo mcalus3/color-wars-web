@@ -20,7 +20,7 @@ class ScoreBoard extends React.Component<Props, object> {
 
   render() {
     let canvDim = getDimensionForCanvas(this.props.dimension, this.props.mobile !== 0);
-    canvDim.X /= 3;
+    canvDim.Y /= 20;
     const scoreBars = createScoreBars(this.props.fieldColors, canvDim);
     return (
       <div className="ScoreBoard">
@@ -48,7 +48,8 @@ function createScoreBars(fields: number[][], canvasDimension: Point) {
   var bars: JSX.Element[] = [];
 
   var colorsArr, valuesArr: number[];
-  ({ colorsArr, valuesArr } = createHistogram(fields));
+  ({ colorsArr, valuesArr } = createHistogram(fields, false));
+    
   colorsArr.forEach((value: number, index: number) => {
     bars.push(
       <ScoreBar
@@ -66,10 +67,16 @@ function scoreBoardLayouter(
   position: number,
   dim: Point
 ): { X: number; Y: number; Width: number; Height: number } {
+  
+  const total = values.reduce((a, b) => a + b, 0);
+  const x = position === 0 ?
+            0 :
+            values.slice(0, position).reduce((a, b) => a + b, 0);
+  
   return {
-    X: 0,
-    Y: Math.floor(dim.Y / values.length * position),
-    Width: Math.floor(values[position] * dim.X / values[0]),
-    Height: Math.floor(dim.Y / values.length)
+    X: Math.floor(dim.X * x / total ),
+    Y: 0,
+    Width: Math.floor(dim.X * values[position] / total ),
+    Height: dim.Y
   };
 }
