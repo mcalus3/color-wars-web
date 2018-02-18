@@ -47,6 +47,10 @@ class TouchScreen extends React.Component<Props> {
     if (this.props.phase === 'paused'){
       this.props.onResume();
     }
+
+    if (this.props.phase === 'initializing'){
+      this.props.onResume();
+    }
   }
 
   componentWillReceiveProps(){
