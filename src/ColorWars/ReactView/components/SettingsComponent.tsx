@@ -27,7 +27,6 @@ export interface Props {
   optimized: boolean;
   phase: string;
   touch: number;
-  onShow: (value: boolean) => actions.ShowSettings;
   onOptimization: (value: boolean) => actions.SetOptimization;
   onCreateGame: () => actions.CreateBoard;
   onPauseGame: () => actions.Pause;
@@ -46,16 +45,7 @@ class SettingsComponent extends React.Component<Props, object> {
 
   render() {
     if (!this.props.visible){
-      return (
-        <div className="HiddenSettings" >
-          <Button
-            bsStyle="primary"
-            onClick={this.onShow}
-          >
-            <span className="glyphicon glyphicon-menu-hamburger" />
-          </Button>
-        </div>
-      );
+      return (<div className="HiddenSettings" />);
 
     } else {
       return (
@@ -155,10 +145,6 @@ class SettingsComponent extends React.Component<Props, object> {
             </div>
           </div>
           <PlayersSettings />
-
-          <Button bsStyle="primary" onClick={this.onShow}>
-            <span className="glyphicon glyphicon-menu-hamburger" />
-          </Button>
         </div>        
       );
     }
@@ -174,10 +160,6 @@ class SettingsComponent extends React.Component<Props, object> {
     </DropdownButton>;
     }
     return null;
-  }
-
-  onShow = () => {
-    this.props.onShow(!this.props.visible);
   }
 
   onOptimizedChange = () => {

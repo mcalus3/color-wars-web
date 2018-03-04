@@ -7,7 +7,7 @@ import { Stage } from 'react-konva';
 import { Point } from '../../utils/objectTypes';
 import Players from '../../ReduxStore/containers/Players';
 import Fields from '../../ReduxStore/containers/Fields';
-import { getDimensionForCanvas } from '../../utils/functions';
+import { getDimensionForGameBoard } from '../../utils/functions';
 
 export interface Props {
   dim: Point;
@@ -21,7 +21,7 @@ class GameBoard extends React.Component<Props, object> {
   canvDim: Point;
 
   render() {
-    this.canvDim = getDimensionForCanvas(this.props.dim, this.props.touchscreen !== 0);
+    this.canvDim = getDimensionForGameBoard(this.props.dim, this.props.touchscreen !== 0);
 
     return (
       <div>

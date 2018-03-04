@@ -44,14 +44,14 @@ export function OptimizedArrayHasCoords(coords: Point, arr: boolean[][]): boolea
   return false;
 }
 
-export function getDimensionForCanvas(dim: Point, mobile: boolean): Point {
+export function getDimensionForGameBoard(dim: Point, mobile: boolean): Point {
   
   var canvasDimension: Point = { X: 0, Y: 0 };
 
   var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
   var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
-  h = h * 20 / 21;
+  h = h - 88;
   
   const boardRatio: number = dim.X / dim.Y;
 
@@ -67,6 +67,14 @@ export function getDimensionForCanvas(dim: Point, mobile: boolean): Point {
   canvasDimension.Y = Math.floor(canvasDimension.Y / dim.Y) * dim.Y;
 
   return canvasDimension;
+}
+
+export function getDimensionForScoreBoard(dim: Point, mobile: boolean): Point {
+  
+  return {
+    X: getDimensionForGameBoard(dim, mobile).X,
+    Y: 44
+  };
 }
 
 export function createHistogram(fields: number[][], sorted = true): { colorsArr: number[]; valuesArr: number[] } {

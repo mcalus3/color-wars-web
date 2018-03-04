@@ -18,8 +18,6 @@ export function mapStateToProps(state: AppState) {
 
 export function mapDispatchToProps(dispatch: Dispatch<actions.Action>) {
   return {
-    onShow: (value: boolean) =>
-    dispatch(actions.ShowSettings(value)),
   onOptimization: (value: boolean) =>
       dispatch(actions.setOptimization(value)),
     onCreateGame: () => dispatch(actions.createGame()),

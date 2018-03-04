@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 export function mapStateToProps(state: AppState) {
   return {
-    touch: state.gameState.touchscreenMode,
+    mobile: state.gameState.touchscreenMode !== 0,
   };
 }
 

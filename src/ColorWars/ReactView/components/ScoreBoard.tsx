@@ -6,7 +6,7 @@ import { Point } from '../../utils/objectTypes';
 import {
   COLORS,
   createHistogram,
-  getDimensionForCanvas
+  getDimensionForScoreBoard
 } from '../../utils/functions';
 import ScoreBar from './GameElements/ScoreBar';
 
@@ -19,8 +19,7 @@ export interface Props {
 class ScoreBoard extends React.Component<Props, object> {
 
   render() {
-    let canvDim = getDimensionForCanvas(this.props.dimension, this.props.mobile !== 0);
-    canvDim.Y /= 20;
+    let canvDim = getDimensionForScoreBoard(this.props.dimension, this.props.mobile !== 0);
     const scoreBars = createScoreBars(this.props.fieldColors, canvDim);
     return (
       <div className="ScoreBoard">
