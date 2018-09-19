@@ -1,7 +1,10 @@
 import { GameState } from '../../../utils/objectTypes';
 
-export function changeDirection(state: GameState, id: number, direction: string) {
-  
+export function changeDirection(
+  state: GameState,
+  id: number,
+  direction: string
+) {
   if (state.gamePhase !== 'running') {
     return state;
   }
@@ -11,9 +14,9 @@ export function changeDirection(state: GameState, id: number, direction: string)
 
   if (
     PlayerIsAllowedToTurn(
-        direction,
-        gameState.playersById[id].direction,
-        gameState.playersById[id].state
+      direction,
+      gameState.playersById[id].direction,
+      gameState.playersById[id].state
     )
   ) {
     gameState.playersById[id] = {

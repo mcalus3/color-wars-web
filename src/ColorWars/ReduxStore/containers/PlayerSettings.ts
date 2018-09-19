@@ -27,4 +27,7 @@ export function mapDispatchToProps(dispatch: Dispatch<actions.Action>) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlayerSettings);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PlayerSettings);

@@ -2,11 +2,7 @@ import { Text, Rect, Label, Layer, Tag } from 'react-konva';
 import { Stage } from 'konva';
 import * as React from 'react';
 
-import {
-  COLORS,
-  createHistogram,
-  getFontSize
-} from '../../utils/functions';
+import { COLORS, createHistogram, getFontSize } from '../../utils/functions';
 import { Component } from 'react';
 import { Point, Player } from '../../utils/objectTypes';
 
@@ -26,8 +22,8 @@ class EndGame extends Component<Props, object> {
   subText: string = '0';
 
   componentDidMount() {
-    var Stage = this.layer.getStage() as Stage;
-    this.canvasDim = { X: Stage.width(), Y: Stage.height() };
+    var stage = this.layer.getStage() as Stage;
+    this.canvasDim = { X: stage.width(), Y: stage.height() };
 
     var colorsArr: number[];
     var valuesArr: number[];
@@ -37,19 +33,20 @@ class EndGame extends Component<Props, object> {
     let winner = this.props.players.filter(p => p.color === colorsArr[0])[0];
     this.winner = winner.name;
 
-    this.subText = this.props.mobile === 0 ? 'Press space to' : 'Tap screen to'
-    
-    if (this.props.state === 'initializing'){
-      this.text = this.props.mobile === 0 ? 'Press space\nto start' : 'Tap screen\nto start';
-      this.subText = ' ';
+    this.subText = this.props.mobile === 0 ? 'Press space to' : 'Tap screen to';
 
-    } else if (this.props.state === 'endGame'){
+    if (this.props.state === 'initializing') {
+      this.text =
+        this.props.mobile === 0
+          ? 'Press space\nto start'
+          : 'Tap screen\nto start';
+      this.subText = ' ';
+    } else if (this.props.state === 'endGame') {
       this.text = this.winner + ' wins!';
       this.subText += ' restart';
-
-    } else if (this.props.state === 'paused'){
-      this.text = ' '
-      this.subText += ' continue';      
+    } else if (this.props.state === 'paused') {
+      this.text = ' ';
+      this.subText += ' continue';
     }
 
     this.forceUpdate();
@@ -57,7 +54,11 @@ class EndGame extends Component<Props, object> {
 
   render() {
     return (
-      <Layer ref={(c) => { this.layer = c; }}>
+      <Layer
+        ref={c => {
+          this.layer = c;
+        }}
+      >
         <Rect
           width={this.canvasDim.X}
           height={this.canvasDim.Y}
@@ -67,65 +68,67 @@ class EndGame extends Component<Props, object> {
           opacity={0.3}
         />
         {this.drawTitle()}
-        <Label y={this.canvasDim.Y /2} x={this.canvasDim.X / 2}>
+        <Label y={this.canvasDim.Y / 2} x={this.canvasDim.X / 2}>
           <Tag
-          pointerDirection='down'
-          cornerRadius={getFontSize(this.canvasDim.X)/3}
+            pointerDirection="down"
+            cornerRadius={getFontSize(this.canvasDim.X) / 3}
           />
           <Text
-          align={'center'}
-          text={this.text}
-          fontSize={getFontSize(this.canvasDim.X)}
-          fill={this.color}
-          shadowColor={'white'}
-          stroke='black'
-          shadowOffsetX={2}
-          shadowOffsetY={2}
+            align={'center'}
+            text={this.text}
+            fontSize={getFontSize(this.canvasDim.X)}
+            fill={this.color}
+            shadowColor={'white'}
+            stroke="black"
+            shadowOffsetX={2}
+            shadowOffsetY={2}
           />
         </Label>
-        <Label y={this.canvasDim.Y /2} x={this.canvasDim.X / 2}>
+        <Label y={this.canvasDim.Y / 2} x={this.canvasDim.X / 2}>
           <Tag
-          pointerDirection='up'
-          cornerRadius={getFontSize(this.canvasDim.X)/2}
+            pointerDirection="up"
+            cornerRadius={getFontSize(this.canvasDim.X) / 2}
           />
           <Text
-          align={'center'}
-          text={this.subText}
-          fontSize={getFontSize(this.canvasDim.X/2)}
-          fill={this.color}
-          shadowColor={'white'}
-          stroke='black'
-          shadowOffsetX={2}
-          shadowOffsetY={2}
+            align={'center'}
+            text={this.subText}
+            fontSize={getFontSize(this.canvasDim.X / 2)}
+            fill={this.color}
+            shadowColor={'white'}
+            stroke="black"
+            shadowOffsetX={2}
+            shadowOffsetY={2}
           />
         </Label>
       </Layer>
     );
   }
 
-  drawTitle(){
-    if (this.props.state === 'initializing'){
-      return <Label y={this.canvasDim.Y / 5} x={this.canvasDim.X / 2}>
-      <Tag
-      fill='grey'
-      opacity={0.75}
-      pointerDirection='down'
-      cornerRadius={getFontSize(this.canvasDim.X)/2}
-      />
-      <Text
-      align={'center'}
-      text={' Color wars '}
-      fontSize={getFontSize(this.canvasDim.X)}
-      fill={this.color}
-      shadowColor={'white'}
-      stroke='black'
-      shadowOffsetX={2}
-      shadowOffsetY={2}
-      padding={getFontSize(this.canvasDim.X)/4}
-      />
-    </Label>
+  drawTitle() {
+    if (this.props.state === 'initializing') {
+      return (
+        <Label y={this.canvasDim.Y / 5} x={this.canvasDim.X / 2}>
+          <Tag
+            fill="grey"
+            opacity={0.75}
+            pointerDirection="down"
+            cornerRadius={getFontSize(this.canvasDim.X) / 2}
+          />
+          <Text
+            align={'center'}
+            text={' Color wars '}
+            fontSize={getFontSize(this.canvasDim.X)}
+            fill={this.color}
+            shadowColor={'white'}
+            stroke="black"
+            shadowOffsetX={2}
+            shadowOffsetY={2}
+            padding={getFontSize(this.canvasDim.X) / 4}
+          />
+        </Label>
+      );
     } else {
-      return null
+      return null;
     }
   }
 }

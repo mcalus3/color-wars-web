@@ -19,23 +19,23 @@ export function resizeBoard(state: GameState, size: Point): GameState {
   gameState.fieldOccupiers = getEmptyFieldOccupiers(size);
 
   // for each active player:
-  for(let i = 0; i < gameState.activePlayers; i++){
-      var curPlayer = { ...gameState.playersById[i] };
-      gameState.playersById[i] = curPlayer;
+  for (let i = 0; i < gameState.activePlayers; i++) {
+    var curPlayer = { ...gameState.playersById[i] };
+    gameState.playersById[i] = curPlayer;
 
-      var curTail = gameState.tailsById[i].slice();
+    var curTail = gameState.tailsById[i].slice();
 
-      // set starting position and move player at it
-      curPlayer.startCoords = setStartingPosition(i, gameState.dimension);
-      curPlayer.coords = { ...curPlayer.startCoords };
+    // set starting position and move player at it
+    curPlayer.startCoords = setStartingPosition(i, gameState.dimension);
+    curPlayer.coords = { ...curPlayer.startCoords };
 
-      // delete tail
-      curTail = [];
+    // delete tail
+    curTail = [];
 
-      gameState.tailsById[i] = curTail;
-      // claim starting fields
-      gameState = claimStartingFields(gameState, i);
-    };
+    gameState.tailsById[i] = curTail;
+    // claim starting fields
+    gameState = claimStartingFields(gameState, i);
+  }
 
   return gameState;
 }

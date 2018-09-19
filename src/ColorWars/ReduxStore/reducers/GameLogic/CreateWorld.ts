@@ -1,7 +1,4 @@
-import {
-  COLOR_NUMS,
-  outOfBoard
-} from '../../../utils/functions';
+import { COLOR_NUMS, outOfBoard } from '../../../utils/functions';
 import { GameState, Point } from '../../../utils/objectTypes';
 
 export function createWorld(state: GameState): GameState {
@@ -12,7 +9,7 @@ export function createWorld(state: GameState): GameState {
   // create board
   gameState.fieldColors = getEmptyFieldColors(gameState.dimension);
   gameState.fieldOccupiers = getEmptyFieldOccupiers(gameState.dimension);
-  for (let i = 0; i < gameState.tailsById.length; i++){
+  for (let i = 0; i < gameState.tailsById.length; i++) {
     gameState.tailsById[i] = [];
   }
 
@@ -29,18 +26,18 @@ export function createWorld(state: GameState): GameState {
 
   // for each active player:
   for (let i = 0; i < gameState.activePlayers; i++) {
-      var curPlayer = { ...gameState.playersById[i] };
-      gameState.playersById[i] = curPlayer;
+    var curPlayer = { ...gameState.playersById[i] };
+    gameState.playersById[i] = curPlayer;
 
-      // set starting position and move player at it
-      curPlayer.startCoords = setStartingPosition(i, gameState.dimension);
-      curPlayer.coords = { ...curPlayer.startCoords };
-      curPlayer.state = 'defensive';
-      gameState.ticksWaitingById[i] = 0;
+    // set starting position and move player at it
+    curPlayer.startCoords = setStartingPosition(i, gameState.dimension);
+    curPlayer.coords = { ...curPlayer.startCoords };
+    curPlayer.state = 'defensive';
+    gameState.ticksWaitingById[i] = 0;
 
-      // claim starting fields
-      gameState = claimStartingFields(gameState, i);
-    };
+    // claim starting fields
+    gameState = claimStartingFields(gameState, i);
+  }
   return gameState;
 }
 
@@ -80,16 +77,16 @@ export function setStartingPosition(index: number, dim: Point): Point {
       y = Math.floor(dim.Y / 4);
       break;
     case 1:
-      x = Math.floor(dim.X / 4 * 3);
-      y = Math.floor(dim.Y / 4 * 3);
+      x = Math.floor((dim.X / 4) * 3);
+      y = Math.floor((dim.Y / 4) * 3);
       break;
     case 2:
-      x = Math.floor(dim.X / 4 * 3);
+      x = Math.floor((dim.X / 4) * 3);
       y = Math.floor(dim.Y / 4);
       break;
     case 3:
       x = Math.floor(dim.X / 4);
-      y = Math.floor(dim.Y / 4 * 3);
+      y = Math.floor((dim.Y / 4) * 3);
       break;
     case 4:
       x = Math.floor(dim.X / 2);
@@ -97,10 +94,10 @@ export function setStartingPosition(index: number, dim: Point): Point {
       break;
     case 5:
       x = Math.floor(dim.X / 2);
-      y = Math.floor(dim.Y / 4 * 3);
+      y = Math.floor((dim.Y / 4) * 3);
       break;
     case 6:
-      x = Math.floor(dim.X / 4 * 3);
+      x = Math.floor((dim.X / 4) * 3);
       y = Math.floor(dim.Y / 2);
       break;
     case 7:
@@ -108,8 +105,8 @@ export function setStartingPosition(index: number, dim: Point): Point {
       y = Math.floor(dim.Y / 2);
       break;
     default:
-    x = Math.ceil(Math.random()*(dim.X-2));
-    y = Math.ceil(Math.random()*(dim.Y-2));
+      x = Math.ceil(Math.random() * (dim.X - 2));
+      y = Math.ceil(Math.random() * (dim.Y - 2));
   }
   return { X: x, Y: y };
 }

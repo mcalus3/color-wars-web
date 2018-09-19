@@ -1,14 +1,9 @@
 import { outOfBoard, getClosestPointOfColor } from '../../../utils/functions';
-import {
-  GameState,
-  Player,
-  Point,
-} from '../../../utils/objectTypes';
+import { GameState, Player, Point } from '../../../utils/objectTypes';
 import { claimTerritoryAlgorithm } from './claimingAlgorithm';
 import { claimFields } from './CreateWorld';
 
 export function Tick(state: GameState) {
-
   // handle pause
   if (state.gamePhase === 'paused' || state.gamePhase === 'initializing') {
     return state;
@@ -21,7 +16,11 @@ export function Tick(state: GameState) {
     gameState = { ...gameState, gamePhase: 'endGame' };
     return gameState;
   } else {
-    gameState = { ...gameState, currentTick: gameState.currentTick + 1, gamePhase: 'running' };
+    gameState = {
+      ...gameState,
+      currentTick: gameState.currentTick + 1,
+      gamePhase: 'running'
+    };
   }
 
   // clear last updated coords table
@@ -43,7 +42,7 @@ export function updatePlayer(state: GameState, id: number) {
   var gameState: GameState = { ...state };
   gameState.ticksWaitingById = gameState.ticksWaitingById.slice();
 
-  while (gameState.ticksWaitingById[id] < 1){
+  while (gameState.ticksWaitingById[id] < 1) {
     gameState = doPlayerAction(gameState, id);
     gameState.ticksWaitingById[id] += gameState.playersById[id].speed;
   }
@@ -53,9 +52,8 @@ export function updatePlayer(state: GameState, id: number) {
   return gameState;
 }
 
-
-function doPlayerAction(state: GameState, id: number){
-  var gameState: GameState = { ...state };  
+function doPlayerAction(state: GameState, id: number) {
+  var gameState: GameState = { ...state };
   var playersById: Player[] = gameState.playersById.slice();
   var tailsById: Point[][] = gameState.tailsById.slice();
   var player: Player = { ...playersById[id] };
@@ -72,7 +70,7 @@ function doPlayerAction(state: GameState, id: number){
 
   // if he is out of bounds, kill him and return (if player is AI, just wait)
   if (outOfBoard(player.coords, gameState.dimension)) {
-      return killPlayer(gameState, id);
+    return killPlayer(gameState, id);
   }
 
   gameState.playersById[id] = player;
@@ -80,7 +78,7 @@ function doPlayerAction(state: GameState, id: number){
   var pY = player.coords.Y;
 
   // if player was revived, set player's state
-  if (player.state === 'dead'){
+  if (player.state === 'dead') {
     if (gameState.fieldColors[pX][pY] !== player.color) {
       player.state = 'offensive';
     } else {
@@ -90,12 +88,12 @@ function doPlayerAction(state: GameState, id: number){
 
   // kill enemy tail on entered field
   gameState = EnterField(gameState, player.coords, id);
-  
+
   // if player killed himself, abort update
-  if (gameState.playersById[id].state === 'dead'){
+  if (gameState.playersById[id].state === 'dead') {
     return gameState;
   }
-  
+
   // if player is on enemy territory spawn tail
   if (gameState.fieldColors[pX][pY] !== player.color) {
     player.state = 'offensive';
@@ -129,7 +127,7 @@ export function killPlayer(state: GameState, id: number): GameState {
   var newState = killTail(state, id);
   newState.playersById = newState.playersById.slice();
   newState.ticksWaitingById = newState.ticksWaitingById.slice();
-  
+
   var player = newState.playersById[id];
   player = adjustStartCoords(player, state.fieldColors);
 
@@ -152,7 +150,10 @@ export function killTail(state: GameState, id: number): GameState {
   };
 
   newState.tailsById[id].forEach(t => {
-    if (newState.fieldOccupiers.length >= t.X && newState.fieldOccupiers[t.X].length >= t.Y){
+    if (
+      newState.fieldOccupiers.length >= t.X &&
+      newState.fieldOccupiers[t.X].length >= t.Y
+    ) {
       newState.fieldOccupiers[t.X] = newState.fieldOccupiers[t.X].slice();
       newState.fieldOccupiers[t.X][t.Y] = -1;
     }
@@ -162,8 +163,17 @@ export function killTail(state: GameState, id: number): GameState {
 }
 
 function adjustStartCoords(player: Player, fieldColors: number[][]): Player {
-  if (!(fieldColors[player.startCoords.X][player.startCoords.Y] === player.color)){
-    return {...player, startCoords: getClosestPointOfColor(player.startCoords, player.color, fieldColors)};
+  if (
+    !(fieldColors[player.startCoords.X][player.startCoords.Y] === player.color)
+  ) {
+    return {
+      ...player,
+      startCoords: getClosestPointOfColor(
+        player.startCoords,
+        player.color,
+        fieldColors
+      )
+    };
   }
   return player;
 }
@@ -190,14 +200,20 @@ function movePlayer(player: Player): Player {
   return player;
 }
 
-function EnterField(state: GameState, field: Point, enteringId: number): GameState {
+function EnterField(
+  state: GameState,
+  field: Point,
+  enteringId: number
+): GameState {
   var id: number = state.fieldOccupiers[field.X][field.Y];
   if (id !== -1) {
+    const newEntering: Player = {
+      ...state.playersById[enteringId],
+      kills: state.playersById[enteringId].kills + 1
+    };
+    const newState = { ...state, playersById: state.playersById.slice() };
 
-    const newEntering: Player = {...state.playersById[enteringId], kills: state.playersById[enteringId].kills + 1};
-    const newState = {...state, playersById: state.playersById.slice()};
-
-    if (id !== enteringId){
+    if (id !== enteringId) {
       newState.playersById[enteringId] = newEntering;
     }
 
@@ -206,67 +222,69 @@ function EnterField(state: GameState, field: Point, enteringId: number): GameSta
   return state;
 }
 
-function fieldsStatistics(oldState: GameState, newState: GameState): GameState{
-
+function fieldsStatistics(oldState: GameState, newState: GameState): GameState {
   if (allPlayersAreEliminated(newState.playersById, newState.activePlayers)) {
-    return {...newState, gamePhase: 'endGame', currentTick: newState.endTime};
+    return { ...newState, gamePhase: 'endGame', currentTick: newState.endTime };
   }
 
   if (newState.fieldColors === oldState.fieldColors) {
     return newState;
   }
 
-  var gameState = {...newState};
-  
-  let colors: {[c: number]: any} = colorsOnMap(newState.fieldColors);
-  for (let i = 0; i < gameState.activePlayers; i++){
-    if (!(colors.hasOwnProperty(gameState.playersById[i].color))) {
+  var gameState = { ...newState };
 
+  let colors: { [c: number]: any } = colorsOnMap(newState.fieldColors);
+  for (let i = 0; i < gameState.activePlayers; i++) {
+    if (!colors.hasOwnProperty(gameState.playersById[i].color)) {
       gameState = eliminateFromTheGame(gameState, i);
-    }   
+    }
   }
 
   if (allFieldsHaveOneColor(gameState.fieldColors)) {
-    gameState = {...gameState, gamePhase: 'endGame', currentTick: gameState.endTime};
+    gameState = {
+      ...gameState,
+      gamePhase: 'endGame',
+      currentTick: gameState.endTime
+    };
   }
 
   return gameState;
 }
 
-function allFieldsHaveOneColor(fields: number[][]): boolean{
+function allFieldsHaveOneColor(fields: number[][]): boolean {
   let prevColor = fields[0][0];
-  for (let i = 0; i < fields.length; i++){
-    for (let j = 0; j < fields[i].length; j++){
-      if (fields[i][j] !== prevColor){
+  for (let i = 0; i < fields.length; i++) {
+    for (let j = 0; j < fields[i].length; j++) {
+      if (fields[i][j] !== prevColor) {
         return false;
       }
       prevColor = fields[i][j];
-    }      
+    }
   }
   return true;
 }
 
-function colorsOnMap(fields: number[][]): {[c: number]: any}{
-  let colors: {[c: number]: any} = {};
-  
-  for (let i = 0; i < fields.length; i++){
-    for (let j = 0; j < fields[i].length; j++){
-      if (!(colors.hasOwnProperty(fields[i][j]))){
+function colorsOnMap(fields: number[][]): { [c: number]: any } {
+  let colors: { [c: number]: any } = {};
+
+  for (let i = 0; i < fields.length; i++) {
+    for (let j = 0; j < fields[i].length; j++) {
+      if (!colors.hasOwnProperty(fields[i][j])) {
         colors[fields[i][j]] = {};
       }
-    }      
+    }
   }
   return colors;
 }
 
-function eliminateFromTheGame(state: GameState, id: number){
-  let gameState = {...state};
+function eliminateFromTheGame(state: GameState, id: number) {
+  let gameState = { ...state };
   gameState.playersById = gameState.playersById.slice();
   gameState.ticksWaitingById = gameState.ticksWaitingById.slice();
 
   gameState.ticksWaitingById[id] = Infinity;
 
-  let player = {...gameState.playersById[id]};
+  let player = { ...gameState.playersById[id] };
   player = {
     ...player,
     coords: { ...player.startCoords },
@@ -278,9 +296,9 @@ function eliminateFromTheGame(state: GameState, id: number){
   return gameState;
 }
 
-function allPlayersAreEliminated(players: Player[], amount: number){
-  for (let i = 0; i < amount; i++){
-    if (players[i].state !== 'eliminated'){
+function allPlayersAreEliminated(players: Player[], amount: number) {
+  for (let i = 0; i < amount; i++) {
+    if (players[i].state !== 'eliminated') {
       return false;
     }
   }

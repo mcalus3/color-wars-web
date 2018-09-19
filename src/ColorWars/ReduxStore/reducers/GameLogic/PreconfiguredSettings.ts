@@ -1,13 +1,13 @@
-import { GameSettings } from "../../../utils/objectTypes";
-import { FRAMES_PER_SEC } from "../../../utils/functions";
+import { GameSettings } from '../../../utils/objectTypes';
+import { FRAMES_PER_SEC } from '../../../utils/functions';
 
-export var preconfiguredSettings: {[n: number]: GameSettings} = {
+export var preconfiguredSettings: { [n: number]: GameSettings } = {
   0: {
     activePlayers: 8,
     dimension: { X: 60, Y: 60 },
     startingTerritorySize: 2,
     endTime: 180 * FRAMES_PER_SEC,
-  
+
     playersById: [
       {
         name: 'Marek',
@@ -64,7 +64,7 @@ export var preconfiguredSettings: {[n: number]: GameSettings} = {
     dimension: { X: 100, Y: 100 },
     startingTerritorySize: 4,
     endTime: 300 * FRAMES_PER_SEC,
-  
+
     playersById: [
       {
         name: 'Marek',
@@ -82,7 +82,7 @@ export var preconfiguredSettings: {[n: number]: GameSettings} = {
         name: 'Player3',
         color: 3,
         speed: 0.25,
-        deathPenalty: 1 * FRAMES_PER_SEC 
+        deathPenalty: 1 * FRAMES_PER_SEC
       },
       {
         name: 'Player4',
@@ -121,7 +121,7 @@ export var preconfiguredSettings: {[n: number]: GameSettings} = {
     dimension: { X: 60, Y: 60 },
     startingTerritorySize: 4,
     endTime: 180 * FRAMES_PER_SEC,
-  
+
     playersById: [
       {
         name: 'Marek',
@@ -178,7 +178,7 @@ export var preconfiguredSettings: {[n: number]: GameSettings} = {
     dimension: { X: 60, Y: 60 },
     startingTerritorySize: 2,
     endTime: 180 * FRAMES_PER_SEC,
-  
+
     playersById: [
       {
         name: 'Marek',
@@ -235,7 +235,7 @@ export var preconfiguredSettings: {[n: number]: GameSettings} = {
     dimension: { X: 30, Y: 15 },
     startingTerritorySize: 2,
     endTime: 60 * FRAMES_PER_SEC,
-  
+
     playersById: [
       {
         name: 'Marek',
@@ -292,7 +292,7 @@ export var preconfiguredSettings: {[n: number]: GameSettings} = {
     dimension: { X: 30, Y: 15 },
     startingTerritorySize: 2,
     endTime: 60 * FRAMES_PER_SEC,
-  
+
     playersById: [
       {
         name: 'Marek',
@@ -349,7 +349,7 @@ export var preconfiguredSettings: {[n: number]: GameSettings} = {
     dimension: { X: 50, Y: 25 },
     startingTerritorySize: 2,
     endTime: 180 * FRAMES_PER_SEC,
-  
+
     playersById: [
       {
         name: 'Marek',
@@ -406,7 +406,7 @@ export var preconfiguredSettings: {[n: number]: GameSettings} = {
     dimension: { X: 50, Y: 25 },
     startingTerritorySize: 2,
     endTime: 180 * FRAMES_PER_SEC,
-  
+
     playersById: [
       {
         name: 'Marek',
@@ -458,4 +458,4 @@ export var preconfiguredSettings: {[n: number]: GameSettings} = {
       }
     ]
   }
-}
+};

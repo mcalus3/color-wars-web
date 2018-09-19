@@ -45,7 +45,7 @@ export interface AddPlayer {
 
 export function addPlayer(): AddPlayer {
   return {
-    type: TypeKeys.ADD_PLAYER,
+    type: TypeKeys.ADD_PLAYER
   };
 }
 
@@ -84,10 +84,13 @@ export function removePlayer(id: number): RemovePlayer {
 export interface ChangeDirection {
   type: TypeKeys.CHANGE_DIRECTION;
   id: number;
-  direction: string
+  direction: string;
 }
 
-export function changeDirection(id: number, direction: string): ChangeDirection {
+export function changeDirection(
+  id: number,
+  direction: string
+): ChangeDirection {
   return {
     type: TypeKeys.CHANGE_DIRECTION,
     id,

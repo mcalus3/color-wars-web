@@ -15,17 +15,20 @@ export function PointsAreEqual(p1: Point, p2: Point): boolean {
   return p1.X === p2.X && p1.Y === p2.Y;
 }
 
-export function layouter(boardDimension: Point, canvasDimension: Point, fieldLocation: Point) {
+export function layouter(
+  boardDimension: Point,
+  canvasDimension: Point,
+  fieldLocation: Point
+) {
   return {
-    X: canvasDimension.X / boardDimension.X * fieldLocation.X,
-    Y: canvasDimension.Y / boardDimension.Y * fieldLocation.Y,
+    X: (canvasDimension.X / boardDimension.X) * fieldLocation.X,
+    Y: (canvasDimension.Y / boardDimension.Y) * fieldLocation.Y,
     Width: canvasDimension.X / boardDimension.X,
     Height: canvasDimension.Y / boardDimension.Y
   };
 }
 
 export function ArrayHasCoords(coords: Point, arr: Point[]): boolean {
-  
   for (let i = 0; i < arr.length; i++) {
     if (PointsAreEqual(arr[i], coords)) {
       return true;
@@ -34,25 +37,32 @@ export function ArrayHasCoords(coords: Point, arr: Point[]): boolean {
   return false;
 }
 
-export function OptimizedArrayHasCoords(coords: Point, arr: boolean[][]): boolean {
-  
-  if (arr[coords.X] !== undefined){
+export function OptimizedArrayHasCoords(
+  coords: Point,
+  arr: boolean[][]
+): boolean {
+  if (arr[coords.X] !== undefined) {
     if (arr[coords.X][coords.Y] === true) {
       return true;
-    }  
+    }
   }
   return false;
 }
 
 export function getDimensionForGameBoard(dim: Point, mobile: boolean): Point {
-  
   var canvasDimension: Point = { X: 0, Y: 0 };
 
-  var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-  var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+  var w = Math.max(
+    document.documentElement.clientWidth,
+    window.innerWidth || 0
+  );
+  var h = Math.max(
+    document.documentElement.clientHeight,
+    window.innerHeight || 0
+  );
 
   h = h - 88;
-  
+
   const boardRatio: number = dim.X / dim.Y;
 
   if (w / h > boardRatio) {
@@ -70,20 +80,20 @@ export function getDimensionForGameBoard(dim: Point, mobile: boolean): Point {
 }
 
 export function getDimensionForScoreBoard(dim: Point, mobile: boolean): Point {
-  
   return {
     X: getDimensionForGameBoard(dim, mobile).X,
     Y: 44
   };
 }
 
-export function createHistogram(fields: number[][], sorted = true): { colorsArr: number[]; valuesArr: number[] } {
-
+export function createHistogram(
+  fields: number[][],
+  sorted: boolean = true
+): { colorsArr: number[]; valuesArr: number[] } {
   var colors: {} = {};
 
   fields.forEach(row => {
     row.forEach(element => {
-
       if (element === COLOR_NUMS.White) {
         return;
       }
@@ -93,13 +103,14 @@ export function createHistogram(fields: number[][], sorted = true): { colorsArr:
       } else {
         colors[element] = 1;
       }
-
     });
   });
 
-  var colorsArr: number[] = Object.keys(colors).map((n: string) => parseInt(n, 10));
-  
-  if (sorted){
+  var colorsArr: number[] = Object.keys(colors).map((n: string) =>
+    parseInt(n, 10)
+  );
+
+  if (sorted) {
     colorsArr.sort(function(a: number, b: number) {
       return parseFloat(colors[b]) - parseFloat(colors[a]);
     });
@@ -128,43 +139,189 @@ export function swap(json: any): any {
 }
 
 export function getFontSize(canvasWidth: number) {
-
   return canvasWidth / 10;
 }
 
 export function getNeighborsPoints(p: Point, d: Point): Point[] {
-  
   var neighbors: Point[] = [];
-  
-  if (p.Y !== 0){
+
+  if (p.Y !== 0) {
     neighbors.push({ X: p.X, Y: p.Y - 1 });
   }
-  if (p.X !== 0){
+  if (p.X !== 0) {
     neighbors.push({ X: p.X - 1, Y: p.Y });
   }
-  if (p.X !== d.X - 1){
+  if (p.X !== d.X - 1) {
     neighbors.push({ X: p.X + 1, Y: p.Y });
   }
-  if (p.Y !== d.Y - 1){
+  if (p.Y !== d.Y - 1) {
     neighbors.push({ X: p.X, Y: p.Y + 1 });
   }
 
   return neighbors;
 }
 
-export function getClosestPointOfColor(point: Point, color: number, fields: number[][]){
+export function getClosestPointOfColor(
+  point: Point,
+  color: number,
+  fields: number[][]
+) {
   return getClosestPoint(getTerritoryPoints(color, fields), point);
 }
 
-export function getRotation(dir: string){
-  return dir === 'right' ? 90 :
-         dir === 'down' ? 180 :
-         dir === 'left' ? 270 :
-                          0;
+export function getRotation(dir: string) {
+  return dir === 'right' ? 90 : dir === 'down' ? 180 : dir === 'left' ? 270 : 0;
 }
 
-export var COLORS: string[] = ["White","Green","Blue","Orange","Red","Brown","CadetBlue","Chartreuse","DarkGoldenRod","AliceBlue","AntiqueWhite","Aqua","Aquamarine","Azure","Beige","Bisque","Black","BlanchedAlmond","BlueViolet","BurlyWood","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","Darkorange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Grey","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","WhiteSmoke","Yellow","YellowGreen"];
-
+export var COLORS: string[] = [
+  'White',
+  'Green',
+  'Blue',
+  'Orange',
+  'Red',
+  'Brown',
+  'CadetBlue',
+  'Chartreuse',
+  'DarkGoldenRod',
+  'AliceBlue',
+  'AntiqueWhite',
+  'Aqua',
+  'Aquamarine',
+  'Azure',
+  'Beige',
+  'Bisque',
+  'Black',
+  'BlanchedAlmond',
+  'BlueViolet',
+  'BurlyWood',
+  'Chocolate',
+  'Coral',
+  'CornflowerBlue',
+  'Cornsilk',
+  'Crimson',
+  'Cyan',
+  'DarkBlue',
+  'DarkCyan',
+  'DarkGray',
+  'DarkGrey',
+  'DarkGreen',
+  'DarkKhaki',
+  'DarkMagenta',
+  'DarkOliveGreen',
+  'Darkorange',
+  'DarkOrchid',
+  'DarkRed',
+  'DarkSalmon',
+  'DarkSeaGreen',
+  'DarkSlateBlue',
+  'DarkSlateGray',
+  'DarkSlateGrey',
+  'DarkTurquoise',
+  'DarkViolet',
+  'DeepPink',
+  'DeepSkyBlue',
+  'DimGray',
+  'DimGrey',
+  'DodgerBlue',
+  'FireBrick',
+  'FloralWhite',
+  'ForestGreen',
+  'Fuchsia',
+  'Gainsboro',
+  'GhostWhite',
+  'Gold',
+  'GoldenRod',
+  'Gray',
+  'Grey',
+  'GreenYellow',
+  'HoneyDew',
+  'HotPink',
+  'IndianRed',
+  'Indigo',
+  'Ivory',
+  'Khaki',
+  'Lavender',
+  'LavenderBlush',
+  'LawnGreen',
+  'LemonChiffon',
+  'LightBlue',
+  'LightCoral',
+  'LightCyan',
+  'LightGoldenRodYellow',
+  'LightGray',
+  'LightGrey',
+  'LightGreen',
+  'LightPink',
+  'LightSalmon',
+  'LightSeaGreen',
+  'LightSkyBlue',
+  'LightSlateGray',
+  'LightSlateGrey',
+  'LightSteelBlue',
+  'LightYellow',
+  'Lime',
+  'LimeGreen',
+  'Linen',
+  'Magenta',
+  'Maroon',
+  'MediumAquaMarine',
+  'MediumBlue',
+  'MediumOrchid',
+  'MediumPurple',
+  'MediumSeaGreen',
+  'MediumSlateBlue',
+  'MediumSpringGreen',
+  'MediumTurquoise',
+  'MediumVioletRed',
+  'MidnightBlue',
+  'MintCream',
+  'MistyRose',
+  'Moccasin',
+  'NavajoWhite',
+  'Navy',
+  'OldLace',
+  'Olive',
+  'OliveDrab',
+  'OrangeRed',
+  'Orchid',
+  'PaleGoldenRod',
+  'PaleGreen',
+  'PaleTurquoise',
+  'PaleVioletRed',
+  'PapayaWhip',
+  'PeachPuff',
+  'Peru',
+  'Pink',
+  'Plum',
+  'PowderBlue',
+  'Purple',
+  'RosyBrown',
+  'RoyalBlue',
+  'SaddleBrown',
+  'Salmon',
+  'SandyBrown',
+  'SeaGreen',
+  'SeaShell',
+  'Sienna',
+  'Silver',
+  'SkyBlue',
+  'SlateBlue',
+  'SlateGray',
+  'SlateGrey',
+  'Snow',
+  'SpringGreen',
+  'SteelBlue',
+  'Tan',
+  'Teal',
+  'Thistle',
+  'Tomato',
+  'Turquoise',
+  'Violet',
+  'Wheat',
+  'WhiteSmoke',
+  'Yellow',
+  'YellowGreen'
+];
 
 export var COLOR_NUMS = {
   White: 0,

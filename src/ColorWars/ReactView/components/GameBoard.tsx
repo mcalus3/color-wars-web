@@ -17,16 +17,17 @@ export interface Props {
 }
 
 class GameBoard extends React.Component<Props, object> {
-  
   canvDim: Point;
 
   render() {
-    this.canvDim = getDimensionForGameBoard(this.props.dim, this.props.touchscreen !== 0);
+    this.canvDim = getDimensionForGameBoard(
+      this.props.dim,
+      this.props.touchscreen !== 0
+    );
 
     return (
       <div>
         <Stage width={this.canvDim.X} height={this.canvDim.Y}>
-          
           <Fields />
 
           <Tails />
@@ -36,14 +37,17 @@ class GameBoard extends React.Component<Props, object> {
           {this.renderMessage()}
 
           {this.renderTouchScreen()}
-        
         </Stage>
       </div>
     );
   }
 
   renderMessage() {
-    if (this.props.gameState === 'endGame' || this.props.gameState === 'paused' || this.props.gameState === 'initializing') {
+    if (
+      this.props.gameState === 'endGame' ||
+      this.props.gameState === 'paused' ||
+      this.props.gameState === 'initializing'
+    ) {
       return <Message />;
     }
     return null;
@@ -56,6 +60,5 @@ class GameBoard extends React.Component<Props, object> {
     return null;
   }
 }
-
 
 export default GameBoard;

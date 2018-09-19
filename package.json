@@ -24,7 +24,6 @@
     "deploy": "gh-pages -d build"
   },
   "devDependencies": {
-    "gh-pages": "^1.0.0",
     "@types/enzyme": "^3.1.1",
     "@types/jest": "^21.1.5",
     "@types/node": "^8.0.47",
@@ -35,7 +34,9 @@
     "@types/react-redux": "^5.0.12",
     "@types/remote-redux-devtools": "^0.5.2",
     "enzyme": "^3.1.0",
+    "gh-pages": "^1.0.0",
     "react-addons-test-utils": "^15.6.2",
-    "remote-redux-devtools": "^0.5.12"
+    "remote-redux-devtools": "^0.5.12",
+    "tslint-config-prettier": "^1.15.0"
   }
 }

@@ -2,11 +2,7 @@ import { FastLayer } from 'react-konva';
 import * as React from 'react';
 
 import { Point } from '../../utils/objectTypes';
-import {
-  COLORS,
-  layouter,
-  PointsAreEqual
-} from '../../utils/functions';
+import { COLORS, layouter, PointsAreEqual } from '../../utils/functions';
 import { Component } from 'react';
 import { getAllCoords } from '../../ReduxStore/reducers/GameLogic/CreateWorld';
 import { Stage } from 'konva';
@@ -33,18 +29,18 @@ class Fields extends Component<Props, object> {
 
   componentWillUpdate(nextProps: Props) {
     let stage = this.layer.getStage() as Stage;
-    
-    if (!PointsAreEqual(this.props.dimension, nextProps.dimension) ||
-        !PointsAreEqual(this.canvasDim, {X: stage.width(), Y: stage.height()})) {
-      
-          this.coords = getAllCoords(nextProps.dimension);
-          this.redraw = true;
-    
-    } else if (this.props.lastUpdatedCoords !== nextProps.lastUpdatedCoords){
-      if (!this.redraw){
-        this.coords = nextProps.lastUpdatedCoords;              
+
+    if (
+      !PointsAreEqual(this.props.dimension, nextProps.dimension) ||
+      !PointsAreEqual(this.canvasDim, { X: stage.width(), Y: stage.height() })
+    ) {
+      this.coords = getAllCoords(nextProps.dimension);
+      this.redraw = true;
+    } else if (this.props.lastUpdatedCoords !== nextProps.lastUpdatedCoords) {
+      if (!this.redraw) {
+        this.coords = nextProps.lastUpdatedCoords;
       } else {
-        this.redraw = false;        
+        this.redraw = false;
       }
     }
 
@@ -52,10 +48,16 @@ class Fields extends Component<Props, object> {
   }
 
   render() {
-    return <FastLayer ref={(c) => { this.layer = c; }} />;
+    return (
+      <FastLayer
+        ref={c => {
+          this.layer = c;
+        }}
+      />
+    );
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     let fields = this.props.fields;
 
     if (this.coords.length === 0) {
@@ -70,7 +72,6 @@ class Fields extends Component<Props, object> {
     this.ctx.beginPath();
 
     this.coords.forEach(coord => {
-
       if (fields[coord.X][coord.Y] !== color) {
         this.ctx.fill();
         this.ctx.closePath();
@@ -90,16 +91,9 @@ class Fields extends Component<Props, object> {
     this.ctx.globalAlpha = 1;
   }
 
-  drawRectangle(
-    fieldLocation: Point,
-    dim: Point
-  ) {
+  drawRectangle(fieldLocation: Point, dim: Point) {
     var X, Y, Width, Height;
-    ({ X, Y, Width, Height } = layouter(
-      dim,
-      this.canvasDim,
-      fieldLocation
-    ));
+    ({ X, Y, Width, Height } = layouter(dim, this.canvasDim, fieldLocation));
 
     this.ctx.rect(X, Y, Width, Height);
   }

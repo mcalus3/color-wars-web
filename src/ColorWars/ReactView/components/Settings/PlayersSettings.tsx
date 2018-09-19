@@ -13,15 +13,12 @@ export interface Props {
 }
 
 class PlayersSettings extends React.Component<Props, object> {
-
   maxPlayers = 50;
 
   render() {
     var players = [];
     for (var i: number = 0; i < this.props.playersAmount; i++) {
-      players.push(
-        <PlayerSettings id={i} key={i.toString()} />
-      );
+      players.push(<PlayerSettings id={i} key={i.toString()} />);
     }
     return (
       <div className="SettingsPanel">
@@ -42,7 +39,7 @@ class PlayersSettings extends React.Component<Props, object> {
   onSpeedChange = (v: number) => {
     let realAmount = Math.round(Math.pow(2, v));
     this.props.onPlayersChange(realAmount);
-  }
+  };
 }
 
 export default PlayersSettings;

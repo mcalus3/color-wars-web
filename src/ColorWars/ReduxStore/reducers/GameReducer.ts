@@ -12,22 +12,26 @@ import { changeMapTemplate } from './GameLogic/ChangeMapTemplate';
 import { modifyPlayer } from './GameLogic/modifyPlayer';
 import { addPlayer } from './GameLogic/addPlayer';
 
-export function appReducer(oldState: AppState = initialState, action: Action): AppState {
-  
+export function appReducer(
+  oldState: AppState = initialState,
+  action: Action
+): AppState {
   var newState: AppState = {
     ...oldState,
     gameState: gameReducer(oldState.gameState, action),
     settingsVisible: settingsReducer(oldState.settingsVisible, action)
   };
-  
+
   return newState;
 }
 
-function gameReducer(oldState: GameState = initialState.gameState, action: Action): GameState {
+function gameReducer(
+  oldState: GameState = initialState.gameState,
+  action: Action
+): GameState {
   var newState: GameState = { ...oldState };
 
   switch (action.type) {
-
     case TypeKeys.TICK:
       return Tick(newState);
 
@@ -76,23 +80,23 @@ function gameReducer(oldState: GameState = initialState.gameState, action: Actio
       newState.touchscreenMode = action.value;
       return newState;
 
-      case TypeKeys.ADD_PLAYER:
+    case TypeKeys.ADD_PLAYER:
       return addPlayer(newState);
 
-      default:
+    default:
       return oldState;
   }
 }
 
-function settingsReducer(oldState: boolean = initialState.settingsVisible, action: Action): boolean {
-
+function settingsReducer(
+  oldState: boolean = initialState.settingsVisible,
+  action: Action
+): boolean {
   switch (action.type) {
-    
-        case TypeKeys.SHOW_SETTINGS:
-          return !oldState;
+    case TypeKeys.SHOW_SETTINGS:
+      return !oldState;
 
-          default:
-          return oldState;
-      }
-    }
-    
+    default:
+      return oldState;
+  }
+}

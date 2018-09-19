@@ -6,15 +6,16 @@ import SettingsControl from './ReduxStore/containers/SettingsControl';
 import NavBar from './ReduxStore/containers/NavBar';
 
 export interface Props {
-  mobile: boolean
+  mobile: boolean;
 }
 
 class Game extends React.Component<Props, object> {
   render() {
+    let githubRibbon = renderGithubRibbon(this.props.mobile);
     return (
       <div className="Game">
         <NavBar />
-        {renderGithubRibbon(this.props.mobile)}
+        {githubRibbon}
         <div className="Board">
           <div className="ScoreBoard">
             <ScoreBoard />
@@ -25,7 +26,6 @@ class Game extends React.Component<Props, object> {
         </div>
 
         <SettingsControl />
-        
       </div>
     );
   }
@@ -33,10 +33,20 @@ class Game extends React.Component<Props, object> {
 
 export default Game;
 
-function renderGithubRibbon(mobile: boolean){
-  if (mobile){
+function renderGithubRibbon(mobile: boolean) {
+  if (mobile) {
     return null;
   } else {
-    return <a target="_blank" className="github-fork-ribbon right-top" href="https://github.com/mcalus3/color-wars-web" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
+    return (
+      <a
+        target="_blank"
+        className="github-fork-ribbon right-top"
+        href="https://github.com/mcalus3/color-wars-web"
+        data-ribbon="Fork me on GitHub"
+        title="Fork me on GitHub"
+      >
+        Fork me on GitHub
+      </a>
+    );
   }
 }

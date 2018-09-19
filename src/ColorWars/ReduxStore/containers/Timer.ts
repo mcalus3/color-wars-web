@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 
 export function mapStateToProps(state: AppState) {
   return {
-    secondsLeft: Math.floor((state.gameState.endTime - state.gameState.currentTick) / FRAMES_PER_SEC)
+    secondsLeft: Math.floor(
+      (state.gameState.endTime - state.gameState.currentTick) / FRAMES_PER_SEC
+    )
   };
 }
 

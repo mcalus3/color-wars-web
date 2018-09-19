@@ -23,7 +23,7 @@ export interface Player {
   direction: string;
   deaths: number;
   kills: number;
-  
+
   name: string;
   speed: number;
   color: number;
@@ -48,10 +48,10 @@ export interface GameState {
   startingTerritorySize: number;
   optimized: boolean;
   endTime: number;
-  
+
   fieldColors: number[][];
   fieldOccupiers: number[][];
-  
+
   playersById: Player[];
   tailsById: Point[][];
   keyMappingsById: { [key: string]: string }[];
@@ -65,7 +65,7 @@ export interface GameSettings {
   dimension: Point;
   startingTerritorySize: number;
   endTime: number;
-  
+
   playersById: PlayerSettings[];
 }
 

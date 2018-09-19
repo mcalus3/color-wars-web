@@ -17,12 +17,13 @@ export function mapStateToProps(state: AppState) {
 export function mapDispatchToProps(dispatch: Dispatch<actions.Action>) {
   return {
     onPlayerModify: (value: string) =>
-    dispatch(actions.changeDirection(0, value)),
-    onRestart: () =>
-    dispatch(actions.createGame()),
-    onResume: () =>
-    dispatch(actions.resume())
+      dispatch(actions.changeDirection(0, value)),
+    onRestart: () => dispatch(actions.createGame()),
+    onResume: () => dispatch(actions.resume())
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TouchScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TouchScreen);

@@ -14,7 +14,6 @@ export interface Props {
 }
 
 class ScoreBar extends React.Component<Props, object> {
-
   componentDidMount() {
     this.animateBar();
   }

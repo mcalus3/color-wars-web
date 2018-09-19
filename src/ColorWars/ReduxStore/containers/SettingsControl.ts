@@ -18,7 +18,7 @@ export function mapStateToProps(state: AppState) {
 
 export function mapDispatchToProps(dispatch: Dispatch<actions.Action>) {
   return {
-  onOptimization: (value: boolean) =>
+    onOptimization: (value: boolean) =>
       dispatch(actions.setOptimization(value)),
     onCreateGame: () => dispatch(actions.createGame()),
     onPauseGame: () => dispatch(actions.pause()),
@@ -32,4 +32,7 @@ export function mapDispatchToProps(dispatch: Dispatch<actions.Action>) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SettingsComponent);
