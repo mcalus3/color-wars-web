@@ -1,6 +1,6 @@
-import Fields from '../../ReactView/components/Fields';
-import { AppState } from '../../utils/objectTypes';
-import { connect } from 'react-redux';
+import Fieldsx from "../../ReactView/components/Fields";
+import { AppState } from "../../utils/objectTypes";
+import { connect } from "react-redux";
 
 export function mapStateToProps(state: AppState) {
   return {
@@ -10,4 +10,4 @@ export function mapStateToProps(state: AppState) {
   };
 }
 
-export default connect(mapStateToProps)(Fields);
+export default connect(mapStateToProps)(Fieldsx);

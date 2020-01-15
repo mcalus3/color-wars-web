@@ -1,12 +1,12 @@
-import PlayerSettings from '../../ReactView/components/Settings/PlayerSettings';
-import * as actions from '../actionTypes';
-import { connect, Dispatch } from 'react-redux';
+import PlayerSettings from "../../ReactView/components/Settings/PlayerSettings";
+import * as actions from "../actionTypes";
+import { connect, Dispatch } from "react-redux";
 
-import { AppState } from '../../utils/objectTypes';
+import { AppState } from "../../utils/objectTypes";
 
 export function mapStateToProps(
   state: AppState,
-  ownProps: { id: number; key: string } = { id: 0, key: '0' }
+  ownProps: { id: number; key: string }
 ) {
   return {
     name: state.gameState.playersById[ownProps.id].name,
@@ -27,7 +27,4 @@ export function mapDispatchToProps(dispatch: Dispatch<actions.Action>) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PlayerSettings);
+export default connect(mapStateToProps, mapDispatchToProps)(PlayerSettings);

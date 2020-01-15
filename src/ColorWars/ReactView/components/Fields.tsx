@@ -1,11 +1,10 @@
-import { FastLayer } from 'react-konva';
-import * as React from 'react';
+import { FastLayer } from "react-konva";
+import * as React from "react";
 
-import { Point } from '../../utils/objectTypes';
-import { COLORS, layouter, PointsAreEqual } from '../../utils/functions';
-import { Component } from 'react';
-import { getAllCoords } from '../../ReduxStore/reducers/GameLogic/CreateWorld';
-import { Stage } from 'konva';
+import { Point } from "../../utils/objectTypes";
+import { COLORS, layouter, PointsAreEqual } from "../../utils/functions";
+import { getAllCoords } from "../../ReduxStore/reducers/GameLogic/CreateWorld";
+import { Stage } from "konva";
 
 export interface Props {
   fields: number[][];
@@ -13,16 +12,16 @@ export interface Props {
   dimension: Point;
 }
 
-class Fields extends Component<Props, object> {
+class Fields extends React.Component<Props, any> {
   layer: any;
-  ctx: CanvasRenderingContext2D;
-  canvasDim: Point;
+  ctx: CanvasRenderingContext2D = undefined as any;
+  canvasDim: Point = { X: 0, Y: 0 };
   coords: Point[] = [];
-  redraw: boolean; // workaround for bug, konva overwrites my fields during canvas resize
+  redraw: boolean = false; // workaround for bug, konva overwrites my fields during canvas resize
 
   componentDidMount() {
     var canvas = this.layer.canvas._canvas as any;
-    this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    this.ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     let stage = this.layer.getStage() as Stage;
     this.canvasDim = { X: stage.width(), Y: stage.height() };
   }
@@ -66,9 +65,9 @@ class Fields extends Component<Props, object> {
 
     let color: number = fields[this.coords[0].X][this.coords[0].Y];
     this.ctx.fillStyle = COLORS[color];
-    this.ctx.shadowColor = 'Grey';
-    this.ctx.shadowBlur = COLORS[color] === 'White' ? 0 : 2;
-    this.ctx.globalAlpha = COLORS[color] === 'White' ? 1 : 0.7;
+    this.ctx.shadowColor = "Grey";
+    this.ctx.shadowBlur = COLORS[color] === "White" ? 0 : 2;
+    this.ctx.globalAlpha = COLORS[color] === "White" ? 1 : 0.7;
     this.ctx.beginPath();
 
     this.coords.forEach(coord => {
@@ -78,8 +77,8 @@ class Fields extends Component<Props, object> {
         this.ctx.beginPath();
 
         color = fields[coord.X][coord.Y];
-        this.ctx.shadowBlur = COLORS[color] === 'White' ? 0 : 2;
-        this.ctx.globalAlpha = COLORS[color] === 'White' ? 1 : 0.7;
+        this.ctx.shadowBlur = COLORS[color] === "White" ? 0 : 2;
+        this.ctx.globalAlpha = COLORS[color] === "White" ? 1 : 0.7;
         this.ctx.fillStyle = COLORS[color];
       }
 

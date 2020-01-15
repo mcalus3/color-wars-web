@@ -1,12 +1,13 @@
-import * as React from 'react';
-import * as ReactKonva from 'react-konva';
-import { COLORS, layouter, swap } from '../../../utils/functions';
-import { Player, Point } from '../../../utils/objectTypes';
+import * as React from "react";
+import * as ReactKonva from "react-konva";
+import { COLORS, layouter, swap } from "../../../utils/functions";
+import { Player, Point } from "../../../utils/objectTypes";
 
 export interface Props {
   player: Player;
   dim: Point;
   mapping: { [key: string]: string };
+  id: number;
 }
 
 class KillsLabel extends React.Component<Props, object> {
@@ -36,18 +37,18 @@ class KillsLabel extends React.Component<Props, object> {
     const invertedMapping: { [key: string]: string } = swap(this.props.mapping);
 
     const kdText =
-      'Kills: ' +
+      "Kills: " +
       this.props.player.kills +
-      '\nDeaths: ' +
+      "\nDeaths: " +
       this.props.player.deaths;
     const dirText =
-      'Directions: \nup: ' +
+      "Directions: \nup: " +
       invertedMapping.up +
-      '\ndown: ' +
+      "\ndown: " +
       invertedMapping.down +
-      '\nleft: ' +
+      "\nleft: " +
       invertedMapping.left +
-      '\nright: ' +
+      "\nright: " +
       invertedMapping.right;
     return this.renderLabels(kdText, dirText);
   }

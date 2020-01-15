@@ -1,19 +1,21 @@
-import * as React from 'react';
-import * as ReactKonva from 'react-konva';
-import * as Konva from 'konva';
+import * as React from "react";
+import * as ReactKonva from "react-konva";
+import * as Konva from "konva";
 import {
   COLORS,
   FRAMES_PER_SEC,
   layouter,
   getRotation
-} from '../../../utils/functions';
-import { Player, Point } from '../../../utils/objectTypes';
+} from "../../../utils/functions";
+import { Player, Point } from "../../../utils/objectTypes";
 
 export interface Props {
   player: Player;
   dim: Point;
   optimized: boolean;
   state: string;
+  id: number;
+  key: string;
 }
 
 class PlayerComponent extends React.Component<
@@ -21,7 +23,7 @@ class PlayerComponent extends React.Component<
   { images: { [key: string]: HTMLImageElement } }
 > {
   playerRef: any;
-  stage: Konva.Stage;
+  stage?: Konva.Stage;
   playerRectangle: any = { X: 0, Y: 0, Width: 0, Height: 0 };
 
   constructor(props: Props) {
@@ -37,8 +39,8 @@ class PlayerComponent extends React.Component<
 
   componentWillUpdate(nextProps: Props) {
     let canvasDimension = {
-      X: this.stage.width(),
-      Y: this.stage.height()
+      X: this.stage!.width(),
+      Y: this.stage!.height()
     };
 
     this.playerRectangle = layouter(
@@ -69,7 +71,7 @@ class PlayerComponent extends React.Component<
   }
 
   renderPlayerTexture() {
-    if (this.props.player.state === 'eliminated') {
+    if (this.props.player.state === "eliminated") {
       return null;
     }
 
@@ -82,7 +84,7 @@ class PlayerComponent extends React.Component<
 
   renderRect() {
     let color: string = COLORS[this.props.player.color];
-    let props = this.getTextureProps('small', this.props.optimized);
+    let props = this.getTextureProps("small", this.props.optimized);
 
     return (
       <ReactKonva.Rect
@@ -111,8 +113,8 @@ class PlayerComponent extends React.Component<
       <ReactKonva.RegularPolygon
         {...props}
         shadowBlur={5}
-        shadowColor={'white'}
-        stroke={'black'}
+        shadowColor={"white"}
+        stroke={"black"}
         strokeWidth={0.5}
         opacity={1}
         sides={this.props.player.avatar + 3}
@@ -126,7 +128,7 @@ class PlayerComponent extends React.Component<
   }
 
   renderSkull() {
-    if (this.props.player.state === 'eliminated') {
+    if (this.props.player.state === "eliminated") {
       // Optimization problems
       // return this.renderImage('skull', 'big');
     }
@@ -153,13 +155,13 @@ class PlayerComponent extends React.Component<
   getTextureProps(size: string, optimized: boolean) {
     let props: any = {
       shadowBlur: 5,
-      shadowColor: 'white',
-      stroke: 'black',
+      shadowColor: "white",
+      stroke: "black",
       strokeWidth: 0.5,
       opacity: 1
     };
 
-    if (size === 'big') {
+    if (size === "big") {
       props.width = this.playerRectangle.Width * 2;
       props.height = this.playerRectangle.Height * 2;
     } else {

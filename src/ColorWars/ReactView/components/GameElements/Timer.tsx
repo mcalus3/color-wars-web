@@ -1,9 +1,9 @@
-import * as React from 'react';
-import * as Konva from 'konva';
-import * as ReactKonva from 'react-konva';
+import * as React from "react";
+import * as Konva from "konva";
+import * as ReactKonva from "react-konva";
 
 class Timer extends React.Component<{ secondsLeft: number }, object> {
-  stage: Konva.Stage;
+  stage?: Konva.Stage;
   text: any;
 
   componentDidMount() {
@@ -32,9 +32,9 @@ class Timer extends React.Component<{ secondsLeft: number }, object> {
           }}
           text={this.getTimerText(this.props.secondsLeft)}
           fontSize={fontWidth}
-          fontFamily={'Calibri'}
-          fill={this.props.secondsLeft > 5 ? 'white' : 'red'}
-          stroke={'black'}
+          fontFamily={"Calibri"}
+          fill={this.props.secondsLeft > 5 ? "white" : "red"}
+          stroke={"black"}
           strokeWidth={0.5}
         />
       </ReactKonva.Label>

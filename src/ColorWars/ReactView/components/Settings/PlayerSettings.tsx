@@ -1,6 +1,6 @@
-import 'rc-slider/assets/index.css';
-import '../../../Settings.css';
-import * as React from 'react';
+import "rc-slider/assets/index.css";
+import "../../../Settings.css";
+import * as React from "react";
 import {
   Form,
   FormGroup,
@@ -8,10 +8,10 @@ import {
   FormControl,
   ControlLabel,
   Button
-} from 'react-bootstrap';
-import Slider, { createSliderWithTooltip } from 'rc-slider';
-import * as actions from '../../../ReduxStore/actionTypes';
-import { FRAMES_PER_SEC, swap } from '../../../utils/functions';
+} from "react-bootstrap";
+import Slider, { createSliderWithTooltip } from "rc-slider";
+import * as actions from "../../../ReduxStore/actionTypes";
+import { FRAMES_PER_SEC, swap } from "../../../utils/functions";
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
@@ -25,6 +25,7 @@ export interface Props {
   aiDifficulty: number;
   avatar: number;
   keys: { [key: string]: string };
+  key: string;
   onPlayerModify: (
     id: number,
     prop: string,
@@ -235,20 +236,20 @@ class PlayerSettingsControl extends React.Component<Props, object> {
     return (v: number) => {
       let calculated = Math.round(v);
       if (calculated === max) {
-        return 'permament';
+        return "permament";
       }
       return `${calculated}`;
     };
   }
 
   onNameChange = (e: any) => {
-    this.props.onPlayerModify(this.props.id, 'name', e.target.value);
+    this.props.onPlayerModify(this.props.id, "name", e.target.value);
   };
 
   onColorChange = (e: any) => {
     this.props.onPlayerModify(
       this.props.id,
-      'color',
+      "color",
       parseInt(e.target.value, 10)
     );
   };
@@ -259,7 +260,7 @@ class PlayerSettingsControl extends React.Component<Props, object> {
     let visualSpeed = Math.round(Math.pow(2, v));
     let invSpeed =
       Math.round((FRAMES_PER_SEC / visualSpeed) * MaxFraction) / MaxFraction;
-    this.props.onPlayerModify(this.props.id, 'speed', invSpeed);
+    this.props.onPlayerModify(this.props.id, "speed", invSpeed);
   };
 
   onKeyChange = (e: any) => {
@@ -269,7 +270,7 @@ class PlayerSettingsControl extends React.Component<Props, object> {
     ) as string;
     delete mapping[dir];
     mapping[e.target.value] = e.target.placeholder;
-    this.props.onPlayerModify(this.props.id, 'keyMapping', mapping);
+    this.props.onPlayerModify(this.props.id, "keyMapping", mapping);
   };
 
   onPenaltyChange = (v: any) => {
@@ -280,23 +281,23 @@ class PlayerSettingsControl extends React.Component<Props, object> {
     } else {
       penalty = FRAMES_PER_SEC * v;
     }
-    this.props.onPlayerModify(this.props.id, 'deathPenalty', penalty);
+    this.props.onPlayerModify(this.props.id, "deathPenalty", penalty);
   };
 
   onAiControlledChange = () => {
     this.props.onPlayerModify(
       this.props.id,
-      'aiControlled',
+      "aiControlled",
       !this.props.aiControlled
     );
   };
 
   onAiDifficultyChange = (v: any) => {
-    this.props.onPlayerModify(this.props.id, 'aiDifficulty', v);
+    this.props.onPlayerModify(this.props.id, "aiDifficulty", v);
   };
 
   onAvatarChange = (v: number) => {
-    this.props.onPlayerModify(this.props.id, 'avatar', v);
+    this.props.onPlayerModify(this.props.id, "avatar", v);
   };
 }
 

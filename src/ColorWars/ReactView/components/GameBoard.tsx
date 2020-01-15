@@ -1,13 +1,13 @@
-import TouchScreen from '../../ReduxStore/containers/TouchScreen';
-import Message from '../../ReduxStore/containers/Message';
-import Tails from '../../ReduxStore/containers/Tails';
-import * as React from 'react';
-import { Stage } from 'react-konva';
+import TouchScreen from "../../ReduxStore/containers/TouchScreen";
+import Message from "../../ReduxStore/containers/Message";
+import Tails from "../../ReduxStore/containers/Tails";
+import * as React from "react";
+import { Stage } from "react-konva";
 
-import { Point } from '../../utils/objectTypes';
-import Players from '../../ReduxStore/containers/Players';
-import Fields from '../../ReduxStore/containers/Fields';
-import { getDimensionForGameBoard } from '../../utils/functions';
+import { Point } from "../../utils/objectTypes";
+import Players from "../../ReduxStore/containers/Players";
+import Fieldsx from "../../ReduxStore/containers/Fields";
+import { getDimensionForGameBoard } from "../../utils/functions";
 
 export interface Props {
   dim: Point;
@@ -17,7 +17,7 @@ export interface Props {
 }
 
 class GameBoard extends React.Component<Props, object> {
-  canvDim: Point;
+  canvDim: Point = { X: 0, Y: 0 };
 
   render() {
     this.canvDim = getDimensionForGameBoard(
@@ -28,7 +28,7 @@ class GameBoard extends React.Component<Props, object> {
     return (
       <div>
         <Stage width={this.canvDim.X} height={this.canvDim.Y}>
-          <Fields />
+          <Fieldsx />
 
           <Tails />
 
@@ -44,9 +44,9 @@ class GameBoard extends React.Component<Props, object> {
 
   renderMessage() {
     if (
-      this.props.gameState === 'endGame' ||
-      this.props.gameState === 'paused' ||
-      this.props.gameState === 'initializing'
+      this.props.gameState === "endGame" ||
+      this.props.gameState === "paused" ||
+      this.props.gameState === "initializing"
     ) {
       return <Message />;
     }

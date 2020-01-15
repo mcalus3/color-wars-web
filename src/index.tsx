@@ -1,18 +1,18 @@
-import { createAiManager, dispatchAiActions } from './ColorWars/AI/AIManager';
-import { FRAMES_PER_SEC } from './ColorWars/utils/functions';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import Game from './ColorWars/ReduxStore/containers/Game';
-import registerServiceWorker from './registerServiceWorker';
-import './index.css';
-import { appReducer } from './ColorWars/ReduxStore/reducers/GameReducer';
-import { AppState } from './ColorWars/utils/objectTypes';
-import { initialState } from './ColorWars/utils/initialState';
+import { createAiManager, dispatchAiActions } from "./ColorWars/AI/AIManager";
+import { FRAMES_PER_SEC } from "./ColorWars/utils/functions";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import Game from "./ColorWars/ReduxStore/containers/Game";
+import registerServiceWorker from "./registerServiceWorker";
+import "./index.css";
+import { appReducer } from "./ColorWars/ReduxStore/reducers/GameReducer";
+import { AppState } from "./ColorWars/utils/objectTypes";
+import { initialState } from "./ColorWars/utils/initialState";
 
-import * as actions from './ColorWars/ReduxStore/actionTypes';
+import * as actions from "./ColorWars/ReduxStore/actionTypes";
 
-import { createStore, Reducer, Store } from 'redux';
-import { Provider } from 'react-redux';
+import { createStore, Reducer, Store } from "redux";
+import { Provider } from "react-redux";
 
 const gStore = initializeGame();
 
@@ -39,13 +39,13 @@ function initializeGame() {
   createAiManager(store);
 
   // add listener for key input
-  document.addEventListener('keydown', (e: any) => {
+  document.addEventListener("keydown", (e: any) => {
     if (
-      e.key === 'ArrowDown' ||
-      e.key === 'ArrowLeft' ||
-      e.key === 'ArrowRight' ||
-      e.key === 'ArrowUp' ||
-      e.key === ' '
+      e.key === "ArrowDown" ||
+      e.key === "ArrowLeft" ||
+      e.key === "ArrowRight" ||
+      e.key === "ArrowUp" ||
+      e.key === " "
     ) {
       e.preventDefault();
     }
@@ -68,7 +68,7 @@ function renderReactDom(store: Store<AppState>) {
         <Game />
       </Provider>
     </div>,
-    document.getElementById('root') as HTMLElement
+    document.getElementById("root") as HTMLElement
   );
 }
 

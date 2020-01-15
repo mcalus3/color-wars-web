@@ -1,14 +1,14 @@
-import { FastLayer } from 'react-konva';
-import { Rect, Node, Stage } from 'konva';
-import * as React from 'react';
+import { FastLayer } from "react-konva";
+import { Rect, Node, Stage } from "konva";
+import * as React from "react";
 
-import { Point, Player } from '../../utils/objectTypes';
+import { Point, Player } from "../../utils/objectTypes";
 import {
   COLORS,
   layouter,
   COLOR_NUMS,
   PointsAreEqual
-} from '../../utils/functions';
+} from "../../utils/functions";
 
 export interface Props {
   tails: Point[][];
@@ -69,12 +69,8 @@ class Tails extends React.Component<Props, object> {
       for (let j = 0; j < nodesToDraw[i].length; j++) {
         let p = nodesToDraw[i][j];
 
-        let X, Y, Width, Height;
-        ({ X, Y, Width, Height } = layouter(
-          this.props.dimension,
-          this.canvasDimension,
-          p
-        ));
+        let X, Y;
+        ({ X, Y } = layouter(this.props.dimension, this.canvasDimension, p));
 
         let clone = this.tailPrototypes[i].clone({
           x: X,
@@ -112,8 +108,8 @@ class Tails extends React.Component<Props, object> {
   }
 
   createPrototypes(nextProps: Props, canvDim: Point) {
-    let X, Y, Width, Height;
-    ({ X, Y, Width, Height } = layouter(nextProps.dimension, canvDim, {
+    let Width, Height;
+    ({ Width, Height } = layouter(nextProps.dimension, canvDim, {
       X: 0,
       Y: 0
     }));

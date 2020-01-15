@@ -1,9 +1,9 @@
-import * as React from 'react';
-import * as actions from '../../ReduxStore/actionTypes';
-import * as ReactKonva from 'react-konva';
-import { Point } from '../../utils/objectTypes';
-import { Stage } from 'konva';
-import { shiftDirectionLeft, shiftDirectionRight } from '../../AI/AiFunctions';
+import * as React from "react";
+import * as actions from "../../ReduxStore/actionTypes";
+import * as ReactKonva from "react-konva";
+import { Point } from "../../utils/objectTypes";
+import { Stage } from "konva";
+import { shiftDirectionLeft, shiftDirectionRight } from "../../AI/AiFunctions";
 
 export interface Props {
   tick: number;
@@ -18,10 +18,10 @@ export interface Props {
 }
 
 class TouchScreen extends React.Component<Props> {
-  stage: Stage;
-  directing: boolean;
-  tapped: boolean;
-  myRef: ReactKonva.Rect | null;
+  stage: Stage = undefined as any;
+  directing: boolean = false;
+  tapped: boolean = false;
+  myRef: any | null = null;
 
   constructor(props: Props) {
     super(props);
@@ -34,11 +34,11 @@ class TouchScreen extends React.Component<Props> {
     rect.width(this.stage.width());
     rect.height(this.stage.height());
 
-    rect.on('touchstart', () => {
+    rect.on("touchstart", () => {
       this.directing = true;
       this.playAgain();
     });
-    rect.on('touchend', () => {
+    rect.on("touchend", () => {
       this.directing = false;
     });
 
@@ -46,15 +46,15 @@ class TouchScreen extends React.Component<Props> {
   }
 
   playAgain() {
-    if (this.props.phase === 'endGame') {
+    if (this.props.phase === "endGame") {
       this.props.onRestart();
     }
 
-    if (this.props.phase === 'paused') {
+    if (this.props.phase === "paused") {
       this.props.onResume();
     }
 
-    if (this.props.phase === 'initializing') {
+    if (this.props.phase === "initializing") {
       this.props.onResume();
     }
   }
@@ -100,7 +100,7 @@ class TouchScreen extends React.Component<Props> {
   renderLineHelper() {
     return (
       <ReactKonva.Line
-        stroke={'black'}
+        stroke={"black"}
         opacity={0.2}
         points={[
           this.stage.width() / 2,
@@ -117,42 +117,42 @@ class TouchScreen extends React.Component<Props> {
       <ReactKonva.Group>
         <ReactKonva.Circle
           radius={1}
-          stroke={'black'}
+          stroke={"black"}
           opacity={0.2}
           x={this.stage.width() / 2}
           y={this.stage.height() / 2}
         />
         <ReactKonva.Arrow
           points={[0, 0, 20, 0]}
-          stroke={'black'}
+          stroke={"black"}
           opacity={0.2}
           x={this.stage.width() / 2}
           y={this.stage.height() / 2}
-          fill={'black'}
+          fill={"black"}
         />
         <ReactKonva.Arrow
           points={[0, 0, 0, 20]}
-          stroke={'black'}
+          stroke={"black"}
           opacity={0.2}
           x={this.stage.width() / 2}
           y={this.stage.height() / 2}
-          fill={'black'}
+          fill={"black"}
         />
         <ReactKonva.Arrow
           points={[0, 0, -20, 0]}
-          stroke={'black'}
+          stroke={"black"}
           opacity={0.2}
           x={this.stage.width() / 2}
           y={this.stage.height() / 2}
-          fill={'black'}
+          fill={"black"}
         />
         <ReactKonva.Arrow
           points={[0, 0, 0, -20]}
-          stroke={'black'}
+          stroke={"black"}
           opacity={0.2}
           x={this.stage.width() / 2}
           y={this.stage.height() / 2}
-          fill={'black'}
+          fill={"black"}
         />
       </ReactKonva.Group>
     );
@@ -189,8 +189,8 @@ class TouchScreen extends React.Component<Props> {
       this.tapped = true;
 
       let dir = this.props.nextDirection;
-      if (dir === 'none') {
-        dir = 'up';
+      if (dir === "none") {
+        dir = "up";
       }
 
       if (pointerCoords.x < this.stage.width() / 2) {
@@ -204,21 +204,21 @@ class TouchScreen extends React.Component<Props> {
   }
 
   calculateDirectionAbsoluteMode(pointerCoords: { x: number; y: number }) {
-    let dir = 'none';
+    let dir = "none";
     let x = this.stage.width() / 2 - pointerCoords.x;
     let y = this.stage.height() / 2 - pointerCoords.y;
 
     if (x < y) {
       if (y > -x) {
-        dir = 'up';
+        dir = "up";
       } else {
-        dir = 'right';
+        dir = "right";
       }
     } else {
       if (y > -x) {
-        dir = 'left';
+        dir = "left";
       } else {
-        dir = 'down';
+        dir = "down";
       }
     }
 
@@ -231,21 +231,21 @@ class TouchScreen extends React.Component<Props> {
     let pY =
       (this.props.playerCoords.Y / this.props.dim.Y) * this.stage.height();
 
-    let dir = 'none';
+    let dir = "none";
     let x = pX - pointerCoords.x;
     let y = pY - pointerCoords.y;
 
     if (x < y) {
       if (y > -x) {
-        dir = 'up';
+        dir = "up";
       } else {
-        dir = 'right';
+        dir = "right";
       }
     } else {
       if (y > -x) {
-        dir = 'left';
+        dir = "left";
       } else {
-        dir = 'down';
+        dir = "down";
       }
     }
 
