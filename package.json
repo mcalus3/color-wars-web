@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.4.1",
     "konva": "^1.7.4",
     "rc-slider": "^8.4.0",
     "react": "^15.6.2",
